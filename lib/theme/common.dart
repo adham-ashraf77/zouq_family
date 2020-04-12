@@ -111,9 +111,52 @@ AppBarTheme appBarTheme = AppBarTheme(
 );
 
 ///////////////////////////////////////////////////////////
+/// chips Styles
+///////////////////////////////////////////////////////////
+
+Decoration doneOrder = BoxDecoration(
+  borderRadius: BorderRadius.all(
+    Radius.circular(10),
+  ),
+  color: doneColor,
+);
+Decoration confirmedOrder = BoxDecoration(
+  borderRadius: BorderRadius.all(
+    Radius.circular(10),
+  ),
+  color: confirmedColor,
+);
+Decoration rejectedOrder = BoxDecoration(
+  borderRadius: BorderRadius.all(
+    Radius.circular(10),
+  ),
+  color: rejectedColor,
+);
+Decoration newOrder = BoxDecoration(
+  borderRadius: BorderRadius.all(
+    Radius.circular(10),
+  ),
+  border: Border.all(color: confirmedColor),
+  color: confirmedBgColor,
+);
 ///////////////////////////////////////////////////////////
 /// Default Images assets links
 ///////////////////////////////////////////////////////////
 String assetsImageBasePath = "assets/images";
 
+
 String profileImg = '$assetsImageBasePath/profilePlaceHolder.png';
+String appLogo = '$assetsImageBasePath/logo.png';
+String appLogoWithOutName = '$assetsImageBasePath/logo2.png';
+
+String profileImg = '$assetsImageBasePath/profilePlaceHolder.png';
+String productImg = '$assetsImageBasePath/productPlaceHolder.png';
+
+String otpImg = '$assetsImageBasePath/mobileMsg.png';
+String resetPassword1 = '$assetsImageBasePath/resetPassword1.png';
+String resetPassword2 = '$assetsImageBasePath/resetPassword2.png';
+
+///////////////////////////////////////////////////////////
+///
+///////////////////////////////////////////////////////////
+
