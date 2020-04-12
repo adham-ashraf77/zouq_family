@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 ///////////////////////////////////////////////////////////
 /// Colors
 ///////////////////////////////////////////////////////////
+
 Color mainColor = Colors.white;
 Color accent = Colors.cyan;
 Color splash = Colors.blue;
@@ -22,6 +23,7 @@ Color confirmedBgColor = Color(0xFFF6EDE7);
 ///////////////////////////////////////////////////////////
 /// Text Styles
 ///////////////////////////////////////////////////////////
+
 TextStyle headers =
     TextStyle(color: textColor, fontWeight: FontWeight.w700, fontSize: 45);
 TextStyle headers1 =
@@ -96,6 +98,7 @@ TextStyle hintTextStyle = TextStyle(
 ///////////////////////////////////////////////////////////
 /// theme
 ///////////////////////////////////////////////////////////
+
 ThemeData appTheme = ThemeData(
     appBarTheme: appBarTheme, brightness: appBrightness, fontFamily: "Dubai");
 
@@ -110,6 +113,7 @@ AppBarTheme appBarTheme = AppBarTheme(
 ///////////////////////////////////////////////////////////
 /// chips Styles
 ///////////////////////////////////////////////////////////
+
 Decoration doneOrder = BoxDecoration(
   borderRadius: BorderRadius.all(
     Radius.circular(10),

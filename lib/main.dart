@@ -12,12 +12,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Zouq Admin',
       theme: appTheme,
       home: OrdersPage(),
       routes: {
         OrdersViewPage.routeName : (context) => OrdersViewPage(),
       }, ///Change this to `Home()` or `OrdersViewPage()` to view other pages!
+      title: 'Zouq Admin',
+      home: Home(),
     );
   }
 }
