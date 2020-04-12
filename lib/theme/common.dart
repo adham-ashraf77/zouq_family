@@ -144,6 +144,8 @@ Decoration newOrder = BoxDecoration(
 ///////////////////////////////////////////////////////////
 String assetsImageBasePath = "assets/images";
 
+
+String profileImg = '$assetsImageBasePath/profilePlaceHolder.png';
 String appLogo = '$assetsImageBasePath/logo.png';
 String appLogoWithOutName = '$assetsImageBasePath/logo2.png';
 
@@ -157,3 +159,4 @@ String resetPassword2 = '$assetsImageBasePath/resetPassword2.png';
 ///////////////////////////////////////////////////////////
 ///
 ///////////////////////////////////////////////////////////
+

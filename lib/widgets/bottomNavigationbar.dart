@@ -3,7 +3,7 @@ import 'package:zouqadmin/theme/common.dart';
 
 class BottomNavigationbar extends StatefulWidget {
   static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     Text(
       'Index 0: المزيد',
@@ -40,15 +40,15 @@ class _BottomNavigationbarState extends State<BottomNavigationbar> {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-          child: ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft:  Radius.circular(15),
-              topRight: Radius.circular(15)
-            ),
-                      child: BottomNavigationBar(
-              
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
+      child: ClipRRect(
+        borderRadius: BorderRadius.only(
+            topLeft:  Radius.circular(15),
+            topRight: Radius.circular(15)
+        ),
+        child: BottomNavigationBar(
+
+          type: BottomNavigationBarType.fixed,
+          items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.more_horiz),
 
@@ -60,20 +60,20 @@ class _BottomNavigationbarState extends State<BottomNavigationbar> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.shopping_cart),
-              title: Text('منتجاتي'),
+              title: Text('طلباتي'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
-              title: Text('طلباتي'),
+              title: Text('الرئسية'),
             ),
-        ],
-        currentIndex: _selectedIndex,
-        unselectedItemColor: Colors.white,
-        selectedItemColor: Colors.black,        
-        backgroundColor:  accent ,
-        onTap: _onItemTapped,
+          ],
+          currentIndex: _selectedIndex,
+          unselectedItemColor: Colors.white,
+          selectedItemColor: Colors.black,
+          backgroundColor:  accent ,
+          onTap: _onItemTapped,
+        ),
       ),
-          ),
     );
   }
 }
