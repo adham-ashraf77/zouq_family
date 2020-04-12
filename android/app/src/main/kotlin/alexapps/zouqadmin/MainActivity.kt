@@ -1,4 +1,4 @@
-package alexapps.zouqadmin
+package com.alexApps.zouqAdmin
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
