@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:zouqadmin/pages/auth/login_screen.dart';
+import 'package:zouqadmin/pages/ordersPage.dart';
 import 'package:zouqadmin/pages/ordersViewPage.dart';
 import 'package:zouqadmin/theme/common.dart';
 

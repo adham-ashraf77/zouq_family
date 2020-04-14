@@ -23,22 +23,18 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        title: Text(
+          'تسجيل كأسرة المنتجة',
+          style: moreTextStyle,
+        ),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: ListView(
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           children: <Widget>[
-            SizedBox(
-              height: 15,
-            ),
-            Center(
-              child: Text(
-                'تسجيل كأسرة المنتجة',
-                style: moreTextStyle,
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
             Container(
               height: MediaQuery.of(context).size.height * 0.15,
               decoration: BoxDecoration(
@@ -54,17 +50,12 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                   Expanded(
                     child: TextField(
                       decoration: InputDecoration(
-                          border: InputBorder.none,
                           hintText: 'أسم المشترك',
                           hintStyle: hintTextStyle),
                     ),
                   ),
                 ],
               ),
-            ),
-            Divider(
-              color: Color(0xff888888),
-              indent: 25,
             ),
             ListTile(
               title: Row(
@@ -105,7 +96,6 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                   Expanded(
                     child: TextField(
                       decoration: InputDecoration(
-                          border: InputBorder.none,
                           hintText: 'البريد الاكترونى',
                           hintStyle:
                               hintTextStyle), //TODO email verification logic
@@ -114,27 +104,18 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                 ],
               ),
             ),
-            Divider(
-              color: Color(0xff888888),
-              indent: 25,
-            ),
             ListTile(
               title: Row(
                 children: <Widget>[
                   Expanded(
                     child: TextField(
                       decoration: InputDecoration(
-                          border: InputBorder.none,
                           hintText: 'كلمة السر',
                           hintStyle: hintTextStyle),
                     ),
                   ),
                 ],
               ),
-            ),
-            Divider(
-              color: Color(0xff888888),
-              indent: 25,
             ),
             ListTile(
               title: Row(
@@ -155,9 +136,9 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                         child: Icon(
                           FontAwesomeIcons.check,
                           color: Colors.white,
-                          size: 20.0,
+                          size: 9.0,
                         ),
-                        radius: 15.0,
+                        radius: 10.0,
                         backgroundColor: selectedDeliveryService ==
                                 DeliveryService.doesDelivery
                             ? accent
@@ -191,8 +172,9 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                         child: Icon(
                           FontAwesomeIcons.check,
                           color: Colors.white,
+                          size: 9,
                         ),
-                        radius: 15.0,
+                        radius: 10.0,
                         backgroundColor: selectedDeliveryService ==
                                 DeliveryService.noDelivery
                             ? accent
@@ -212,7 +194,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
             ),
             //TODO revise code and add retrive selected item index logic
             Container(
-              height: MediaQuery.of(context).size.height * 0.15,
+              height: MediaQuery.of(context).size.height * 0.1,
               width: double.infinity,
               child: Wrap(
                 spacing: 7,

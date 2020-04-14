@@ -166,8 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Center(
                   child: Container(
                     child: Text(
-                      'نسيت كلمة المرور',
-                      //TODO @rami all text starting from here outputs an error when applying localization
+                      AppLocalizations.of(context).translate('forgot password'),
                       style: paragarph3,
                     ),
                   ),
