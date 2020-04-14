@@ -1,6 +1,7 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:zouqadmin/I10n/app_localizations.dart';
 import 'package:zouqadmin/pages/auth/SignUpPage.dart';
 import 'package:zouqadmin/pages/auth/forgetpass_screen.dart';
 import 'package:zouqadmin/theme/common.dart';
@@ -34,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Padding(
                 padding: const EdgeInsets.only(right: 10.0),
                 child: Text(
-                  'تخطى',
+                  AppLocalizations.of(context).translate('skip'),
                   style: headers4,
                   textAlign: TextAlign.end,
                 ),
@@ -42,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           title: Text(
-            ' تسجيل دخول',
+            AppLocalizations.of(context).translate('sign in'),
             style: headers4,
           ),
         ),
@@ -93,7 +94,9 @@ class _LoginPageState extends State<LoginPage> {
                     Expanded(
                       flex: 7,
                       child: TextFormField(
-                        decoration: InputDecoration(hintText: 'رقم الهاتـف'),
+                        decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context)
+                                .translate('telephone')),
                       ),
                     ),
                     SizedBox(
@@ -131,7 +134,9 @@ class _LoginPageState extends State<LoginPage> {
                 height: 50,
                 width: MediaQuery.of(context).size.width - 50,
                 child: TextFormField(
-                  decoration: InputDecoration(hintText: 'كلمة المرور'),
+                  decoration: InputDecoration(
+                      hintText:
+                      AppLocalizations.of(context).translate('password')),
                   obscureText: true,
                 ),
               ),
@@ -146,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 40,
               ),
               AppButton(
-                text: 'تسجيل الدخول',
+                text: AppLocalizations.of(context).translate('sign in'),
                 onClick: () {
                   pushPage(context, Home());
                 },
@@ -162,6 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Container(
                     child: Text(
                       'نسيت كلمة المرور',
+                      //TODO @rami all text starting from here outputs an error
                       style: paragarph3,
                     ),
                   ),
