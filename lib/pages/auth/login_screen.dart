@@ -167,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Container(
                     child: Text(
                       'نسيت كلمة المرور',
-                      //TODO @rami all text starting from here outputs an error
+                      //TODO @rami all text starting from here outputs an error when applying localization
                       style: paragarph3,
                     ),
                   ),
