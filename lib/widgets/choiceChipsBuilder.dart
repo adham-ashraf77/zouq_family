@@ -12,16 +12,17 @@ class ChoiceChipsBuilder extends StatefulWidget {
 
 class _ChoiceChipsBuilderState extends State<ChoiceChipsBuilder> {
   String selectedChoice = '';
-
   _BuildChoiceList() {
-    List<Widget> choices = [];
-    widget.chipNames.forEach((item) {
+    List<Widget> choices = List<Widget>();
+
+    widget.chipNames.forEach((choiceName) {
       choices.add(Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
         child: ChoiceChip(
-          label: Text(item),
+          label: Text(choiceName),
           labelStyle: TextStyle(
-            color: selectedChoice == item ? Colors.white : Color(0xFF737373),
+            color:
+                selectedChoice == choiceName ? Colors.white : Color(0xFF737373),
           ),
           backgroundColor: Colors.white,
           selectedColor: accent,
@@ -30,13 +31,13 @@ class _ChoiceChipsBuilderState extends State<ChoiceChipsBuilder> {
               Radius.circular(7),
             ),
             side: BorderSide(
-              color: selectedChoice == item ? accent : Color(0xFF737373),
+              color: selectedChoice == choiceName ? accent : Color(0xFF737373),
             ),
           ),
-          selected: selectedChoice == item,
+          selected: selectedChoice == choiceName,
           onSelected: (selected) {
             setState(() {
-              selectedChoice = item;
+              selectedChoice = choiceName;
             });
           },
         ),

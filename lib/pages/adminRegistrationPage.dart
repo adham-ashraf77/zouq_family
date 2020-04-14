@@ -5,10 +5,11 @@ import 'package:zouqadmin/pages/accountNotActivated.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:zouqadmin/widgets/choiceChipsBuilder.dart';
+import 'package:zouqadmin/widgets/filterChipWidget.dart';
 
 enum DeliveryService { doesDelivery, noDelivery }
 List<String> tags = ['sweets', 'local', 'pastries'];
+List<bool> selected = [false, false, false];
 
 class AdminRegistration extends StatefulWidget {
   @override
@@ -217,9 +218,33 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                 spacing: 7,
                 runSpacing: 7,
                 children: <Widget>[
-                  ChoiceChipsBuilder(
-                    chipNames: tags,
-                  )
+                  FilterChipWidget(
+                    chipName: tags[0],
+                    isSelected: selected[0],
+                    onSelect: (clicked) {
+                      setState(() {
+                        selected[0] = clicked;
+                      });
+                    },
+                  ),
+                  FilterChipWidget(
+                    chipName: tags[1],
+                    isSelected: selected[1],
+                    onSelect: (clicked) {
+                      setState(() {
+                        selected[1] = clicked;
+                      });
+                    },
+                  ),
+                  FilterChipWidget(
+                    chipName: tags[2],
+                    isSelected: selected[2],
+                    onSelect: (clicked) {
+                      setState(() {
+                        selected[2] = clicked;
+                      });
+                    },
+                  ),
                 ],
               ),
             ),
@@ -261,6 +286,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                   ),
                   onPressed: () {
                     //TODO admin profile editing code
+                    print(selected);
                   }),
             ),
             //TODO remove row testing alert dialogs
