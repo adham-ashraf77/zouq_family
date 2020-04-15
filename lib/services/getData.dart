@@ -20,7 +20,6 @@ class GetData{
     try{
       Response response =
       await Dio().get("$_url$_categories");
-      print(response.data);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         List<dynamic> data = response.data ;
         for(int i=0; i<data.length;i++ ){
@@ -41,7 +40,6 @@ class GetData{
     try{
       Response response =
       await Dio().get("$_url$_cities");
-      print(response.data);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         List<dynamic> data = response.data ;
         for(int i=0; i<data.length;i++ ){

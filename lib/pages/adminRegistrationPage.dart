@@ -7,6 +7,7 @@ import 'package:zouqadmin/models/categories.dart';
 import 'package:zouqadmin/models/cities.dart';
 import 'package:zouqadmin/pages/accountFrozen.dart';
 import 'package:zouqadmin/pages/accountNotActivated.dart';
+import 'package:zouqadmin/pages/dialogWorning.dart';
 import 'package:zouqadmin/services/getData.dart';
 import 'package:zouqadmin/services/registeration.dart';
 import 'package:zouqadmin/theme/common.dart';
@@ -14,6 +15,8 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zouqadmin/widgets/filterChipWidget.dart';
 import 'package:path/path.dart' as p;
+
+import 'auth/verificationcode_screen.dart';
 
 enum DeliveryService { doesDelivery, noDelivery }
 
@@ -52,7 +55,8 @@ class _AdminRegistrationState extends State<AdminRegistration> {
       _loodingImage = true;
     });
     try {
-      var file = await FilePicker.getFile(type: FileType.image);
+      var file = await FilePicker.getFile(type: FileType.custom,allowedExtensions: ['jpg', 'png', 'jpeg'],);
+
       setState(()  {
         fileName = p.basename(file.path);
         _image = file;
@@ -113,23 +117,26 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   }
 
   registration() async {
+    int idCity;
+    Cities city =  _allCity.firstWhere((c)=>c.text == _city);
+    idCity = city.id;
     String response1 = await Registeration().registration(
         name: _name,
         email: _email,
         password: _password,
         phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
       image: _image,
-      city: _city,
+      city: idCity,
       is_delivery_available: selectedDeliveryService == DeliveryService.doesDelivery?true:false,
       categories: _categories
     );
 
     if (response1 != "success"){
-//      showDialog(
-//          context: context,
-//          builder: (BuildContext context) => DialogWorning(mss:response1 ,));
+      showDialog(
+          context: context,
+          builder: (BuildContext context) => DialogWorning(mss:response1 ,));
     } else {
-      //Navigator.push(context, MaterialPageRoute(builder: (context) => VerificationcodePage(phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => VerificationcodePage(phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",)));
     }
   }
 
@@ -332,10 +339,12 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                           _password = value;
                         },
                         validator: (value) {
-                          if (value.trim().length == 0) {
+                          if (value.trim().length == 0 ) {
                             return 'Please enter your password';
                           }
-                          return null;
+                          if(value.trim().length <6){
+                            return "Password short";
+                          }
                         },
                       ),
                     ),

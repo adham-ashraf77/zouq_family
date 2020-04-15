@@ -1,22 +1,65 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:zouqadmin/services/registeration.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/AppButton.dart';
 
 import '../../home.dart';
+import '../dialogWorning.dart';
+import '../productsPage.dart';
 
 class VerificationcodePage extends StatefulWidget {
-  VerificationcodePage();
+  String phone;
+  VerificationcodePage({this.phone});
 
   @override
-  _VerificationcodePageState createState() => _VerificationcodePageState();
+  _VerificationcodePageState createState() => _VerificationcodePageState(phone);
 }
 
 class _VerificationcodePageState extends State<VerificationcodePage> {
+  String _phone;
+  _VerificationcodePageState(this._phone);
   bool hasError = false;
-  String currentText = "";
+  String _currentText = "";
+  String _codeAlert="";
+
+  validation(){
+    if (_currentText.length < 4) {
+      setState(() {
+        _codeAlert = "Confirmation code is short";
+      });
+    } else {
+      setState(() {
+        _codeAlert = "";
+      });
+      activate(_currentText);
+    }
+  }
+
+
+  activate(String code)async{
+    String response = await Registeration().activateRegistered(_phone,code);
+    if (response != "success") {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) => DialogWorning(mss:response ,));
+    }else {
+      pushPage(context, ProductsPage());
+    }
+  }
+
+  resendCode() async {
+    String response = await Registeration().resendConfirmCode(_phone);
+    if (response != "success") {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) => DialogWorning(mss:response ,));
+    }else {
+      print("success");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,10 +120,15 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
                 selectedColor: Colors.grey[200],
                 onChanged: (value) {
                   setState(() {
-                    currentText = value;
+                    _currentText = value;
                   });
                 },
               ),
+            ),
+            Text(
+              "$_codeAlert",
+              style: TextStyle(color: Colors.red, fontSize: 12),
+              textAlign: TextAlign.start,
             ),
             SizedBox(
               height: 30,
@@ -88,7 +136,7 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
             AppButton(
               text: "تحقق",
               onClick: () {
-                pushPage(context, Home());
+                validation();
               },
             ),
             SizedBox(
@@ -102,7 +150,9 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
                   style: paragarph4,
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    resendCode();
+                  },
                   child: Text(
                     '  إعادة إرسال رمز جديد ',
                     style: paragarph4.copyWith(color: accent),
