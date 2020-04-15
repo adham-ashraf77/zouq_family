@@ -180,6 +180,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   void dispose() {
     // TODO: implement dispose
     _tags.clear();
+    _allCity.clear();
     selected.clear();
     super.dispose();
   }
