@@ -48,6 +48,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   List<bool> selected = [];
   List<Cities> _allCity = [];
   List<String> _showCity = [];
+  bool _isLooding =false;
 
 
   Future getImage() async {
@@ -150,7 +151,11 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   @override
   void initState() {
     // TODO: implement initState
+    setState(() {
+      _isLooding =true;
+    });
     save();
+
     super.initState();
   }
   save() async {
@@ -165,6 +170,9 @@ class _AdminRegistrationState extends State<AdminRegistration> {
      _tags.forEach((d){
        selected.add(false);
      });
+   });
+   setState(() {
+     _isLooding =false;
    });
   }
 
@@ -194,7 +202,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
         ),
         centerTitle: true,
       ),
-      body: SafeArea(
+      body:_isLooding? Center(child: CircularProgressIndicator(),): SafeArea(
         child: Form(
           key: _formKey,
           child: ListView(
