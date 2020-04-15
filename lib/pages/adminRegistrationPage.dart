@@ -136,7 +136,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
           context: context,
           builder: (BuildContext context) => DialogWorning(mss:response1 ,));
     } else {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => VerificationcodePage(phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",)));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => VerificationcodePage(phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",)));
     }
   }
 
