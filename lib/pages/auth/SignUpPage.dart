@@ -154,7 +154,7 @@ class _SignUpPageState extends State<SignUpPage> {
               AppButton(
                 text: "تسجيل",
                 onClick: () {
-                  pushPage(context, VerificationcodePage());
+                  pushPage(context, VerificationcodePage(flag: 1,));
                 },
               ),
               Padding(

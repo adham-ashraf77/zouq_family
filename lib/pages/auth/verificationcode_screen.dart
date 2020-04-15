@@ -1,31 +1,35 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:zouqadmin/pages/auth/ResetPasswordPage.dart';
 import 'package:zouqadmin/services/registeration.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/AppButton.dart';
-
+import 'package:zouqadmin/services/checkpasswordresettingcode.dart';
 import '../../home.dart';
 import '../dialogWorning.dart';
 import '../productsPage.dart';
 
 class VerificationcodePage extends StatefulWidget {
   String phone;
-  VerificationcodePage({this.phone});
+  int flag; //1 for activate user for verification, 2 for resetting password
+  VerificationcodePage({this.phone, @required this.flag});
 
   @override
-  _VerificationcodePageState createState() => _VerificationcodePageState(phone);
+  _VerificationcodePageState createState() =>
+      _VerificationcodePageState(phone, flag);
 }
 
 class _VerificationcodePageState extends State<VerificationcodePage> {
   String _phone;
-  _VerificationcodePageState(this._phone);
+  int flag;
+  _VerificationcodePageState(this._phone, this.flag);
   bool hasError = false;
   String _currentText = "";
-  String _codeAlert="";
+  String _codeAlert = "";
 
-  validation(){
+  validation() {
     if (_currentText.length < 4) {
       setState(() {
         _codeAlert = "Confirmation code is short";
@@ -34,20 +38,49 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
       setState(() {
         _codeAlert = "";
       });
-      activate(_currentText);
+      flag == 1 ? activate(_currentText) : checkToResetPassword(_currentText);
     }
   }
 
-
-  activate(String code)async{
-    String response = await Registeration().activateRegistered(_phone,code);
+  activate(String code) async {
+    String response = await Registeration().activateRegistered(_phone, code);
     if (response != "success") {
       showDialog(
           context: context,
-          builder: (BuildContext context) => DialogWorning(mss:response ,));
-    }else {
+          builder: (BuildContext context) => DialogWorning(
+                mss: response,
+              ));
+    } else {
       pushPage(context, ProductsPage());
     }
+  }
+
+  checkToResetPassword(String code) async {
+    CheckPasswordResettingCode()
+        .resetPassword(phone: _phone, code: code)
+        .then((onValue) {
+      if (onValue.data['message'] ==
+              'now you can reset the password in 3600 sec' ||
+          onValue.statusCode == 200) {
+        pushPage(
+            context,
+            ResetPasswordPage(
+              phone: _phone,
+            ));
+      } else {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => DialogWorning(
+                  mss: onValue.data['message'],
+                ));
+      }
+    }).catchError((onError) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) => DialogWorning(
+                mss: onError.toString(),
+              ));
+    });
   }
 
   resendCode() async {
@@ -55,8 +88,10 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
     if (response != "success") {
       showDialog(
           context: context,
-          builder: (BuildContext context) => DialogWorning(mss:response ,));
-    }else {
+          builder: (BuildContext context) => DialogWorning(
+                mss: response,
+              ));
+    } else {
       print("success");
     }
   }
