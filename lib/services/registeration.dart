@@ -15,17 +15,15 @@ class Registeration {
 
   Future<String> registration(
       {String name,
-      String gender,
       String phone,
       String password,
       String email,
       bool is_delivery_available,
       File image,
-      List<String> categories,
+      List<int> categories,
       String city}) async {
     _formData = FormData.fromMap({
       "name": "$name",
-      "gender": "$gender",
       "password": "$password",
       "email": "$email",
       "phone": "$phone",
@@ -34,29 +32,29 @@ class Registeration {
       "categories": "$categories",
       "city": "$city",
     });
-    try {
-      Response response =
-          await Dio().post("$_url$_registeraAndSendConfirm", data: _formData);
-      print(response.data);
-      if (response.statusCode >= 200 && response.statusCode <= 299) {
-        return "success";
-      } else {
-        print('not a 200 requesy ${response.data}');
-        return "something is wrong";
-      }
-    } on DioError catch (e) {
-      print(e.response);
-      if (e.response.data["errors"]["email"].toString() ==
-          "[The email has already been taken.]") {
-        return "The email has already been taken.";
-      }
-      if (e.response.data["errors"]["phone"].toString() ==
-          "[The phone has already been taken.]") {
-        return "The phone has already been taken.";
-      }
-      if (e.response == null) return "connection time out";
-    }
-    return "Worning check the Data";
+//    try {
+//      Response response =
+//          await Dio().post("$_url$_registeraAndSendConfirm", data: _formData);
+//      print(response.data);
+//      if (response.statusCode >= 200 && response.statusCode <= 299) {
+//        return "success";
+//      } else {
+//        print('not a 200 requesy ${response.data}');
+//        return "something is wrong";
+//      }
+//    } on DioError catch (e) {
+//      print(e.response);
+//      if (e.response.data["errors"]["email"].toString() ==
+//          "[The email has already been taken.]") {
+//        return "The email has already been taken.";
+//      }
+//      if (e.response.data["errors"]["phone"].toString() ==
+//          "[The phone has already been taken.]") {
+//        return "The phone has already been taken.";
+//      }
+//      if (e.response == null) return "connection time out";
+//    }
+//    return "Worning check the Data";
   }
 
   Future<String> resendConfirmCode(String phone) async {

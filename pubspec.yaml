@@ -39,6 +39,7 @@ dependencies:
   geolocator: ^5.3.0
   pin_code_fields: ^2.4.0
   dio: ^3.0.9
+  file_picker: ^1.6.2
 
 dev_dependencies:
   flutter_test:

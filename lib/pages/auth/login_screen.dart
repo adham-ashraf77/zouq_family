@@ -10,6 +10,7 @@ import 'package:zouqadmin/widgets/AppButton.dart';
 import 'package:zouqadmin/widgets/roundedAppBar.dart';
 
 import '../../home.dart';
+import '../adminRegistrationPage.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({this.title});
@@ -153,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
               AppButton(
                 text: AppLocalizations.of(context).translate('sign in'),
                 onClick: () {
-                  pushPage(context, Home());
+//                  pushPage(context, Home());
                 },
               ),
               SizedBox(
@@ -175,22 +176,6 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 30,
               ),
-              InkWell(
-                onTap: () {
-                  //TODO
-                },
-                child: Center(
-                  child: Container(
-                    child: Text(
-                      'شاشة التسجيل كأسرة منتجة',
-                      style: TextStyle(
-                        color: Colors.blue[200],
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
               SizedBox(
                 height: 30,
               ),
@@ -203,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   InkWell(
                     onTap: () {
-                      pushPage(context, SignUpPage());
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AdminRegistration()));
                     },
                     child: Text(
                       'قم بالاشتراك الان ',
