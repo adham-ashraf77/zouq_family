@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 
 class CheckPasswordResettingCode {
   final String _url = "http://api.dhuqapp.com";
-  final String _reset = "/api/client/check-reset-password-confirm-code";
+  final String _reset = "/api/family/check-reset-password-confirm-code";
   FormData _formData;
 
   Future<Response> resetPassword(

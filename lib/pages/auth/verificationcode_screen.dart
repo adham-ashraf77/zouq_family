@@ -75,10 +75,11 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
                 ));
       }
     }).catchError((onError) {
+      print('Error : ' + onError.toString());
       showDialog(
           context: context,
           builder: (BuildContext context) => DialogWorning(
-                mss: onError.toString(),
+                mss: 'Something went wrong please try again later',//onError.toString(),
               ));
     });
   }

@@ -3,16 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zouqadmin/I10n/app_localizations.dart';
-import 'package:zouqadmin/pages/auth/SignUpPage.dart';
 import 'package:zouqadmin/pages/auth/forgetpass_screen.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
+import 'package:zouqadmin/pages/productsPage.dart';
 import 'package:zouqadmin/services/login.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/AppButton.dart';
 import 'package:zouqadmin/widgets/roundedAppBar.dart';
 import 'package:zouqadmin/services/getuser.dart';
-import '../../home.dart';
 import '../adminRegistrationPage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -70,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => Home(),
+                builder: (context) => ProductsPage(),
                 settings: RouteSettings(
                   arguments: onValue,
                 ),
@@ -127,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
               centerTitle: true,
               leading: InkWell(
                 onTap: () {
-                  pushPage(context, Home());
+                  pushPage(context, ProductsPage());
                 },
                 child: Center(
                   child: Padding(
@@ -235,10 +234,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     SizedBox(
-                      height: 25,
+                      height: 20,
                     ),
                     Container(
-                      height: 50,
+                      height: 70,
                       width: MediaQuery.of(context).size.width - 50,
                       child: TextFormField(
                         validator: (value) {
@@ -262,7 +261,7 @@ class _LoginPageState extends State<LoginPage> {
                     //   },
                     // ),
                     SizedBox(
-                      height: 40,
+                      height: 25,
                     ),
                     AppButton(
                       text: AppLocalizations.of(context).translate('sign in'),
@@ -275,8 +274,9 @@ class _LoginPageState extends State<LoginPage> {
                                           phoneNumberTextFieldController.text)
                                       .replaceAll("+", ''))
                               .then((onValue) {
-                            if (onValue != 'success') if (onValue.toString() ==
-                                'Unauthorized 401') {
+                            if (onValue != 'success') if (onValue
+                                .toString()
+                                .contains('authentication failure')) {
                               showDialog(
                                   context: context,
                                   builder: (BuildContext context) =>
@@ -284,15 +284,27 @@ class _LoginPageState extends State<LoginPage> {
                                         mss:
                                             "phone number or password isn't correct, please check your unput and try again",
                                       ));
-                            } else if (onValue
-                                .toString()
-                                .contains("Bad Request 400")){
+                            } else if (onValue.toString().contains(
+                                    "your account is not activated yet by the admins") ||
+                                onValue
+                                    .toString()
+                                    .contains("not-active-by-admins")) {
                               showDialog(
                                   context: context,
                                   builder: (BuildContext context) =>
                                       DialogWorning(
-                                        mss: 'This user is not admin',
-                                      ));}
+                                        mss:
+                                            'This account is not activated yet by the admins, try again later',
+                                      ));
+                            } else if (onValue
+                                .toString()
+                                .contains("this isn't an family"))
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      DialogWorning(
+                                        mss: 'This user is not family',
+                                      ));
                             else {
                               showDialog(
                                   context: context,
@@ -307,31 +319,19 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => Home(),
+                                        builder: (context) => ProductsPage(),
                                         settings: RouteSettings(
                                           arguments: onValue,
                                         ),
                                       ));
                                 else {
                                   print('Err' + onValue.toString());
-                                  if (onValue
-                                      .toString()
-                                      .contains("this user isn't an admin"))
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            DialogWorning(
-                                              mss: 'This user is not admin',
-                                            ));
-                                  else {
-                                    print('object ' + onValue.toString());
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            DialogWorning(
-                                              mss: onValue.toString(),
-                                            ));
-                                  }
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          DialogWorning(
+                                            mss: 'Something went wrong please try again later',//onValue.toString(),
+                                          ));
                                 }
                               });
                           }).catchError((onError) {
@@ -340,7 +340,7 @@ class _LoginPageState extends State<LoginPage> {
                                 context: context,
                                 builder: (BuildContext context) =>
                                     DialogWorning(
-                                      mss: onError.toString(),
+                                      mss: 'Something went wrong please try again later',//onError.toString(),
                                     ));
                           });
                         }

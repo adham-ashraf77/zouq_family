@@ -3,11 +3,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Login {
   final String _url = "http://api.dhuqapp.com";
-  final String _login = "/api/admin/login";
+  final String _login = "/api/family/login";
   FormData _formData;
 
-  Future<String> login({String phone, String password}) async {
-    // print('-=>' + phone + password);
+  Future<dynamic> login({String phone, String password}) async {
+    print('-=>' + phone + password);
     _formData = FormData.fromMap({"password": "$password", "phone": "$phone"});
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
@@ -26,7 +26,7 @@ class Login {
     } on DioError catch (e) {
       print('err->' + e.response.toString());
       if (e.response == null) return "connection time out";
-      return e.response.statusMessage.toString() + ' ' + e.response.statusCode.toString();
+      return e.response;
     }
 
   }

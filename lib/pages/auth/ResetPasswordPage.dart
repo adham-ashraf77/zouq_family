@@ -123,10 +123,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             ));
                       }
                     }).catchError((onError){
+                      print('Error ->' + onError);
                       showDialog(
                           context: context,
                           builder: (BuildContext context) => DialogWorning(
-                            mss: onError.toString(),
+                            mss: 'Something went wrong please try again later',// onError.toString(),
                           ));
                     })
                         :

@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 
 class SetNewPassword {
   final String _url = "http://api.dhuqapp.com";
-  final String _reset = "/api/client/reset-password";
+  final String _reset = "/api/family/reset-password";
   FormData _formData;
 
   Future<Response> setNewPassword({@required String phone,@required String newPassword}) async {
