@@ -110,6 +110,9 @@ class _AdminRegistrationState extends State<AdminRegistration> {
       if(_image != null){
         if(selectedDeliveryService != null){
           if(_city != null){
+            setState(() {
+              _isLooding =true;
+            });
             registration();
           }
         }
@@ -131,6 +134,9 @@ class _AdminRegistrationState extends State<AdminRegistration> {
       is_delivery_available: selectedDeliveryService == DeliveryService.doesDelivery?true:false,
       categories: _categories
     );
+    setState(() {
+      _isLooding =false;
+    });
 
     if (response1 != "success"){
       showDialog(
@@ -203,7 +209,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
         ),
         centerTitle: true,
       ),
-      body:_isLooding? Center(child: CircularProgressIndicator(),): SafeArea(
+      body:SafeArea(
         child: Form(
           key: _formKey,
           child: ListView(
@@ -504,7 +510,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                 textAlign: TextAlign.start,
               ),
               ListTile(
-                title: RaisedButton(
+                title:_isLooding? Center(child: CircularProgressIndicator(),):  RaisedButton(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0)),
                     color: accent,
@@ -528,7 +534,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                       color: accent,
                       child: Text(
                         'test non-active',
-                        style: TextStyle(color: Colors.white, fontSize: 25.0),
+                        style: TextStyle(color: Colors.white, fontSize: 20.0),
                       ),
                       onPressed: () {
                         showDialog(
@@ -542,7 +548,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                       color: accent,
                       child: Text(
                         'test frozen',
-                        style: TextStyle(color: Colors.white, fontSize: 25.0),
+                        style: TextStyle(color: Colors.white, fontSize: 20.0),
                       ),
                       onPressed: () {
                         showDialog(
