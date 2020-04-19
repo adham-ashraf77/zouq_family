@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:zouqadmin/pages/adminEditProfilePage.dart';
+import 'package:zouqadmin/services/editprofile.dart';
 import 'package:zouqadmin/theme/common.dart';
+import 'package:zouqadmin/utils/helpers.dart';
 
 class BottomNavigationbar extends StatefulWidget {
   static const TextStyle optionStyle =
@@ -33,6 +36,11 @@ class _BottomNavigationbarState extends State<BottomNavigationbar> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      print(_selectedIndex);
+      if(_selectedIndex == 0){
+         pushPage(context, AdminProfileEditor());
+        
+      }
     });
   }
 
