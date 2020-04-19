@@ -6,6 +6,8 @@ import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/widgets/bottomNavigationbar.dart';
 import 'package:zouqadmin/widgets/ordersCardWidget.dart';
 
+import 'addItemPage.dart';
+
 class OrdersPage extends StatefulWidget {
   @override
   _OrdersPageState createState() => _OrdersPageState();
@@ -166,192 +168,187 @@ class _OrdersPageState extends State<OrdersPage> {
             price: '45')
       ],
     ),];
+
+
   @override
   Widget build(BuildContext context) {
     final double allWidth = MediaQuery.of(context).size.width;
-    AppBar appBar = AppBar(
-      backgroundColor: Color.fromRGBO(250, 250, 253, 1),
-      centerTitle: true,
-      elevation: 0,
-
-      ///TODO uncomment the code below if you want a back button
-      // leading: IconButton(
-      //     icon: Icon(
-      //       Icons.arrow_back,
-      //       color: Colors.black,
-      //     ),
-      //     onPressed: () {
-      //       Navigator.pop(context);
-      //     }),
-      title: Text(
-        'ذوق',
-        style: headers1,
-      ),
-    );
+//    AppBar appBar = AppBar(
+//      backgroundColor: Color.fromRGBO(250, 250, 253, 1),
+//      centerTitle: true,
+//      elevation: 0,
+//
+//      ///TODO uncomment the code below if you want a back button
+//      // leading: IconButton(
+//      //     icon: Icon(
+//      //       Icons.arrow_back,
+//      //       color: Colors.black,
+//      //     ),
+//      //     onPressed: () {
+//      //       Navigator.pop(context);
+//      //     }),
+//      title: Text(
+//        'ذوق',
+//        style: headers1,
+//      ),
+//    );
     return Scaffold(
-      backgroundColor: Color.fromRGBO(250, 250, 253, 1),
-      appBar: appBar,
-      bottomNavigationBar: BottomNavigationbar(),
-      body: Container(
-          width: allWidth,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                height: 10,
-              ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(7),
-                child: Container(
-                  color: Colors.white,
-                  width: allWidth - 25,
-                  height: 40,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _isFocused3 = true;
-                            _isFocused1 = false;
-                            _isFocused2 = false;
-                          });
-                        },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
-                          child: Container(
-                            width: (allWidth - 37) / 3,
-                            height: 35,
-                            color:
-                                _isFocused3 ? Colors.blue[300] : Colors.white,
-                            child: Center(
-                              child: Text('طلبات قديمة',
-                                  style: paragarph3.copyWith(
-                                      color: _isFocused3
-                                          ? Colors.white
-                                          : Colors.black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w100)),
-                            ),
-                          ),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        // pinned: true,
+        title: Text("ذوق", style: headers1),
+        centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            icon: new Image.asset('assets/icons/add.png'),
+            onPressed: () {
+              //TODO go add product screen
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AddItemPage()));
+            },
+          ),
+        ],
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          SizedBox(
+            height: 10,
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(7),
+            child: Container(
+              color: Colors.white,
+              width: allWidth - 25,
+              height: 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _isFocused3 = true;
+                        _isFocused1 = false;
+                        _isFocused2 = false;
+                      });
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Container(
+                        width: (allWidth - 37) / 3,
+                        height: 35,
+                        color:
+                        _isFocused3 ? Colors.blue[300] : Colors.white,
+                        child: Center(
+                          child: Text('طلبات قديمة',
+                              style: paragarph3.copyWith(
+                                  color: _isFocused3
+                                      ? Colors.white
+                                      : Colors.black,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w100)),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _isFocused3 = false;
-                            _isFocused1 = false;
-                            _isFocused2 = true;
-                          });
-                        },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
-                          child: Container(
-                            width: (allWidth - 37) / 3,
-                            height: 35,
-                            color:
-                                _isFocused2 ? Colors.blue[300] : Colors.white,
-                            child: Center(
-                              child: Text('طلبات مؤكدة',
-                                  style: paragarph3.copyWith(
-                                      color: _isFocused2
-                                          ? Colors.white
-                                          : Colors.black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w100)),
-                            ),
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _isFocused3 = false;
-                            _isFocused1 = true;
-                            _isFocused2 = false;
-                          });
-                        },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
-                          child: Container(
-                            width: (allWidth - 37) / 3,
-                            height: 35,
-                            color:
-                                _isFocused1 ? Colors.blue[300] : Colors.white,
-                            child: Center(
-                              child: Text('طلبات جديدة',
-                                  style: paragarph3.copyWith(
-                                      color: _isFocused1
-                                          ? Colors.white
-                                          : Colors.black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w100)),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              _isFocused1
-                  ? Container(
-                      width: allWidth - 25,
-                      height: MediaQuery.of(context).size.height -
-                          (MediaQuery.of(context).padding.top +
-                              appBar.preferredSize.height +
-                              50 +
-                              82),
-                      child: ListView.builder(
-                        itemCount: newOrders.length,
-                        itemBuilder: (context, i) {
-                          return OrdersCard(
-                            order: newOrders[i],
-                            type: 1,
-                          );
-                        },
-                      ),
-                    )
-                  : _isFocused2
-                      ? Container(
-                          width: allWidth - 25,
-                          height: MediaQuery.of(context).size.height -
-                              (MediaQuery.of(context).padding.top +
-                                  appBar.preferredSize.height +
-                                  50 +
-                                  82),
-                          child: ListView.builder(
-                            itemCount: completeOrders.length,
-                            itemBuilder: (context, i) {
-                              return OrdersCard(
-                                order: completeOrders[i],
-                                type: 2,
-                              );
-                            },
-                          ),
-                        )
-                      : Container(
-                          width: allWidth - 25,
-                          height: MediaQuery.of(context).size.height -
-                              (MediaQuery.of(context).padding.top +
-                                  appBar.preferredSize.height +
-                                  50 +
-                                  82),
-                          child: ListView.builder(
-                            itemCount: oldOrders.length,
-                            itemBuilder: (context, i) {
-                              return OrdersCard(
-                                order: oldOrders[i],
-                                type: 3,
-                              );
-                            },
-                          ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _isFocused3 = false;
+                        _isFocused1 = false;
+                        _isFocused2 = true;
+                      });
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Container(
+                        width: (allWidth - 37) / 3,
+                        height: 35,
+                        color:
+                        _isFocused2 ? Colors.blue[300] : Colors.white,
+                        child: Center(
+                          child: Text('طلبات مؤكدة',
+                              style: paragarph3.copyWith(
+                                  color: _isFocused2
+                                      ? Colors.white
+                                      : Colors.black,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w100)),
                         ),
-            ],
-          )),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _isFocused3 = false;
+                        _isFocused1 = true;
+                        _isFocused2 = false;
+                      });
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Container(
+                        width: (allWidth - 37) / 3,
+                        height: 35,
+                        color:
+                        _isFocused1 ? Colors.blue[300] : Colors.white,
+                        child: Center(
+                          child: Text('طلبات جديدة',
+                              style: paragarph3.copyWith(
+                                  color: _isFocused1
+                                      ? Colors.white
+                                      : Colors.black,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w100)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          _isFocused1
+              ? Expanded(
+            child: ListView.builder(
+              itemCount: newOrders.length,
+              itemBuilder: (context, i) {
+                return OrdersCard(
+                  order: newOrders[i],
+                  type: 1,
+                );
+              },
+            ),
+          )
+              : _isFocused2
+              ? Expanded(
+            child: ListView.builder(
+              itemCount: completeOrders.length,
+              itemBuilder: (context, i) {
+                return OrdersCard(
+                  order: completeOrders[i],
+                  type: 2,
+                );
+              },
+            ),
+          )
+              : Expanded(
+            child: ListView.builder(
+              itemCount: oldOrders.length,
+              itemBuilder: (context, i) {
+                return OrdersCard(
+                  order: oldOrders[i],
+                  type: 3,
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

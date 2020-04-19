@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:zouqadmin/pages/adminOptionsPage.dart';
 import 'package:zouqadmin/pages/adminRegistrationPage.dart';
+import 'package:zouqadmin/pages/ordersPage.dart';
+import 'package:zouqadmin/pages/productsPage.dart';
+import 'package:zouqadmin/theme/common.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -9,7 +12,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
-  final List<Widget> _children = [AdminRegistration(), AdminOptionsPage()];
+  final List<Widget> _children = [OrdersPage(), ProductsPage(), AdminOptionsPage()];
   void onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
@@ -27,6 +30,10 @@ class _HomeState extends State<Home> {
           BottomNavigationBarItem(
             title: Text('الرئيسية'),
             icon: Icon(Icons.home),
+          ),
+          BottomNavigationBarItem(
+            title: Text('منتجاتى'),
+            icon: Icon(Icons.shopping_cart),
           ),
           BottomNavigationBarItem(
             title: Text('المزيد'),

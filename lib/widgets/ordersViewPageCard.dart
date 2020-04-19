@@ -34,24 +34,21 @@ class OrderViewPageCard extends StatelessWidget {
                       children: <Widget>[
                         Row(
                           children: <Widget>[
-                            Icon(
-                              Icons.shopping_cart,
-                              color: Colors.grey[300],
-                            ),
+                            Image.asset('assets/icons/cart.png',scale: 2.7,),
                             SizedBox(
                               width: 10,
                             ),
                             Text(
                               '${prouct.amount}' + 'x',
                               style:
-                                  paragarph3.copyWith(color: Colors.grey[400]),
+                                  paragarph3.copyWith(color: Colors.blue,fontSize: 16),
                               textDirection: TextDirection.rtl,
                             ),
                           ],
                         ),
                         Text(
                           'ريال ${prouct.price}',
-                          style: paragarph3.copyWith(color: Colors.grey[400]),
+                          style: paragarph3.copyWith(color: Colors.blue,fontSize: 16),
                           textDirection: TextDirection.rtl,
                         ),
                       ],

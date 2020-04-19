@@ -51,7 +51,7 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
                 mss: response,
               ));
     } else {
-      pushPage(context, ProductsPage());
+      pushPage(context, Home());
     }
   }
 

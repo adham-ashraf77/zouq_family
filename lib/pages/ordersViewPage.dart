@@ -25,266 +25,259 @@ class OrdersViewPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Container(
-                height: 50,
-                alignment: Alignment(-1.0, -0.8),
-                width: MediaQuery.of(context).size.width,
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.grey,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.all(3.0), // borde width
+                  decoration: new BoxDecoration(
+                    color: Colors.grey[200], // border color
+                    shape: BoxShape.circle,
+                  ),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.grey[200],
+                    backgroundImage: NetworkImage('${order.imageUrl}'),
+                    radius: 50,
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.all(3.0), // borde width
-                      decoration: new BoxDecoration(
-                        color: Colors.grey[200], // border color
-                        shape: BoxShape.circle,
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  order.name,
+                  style: paragarph1.copyWith(
+                      fontWeight: FontWeight.w500, color: Color(0xFF535353)),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Container(
+                  decoration: new BoxDecoration(
+                      color: type == 1
+                          ? Color(0xFFF39D67).withOpacity(0.2)
+                          : type == 2
+                          ? Color(0xFFF39D67)
+                          : type == 3 ? Color(0xFF48CF84): Colors.blue, // border color
+                      border: Border.all(
+                        color: type == 1
+                            ? Color(0xFFF39D67)
+                            : type == 2
+                            ? Color(0xFFF39D67)
+                            : type == 3 ? Color(0xFF48CF84): Colors.blue,
                       ),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.grey[200],
-                        backgroundImage: NetworkImage('${order.imageUrl}'),
-                        radius: 50,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      order.name,
-                      style: paragarph1.copyWith(
-                          fontWeight: FontWeight.w100, color: Colors.black54),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Container(
-                      decoration: new BoxDecoration(
-                          color: Colors.grey[200], // border color
-                          border: Border.all(
-                            color: Colors.redAccent[100],
-                          ),
-                          borderRadius: BorderRadius.circular(10)),
-                      width: 70,
-                      height: 30,
-                      child: Center(
-                          child: Text(
+                      borderRadius: BorderRadius.circular(10)),
+                  width: 80,
+                  height: 30,
+                  child: Center(
+                      child: Text(
                         type == 1
                             ? 'طلب جديد'
                             : type == 2
-                                ? 'طلب مؤكد'
-                                : type == 3 ? 'طلب تم' : '',
+                            ? 'طلب مؤكد'
+                            : type == 3 ? 'طلب تم' : '',
                         textDirection: TextDirection.rtl,
-                        style: TextStyle(color: Colors.redAccent[100]),
+                        style: TextStyle(color: type == 1
+                            ? Color(0xFFE08248)
+                            : type == 2
+                            ? Colors.white
+                            : type == 3 ? Colors.white: Colors.blue,
+                            fontSize: 16),
                       )),
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              '${order.id}',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              'رقم الطلب',
-                              textDirection: TextDirection.rtl,
-                              style: paragarph2.copyWith(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w100,
-                              ),
-                            ),
-                          ],
+                        Text(
+                          '${order.id}',
+                          style: TextStyle(color: Colors.grey),
                         ),
-                        Divider(
-                          height: 2,
-                          color: Colors.grey[300],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              '${order.time}' + '  ' + '${order.date}',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              'وقت الطلب',
-                              textDirection: TextDirection.rtl,
-                              style: paragarph2.copyWith(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w100,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Divider(
-                          height: 2,
-                          color: Colors.grey[300],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        type == 2 || type == 3
-                            ? Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      Container(
-                                        width: 35,
-                                        height: 35,
-                                        child: Image.asset(
-                                          'assets/images/whatsicon.png',
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        '${order.phoneNumber}',
-                                        style: TextStyle(color: Colors.grey),
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    'محادثة whatsapp',
-                                    textDirection: TextDirection.rtl,
-                                    style: paragarph2.copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w100,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : SizedBox(),
-                        type == 2 || type == 3
-                            ? Divider(
-                                height: 2,
-                                color: Colors.grey[300],
-                              )
-                            : SizedBox(),
-                        SizedBox(
-                          height: type == 2 || type == 3 ? 20 : 0,
-                        ),
-                        /////
-                        type == 2 || type == 3
-                            ? Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      CircleAvatar(
-                                        backgroundColor: accent,
-                                        radius: 12,
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        '${order.phoneNumber}',
-                                        style: TextStyle(color: Colors.grey),
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    'رقم هاتف',
-                                    textDirection: TextDirection.rtl,
-                                    style: paragarph2.copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w100,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : SizedBox(),
-                        type == 2 || type == 3
-                            ? Divider(
-                                height: 2,
-                                color: Colors.grey[300],
-                              )
-                            : SizedBox(),
-                        SizedBox(
-                          height: type == 2 || type == 3 ? 20 : 0,
+                        Text(
+                          'رقم الطلب',
+                          style: paragarph2.copyWith(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ],
                     ),
+                    Divider(
+                      height: 2,
+                      color: Colors.grey[300],
+                    ),
                     SizedBox(
                       height: 20,
                     ),
-                   type == 3 ? SizedBox() : Text(
-                      'الموقع',
-                      style: paragarph2.copyWith(color: Colors.blue),
-                    ),
-                    SizedBox(
-                      height:  type == 3 ? 0 : 20,
-                    ),
-                    type == 2 || type == 1
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Container(
-                                color: Colors.grey[200],
-                                height: 100,
-                                width: MediaQuery.of(context).size.width,
-                                child: Image.network('https://www.mediafire.com/convkey/b31a/c318q2te6lqziqzzg.jpg')), ///TODO this url must be replaced with `link` variable
-                          )
-                        : Container(
-                          height:  100 * order.comments.length.toDouble(),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: order.comments.length,
-                            itemBuilder:(context,i){
-                              return  CommentDesign(comment : order.comments[i]);
-                            },
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          '${order.time}' + '  ' + '${order.date}',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        Text(
+                          'وقت الطلب',
+                          style: paragarph2.copyWith(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
+                      ],
+                    ),
+                    Divider(
+                      height: 2,
+                      color: Colors.grey[300],
+                    ),
                     SizedBox(
                       height: 20,
                     ),
-                    Text(
-                      'الطلبات (${order.product.length.toString()} منتجات)',
-                      style: paragarph2.copyWith(color: Colors.blue),
-                    ),
+                    type == 2 || type == 3
+                        ? Row(
+                      mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              width: 35,
+                              height: 35,
+                              child: Image.asset(
+                                'assets/images/whatsicon.png',
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              '${order.phoneNumber}',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          'محادثة whatsapp',
+                          textDirection: TextDirection.rtl,
+                          style: paragarph2.copyWith(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w100,
+                          ),
+                        ),
+                      ],
+                    )
+                        : SizedBox(),
+                    type == 2 || type == 3
+                        ? Divider(
+                      height: 2,
+                      color: Colors.grey[300],
+                    )
+                        : SizedBox(),
                     SizedBox(
-                      height: 20,
+                      height: type == 2 || type == 3 ? 20 : 0,
                     ),
-                    Container(
-                      height: 105 * order.product.length.toDouble(),
-                      child: ListView.builder(
-                        itemCount: order.product.length,
-                        itemBuilder: (context, i) {
-                          return OrderViewPageCard(
-                            prouct: order.product[i],
-                          );
-                        },
-                      ),
+                    /////
+                    type == 2 || type == 3
+                        ? Row(
+                      mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            SizedBox(
+                              width: 5,
+                            ),
+                            CircleAvatar(
+                              backgroundColor: accent,
+                              radius: 12,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              '${order.phoneNumber}',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          'رقم هاتف',
+                          textDirection: TextDirection.rtl,
+                          style: paragarph2.copyWith(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w100,
+                          ),
+                        ),
+                      ],
+                    )
+                        : SizedBox(),
+                    type == 2 || type == 3
+                        ? Divider(
+                      height: 2,
+                      color: Colors.grey[300],
+                    )
+                        : SizedBox(),
+                    SizedBox(
+                      height: type == 2 || type == 3 ? 20 : 0,
                     ),
                   ],
                 ),
-              )
-            ],
+                SizedBox(
+                  height: 20,
+                ),
+                type == 3 ? SizedBox() : Text(
+                  'الموقع',
+                  style: paragarph2.copyWith(color: Colors.blue),
+                ),
+                SizedBox(
+                  height:  type == 3 ? 0 : 20,
+                ),
+                type == 2 || type == 1
+                    ? ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                      color: Colors.grey[200],
+                      height: 100,
+                      width: MediaQuery.of(context).size.width,
+                      child: Image.network('https://www.mediafire.com/convkey/b31a/c318q2te6lqziqzzg.jpg')), ///TODO this url must be replaced with `link` variable
+                )
+                    : Container(
+                  height:  100 * order.comments.length.toDouble(),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: order.comments.length,
+                    itemBuilder:(context,i){
+                      return  CommentDesign(comment : order.comments[i]);
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'الطلبات (${order.product.length.toString()} منتجات)',
+                  style: paragarph2.copyWith(color: Colors.blue),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                ListView.builder(
+                  primary: false,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: order.product.length,
+                  itemBuilder: (context, i) {
+                    return OrderViewPageCard(
+                      prouct: order.product[i],
+                    );
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -313,7 +306,7 @@ class OrdersViewPage extends StatelessWidget {
                                 color: Colors.white,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(50)),
-                                border: Border.all(color: Colors.grey[300])),
+                                border: Border.all(color: Color(0xFFDADADA),width: 2)),
                           ),
                           SizedBox(
                             width: 12,
@@ -330,7 +323,8 @@ class OrdersViewPage extends StatelessWidget {
                                 color: Colors.white,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(50)),
-                                border: Border.all(color: Colors.grey[300])),
+                                border: Border.all(color: Color(0xFFDADADA),width: 2),
+                            ),
                           ),
                         ],
                       )
@@ -374,7 +368,7 @@ class OrdersViewPage extends StatelessWidget {
                 child: Text(
                   'ريال ' + '236',
                   textDirection: TextDirection.rtl,
-                  style: paragarph1.copyWith(fontWeight: FontWeight.w200),
+                  style: paragarph1.copyWith(fontWeight: FontWeight.w200,color: Colors.blue),
                 ),
               ),
             ],

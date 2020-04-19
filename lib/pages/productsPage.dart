@@ -90,10 +90,6 @@ class _ProductsPageState extends State<ProductsPage> {
           )
         ],
       ),
-      bottomNavigationBar: Container(
-        height: MediaQuery.of(context).size.height * 0.1,
-        child: BottomNavigationbar(),
-      ),
     );
   }
 }

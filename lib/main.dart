@@ -7,6 +7,7 @@ import 'package:zouqadmin/theme/common.dart';
 
 import 'I10n/AppLanguage.dart';
 import 'I10n/app_localizations.dart';
+import 'home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
           ],
           title: 'Zouq Admin',
           theme: appTheme,
-          home: LoginPage(),
+          home: Home(),
           routes: {
             OrdersViewPage.routeName: (context) => OrdersViewPage(),
           },
