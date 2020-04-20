@@ -282,7 +282,9 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                     Expanded(
                       child: Container(
                         child: TextFormField(
+                          maxLength: 12,
                           decoration: InputDecoration(
+                            counterText: "",
                               border: InputBorder.none,
                               hintText: 'رقم الهاتف',
                               hintStyle: hintTextStyle),

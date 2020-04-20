@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zouqadmin/pages/adminEditProfilePage.dart';
 import 'package:zouqadmin/pages/adminWalletPage.dart';
+import 'package:zouqadmin/pages/auth/login_screen.dart';
 import 'package:zouqadmin/theme/common.dart';
 
 class AdminOptionsPage extends StatefulWidget {
@@ -11,8 +13,6 @@ class AdminOptionsPage extends StatefulWidget {
 }
 
 class _AdminOptionsPageState extends State<AdminOptionsPage> {
-  bool _isLoggedIn = true;
-
   IconData trailingIcon = Icons.arrow_forward_ios;
   @override
   Widget build(BuildContext context) {
@@ -43,10 +43,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
             height: MediaQuery.of(context).size.height * 0.15,
             decoration: BoxDecoration(
               image: DecorationImage(
-                  image: _isLoggedIn == true
-                      ? AssetImage(profileImg)
-                      : AssetImage(
-                          profileImg)), //TODO add server image if _isLoggedIn is true
+                  image: AssetImage(profileImg)), //TODO add server image if _isLoggedIn is true
             ),
           ),
           SizedBox(
@@ -54,23 +51,20 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
           ),
           Center(
             child: Text(
-              _isLoggedIn == true ? 'أسم الأسرة المنتجة' : 'زائر جديد',
+               'أسم الأسرة المنتجة',
               style: moreTextStyle,
             ),
           ),
-          Visibility(
-            visible: _isLoggedIn,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AdminWalletPage()));
-              },
-              child: ListTile(
-                leading: Text("المحفظة", style: moreTextStyle),
-                trailing: Text(
-                  "450 ريال",
-                  style: moreSmallTextStyle,
-                ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AdminWalletPage()));
+            },
+            child: ListTile(
+              leading: Text("المحفظة", style: moreTextStyle),
+              trailing: Text(
+                "450 ريال",
+                style: moreSmallTextStyle,
               ),
             ),
           ),
@@ -166,21 +160,17 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
           ),
           ListTile(
             leading: GestureDetector(
-              onTap: () {
-//                if (_isLoggedIn == true) {
-//                  showDialog(
-//                      context: context,
-//                      builder: (BuildContext context) => LogoutDialog());
-//                } else {
-//                  setState(() {
-//                    _isLoggedIn = true;
-//                  });
-//                }
+              onTap: () async{
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.clear();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => LoginPage())
+                );
               },
               child: Text(
-                _isLoggedIn == true ? 'تسجيل الخروج' : 'تسجيل الدخول',
+                'تسجيل الخروج',
                 style: moreTextStyle.copyWith(
-                    color: _isLoggedIn == true ? rejectedColor : doneColor),
+                    color: rejectedColor),
                 textAlign: TextAlign.end,
               ),
             ),

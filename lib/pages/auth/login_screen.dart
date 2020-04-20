@@ -12,6 +12,7 @@ import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/AppButton.dart';
 import 'package:zouqadmin/widgets/roundedAppBar.dart';
 import 'package:zouqadmin/services/getuser.dart';
+import '../../home.dart';
 import '../adminRegistrationPage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -69,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => ProductsPage(),
+                builder: (context) => Home(),
                 settings: RouteSettings(
                   arguments: onValue,
                 ),
@@ -124,21 +125,6 @@ class _LoginPageState extends State<LoginPage> {
             appBar: AppBar(
               backgroundColor: Colors.grey[200],
               centerTitle: true,
-              leading: InkWell(
-                onTap: () {
-                  pushPage(context, ProductsPage());
-                },
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 10.0),
-                    child: Text(
-                      AppLocalizations.of(context).translate('skip'),
-                      style: headers4,
-                      textAlign: TextAlign.end,
-                    ),
-                  ),
-                ),
-              ),
               title: Text(
                 AppLocalizations.of(context).translate('sign in'),
                 style: headers4,
@@ -193,6 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                           Expanded(
                             flex: 7,
                             child: TextFormField(
+                              maxLength: 12,
                               controller: phoneNumberTextFieldController,
                               validator: (value) {
                                 if (value.trim().length < 9) {
@@ -201,6 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                                 return null;
                               },
                               decoration: InputDecoration(
+                                counterText: "",
                                   hintText: AppLocalizations.of(context)
                                       .translate('telephone')),
                             ),
@@ -319,7 +307,7 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => ProductsPage(),
+                                        builder: (context) => Home(),
                                         settings: RouteSettings(
                                           arguments: onValue,
                                         ),

@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
           ],
           title: 'Zouq Admin',
           theme: appTheme,
-          home: Home(),
+          home: LoginPage(),
           routes: {
             OrdersViewPage.routeName: (context) => OrdersViewPage(),
           },

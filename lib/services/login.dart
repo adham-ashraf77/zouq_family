@@ -18,6 +18,8 @@ class Login {
         prefs.setString("password", "$password");
         prefs.setString("phone", "$phone");
         prefs.setString("token", response.data['token']);
+        prefs.setString("image", response.data['image']);
+        prefs.setString("email", response.data['email']);
         return "success";
       } else {
         print('not a 200 request ${response.data}');
