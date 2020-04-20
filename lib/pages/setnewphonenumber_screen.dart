@@ -6,6 +6,8 @@ import 'package:zouqadmin/pages/dialogWorning.dart';
 import 'package:zouqadmin/services/setnewphonenumber.dart';
 import 'package:zouqadmin/theme/common.dart';
 
+import '../home.dart';
+
 class SetNewPhoneNumberScreen extends StatefulWidget {
   final String phone;
 
@@ -80,6 +82,7 @@ class _SetNewPhoneNumberScreenState extends State<SetNewPhoneNumberScreen> {
                           Expanded(
                             child: Container(
                               child: TextFormField(
+                                maxLength: 12,
                                 controller: phoneTextFieldController,
                                 validator: (value) {
                                   if (value.trim().length < 9) {
@@ -88,6 +91,7 @@ class _SetNewPhoneNumberScreenState extends State<SetNewPhoneNumberScreen> {
                                   return null;
                                 },
                                 decoration: InputDecoration(
+                                  counterText: "",
                                     // border: InputBorder.none,
                                     hintText: 'رقم الهاتف الجديد',
                                     hintStyle: hintTextStyle),
@@ -145,6 +149,9 @@ class _SetNewPhoneNumberScreenState extends State<SetNewPhoneNumberScreen> {
                                             mss:
                                                 'Phone has been updated successfully',
                                           ));
+                                      Future.delayed(Duration(seconds: 3),() =>Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(builder: (context) => Home())
+                                      ));
                                 } else {
                                   print(onValue.toString());
                                   showDialog(
