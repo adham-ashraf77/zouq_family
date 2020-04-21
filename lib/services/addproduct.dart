@@ -87,7 +87,7 @@ class AddProduct {
             return "something is wrong";
           }
         } on DioError catch (e) {
-          // print('errooooooooorrrrrrrrr');
+           print('Error ' + e.toString());
           if (e.response == null) {
             showDialog(
                 context: context,

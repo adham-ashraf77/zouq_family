@@ -90,7 +90,7 @@ class _ItemDetailState extends State<ItemDetail> {
 
   deleteProduct() {
     print('Deleting ' + id.toString());
-    
+
     Delete().delete(productID: id).then((onValue) {
       if (onValue.toString().contains('success')) {
         
@@ -122,7 +122,7 @@ class _ItemDetailState extends State<ItemDetail> {
       print('onValue : ' + onValue.toString());
       var x = jsonDecode(onValue.toString());
       var y = x['product'];
-      print(y.toString());
+      print('=>>> ' + y.toString());
       setState(() {
         this.name = y['name'];
         this.price = y['price'];
@@ -131,13 +131,13 @@ class _ItemDetailState extends State<ItemDetail> {
         this.videoUrl = y['video'];
         List<dynamic> list = y['media'];
         imgList.clear();
-        
+        print('=>>> ' + y.toString());
         list.forEach((f) {
           setState(() {
             imgList.add(f.toString());
           });
         });
-        
+        print('=>>> ' + imgList.toString());
       });
 
       // if (onValue.toString().contains('success')) {
@@ -154,7 +154,7 @@ class _ItemDetailState extends State<ItemDetail> {
       //           ));
       // }
     }).then((_){
-              print('=>><< ' + this.videoUrl);
+//              print('=>><< ' + this.videoUrl);
        _controller = VideoPlayerController.network(
         
         this.videoUrl == null
