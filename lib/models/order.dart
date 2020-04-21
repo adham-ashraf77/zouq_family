@@ -12,7 +12,7 @@ class Order {
   final String phoneNumber;
   final double rate;
   final List<Comment> comments;
-  final List<Prouct> product;
+  final List<Product> product;
   Order(
       {this.id,
       this.comments,

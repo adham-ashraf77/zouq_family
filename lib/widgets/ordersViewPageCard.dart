@@ -3,7 +3,7 @@ import 'package:zouqadmin/models/product.dart';
 import 'package:zouqadmin/theme/common.dart';
 
 class OrderViewPageCard extends StatelessWidget {
-  final Prouct prouct;
+  final Product prouct;
   final int type;
 
   OrderViewPageCard({this.prouct, this.type});

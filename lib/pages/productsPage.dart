@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:zouqadmin/pages/addItemPage.dart';
 import 'package:zouqadmin/pages/itemDetailPage.dart';
+import 'package:zouqadmin/services/paginate.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/widgets/UiCard.dart';
 import 'package:zouqadmin/widgets/bottomNavigationbar.dart';
 import 'package:zouqadmin/widgets/cardContents/marketProfileCardContent.dart';
 import 'package:zouqadmin/widgets/chips/tagchip.dart';
+import 'package:zouqadmin/models/product.dart';
 
 class ProductsPage extends StatefulWidget {
   @override
@@ -15,6 +19,29 @@ class ProductsPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductsPage> {
   List<String> tags = ["حلوى", "غداء", "حلوى", "غداء", "حلوى", "غداء"];
   List<bool> selcted = [false, false, false, false, false, false];
+  List<Product> products = [];
+
+  @override
+  void didChangeDependencies() {
+    Paginate().paginate().then((onVal) {
+      var x = jsonDecode(onVal.toString());
+      List allProducts = x['products'];
+      products.clear();
+      for (int i = 0; i < allProducts.length; i++) {
+        setState(() {
+          products.add(new Product(
+              description: allProducts[i]['description'].toString(),
+              imageUrl: allProducts[i]['caption'].toString(),
+              name: allProducts[i]['name'].toString(),
+              price: allProducts[i]['price'].toString(),
+              rate: allProducts[i]['rate'].toString(),
+              id: allProducts[i]['id'].toString()));
+        });
+      }
+    });
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -62,28 +89,32 @@ class _ProductsPageState extends State<ProductsPage> {
           Container(
             height: (allHeight -
                 AppBar().preferredSize.height -
-                mediaQuery.padding.top-MediaQuery.of(context).size.height * 0.2),
+                mediaQuery.padding.top -
+                MediaQuery.of(context).size.height * 0.2),
             width: MediaQuery.of(context).size.width,
             child: ListView.builder(
                 padding: EdgeInsets.all(0),
                 primary: true,
-                itemCount: 6,
+                itemCount: products.length, //TODO replace with products.length
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
                     onTap: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ItemDetail()));
+                            builder: (context) => ItemDetail(
+                                id: products[index]
+                                    .id), //TODO replace with products[index] ID
+                          ));
                     },
                     child: UICard(
+                        //TODO render products instead of static
                         cardContent: MarketProfileCardContecnt(
-                      title: "وجبة",
-                      description: "وجبة منزلية لذيذة",
-                      imgUrl:
-                          "https://img.delicious.com.au/xME97xUY/w1200/del/2015/10/white-chocolate-truffle-cake-13633-1.jpg",
-                      price: 15.0,
-                      rating: 5.0,
+                      title: "${products[index].name}",
+                      description: "${products[index].description}",
+                      imgUrl: "${products[index].imageUrl}",
+                      price: double.parse('${products[index].price}'),
+                      rating:  double.parse('${products[index].rate}'),
                     )),
                   );
                 }),

@@ -26,13 +26,13 @@ class _OrdersPageState extends State<OrdersPage> {
         time: '02:22PM',
         contents: ' كيك , حلا , ….',
         product: [
-          Prouct(
+          Product(
               amount: 3,
               price: '45',
               imageUrl:
                   'http://www.mediafire.com/convkey/37d2/4rblt3fgtrad9sbzg.jpg',
               name: 'ملفوفة في أوراق الموز'),
-          Prouct(
+          Product(
               amount: 1,
               name: 'بوتو بيرياني',
               imageUrl:
@@ -47,13 +47,13 @@ class _OrdersPageState extends State<OrdersPage> {
         time: '02:22PM',
         contents: ' كيك , حلا , ….',
         product: [
-          Prouct(
+          Product(
               amount: 3,
               price: '45',
               imageUrl:
                   'http://www.mediafire.com/convkey/37d2/4rblt3fgtrad9sbzg.jpg',
               name: 'ملفوفة في أوراق الموز'),
-          Prouct(
+          Product(
               amount: 1,
               name: 'بوتو بيرياني',
               imageUrl:
@@ -72,13 +72,13 @@ class _OrdersPageState extends State<OrdersPage> {
       price: '43 ريال',
       phoneNumber: '543-649-3478',
       product: [
-        Prouct(
+        Product(
             amount: 3,
             price: '45',
             imageUrl:
                 'http://www.mediafire.com/convkey/37d2/4rblt3fgtrad9sbzg.jpg',
             name: 'ملفوفة في أوراق الموز'),
-        Prouct(
+        Product(
             amount: 1,
             name: 'بوتو بيرياني',
             imageUrl:
@@ -97,13 +97,13 @@ class _OrdersPageState extends State<OrdersPage> {
       phoneNumber: '543-649-3478',
    
       product: [
-        Prouct(
+        Product(
             amount: 3,
             price: '45',
             imageUrl:
                 'http://www.mediafire.com/convkey/37d2/4rblt3fgtrad9sbzg.jpg',
             name: 'ملفوفة في أوراق الموز'),
-        Prouct(
+        Product(
             amount: 1,
             name: 'بوتو بيرياني',
             imageUrl:
@@ -126,13 +126,13 @@ class _OrdersPageState extends State<OrdersPage> {
         Comment(name : 'محمد يوسف', comment: 'الطعام مذاقة جيد ولم يتأخر التوصيل , انصح بطلب هذا المنتج فانة رائع', imageUrl: 'http://www.mediafire.com/convkey/f3dd/rp9c5h7xajnzrh8zg.jpg', rate: 4.9)
       ],
       product: [
-        Prouct(
+        Product(
             amount: 3,
             price: '45',
             imageUrl:
                 'http://www.mediafire.com/convkey/37d2/4rblt3fgtrad9sbzg.jpg',
             name: 'ملفوفة في أوراق الموز'),
-        Prouct(
+        Product(
             amount: 1,
             name: 'بوتو بيرياني',
             imageUrl:
@@ -154,13 +154,13 @@ class _OrdersPageState extends State<OrdersPage> {
         Comment(name : 'محمد يوسف', comment: 'الطعام مذاقة جيد ولم يتأخر التوصيل , انصح بطلب هذا المنتج فانة رائع', imageUrl: 'http://www.mediafire.com/convkey/f3dd/rp9c5h7xajnzrh8zg.jpg', rate: 4.9)
       ],
       product: [
-        Prouct(
+        Product(
             amount: 3,
             price: '45',
             imageUrl:
                 'http://www.mediafire.com/convkey/37d2/4rblt3fgtrad9sbzg.jpg',
             name: 'ملفوفة في أوراق الموز'),
-        Prouct(
+        Product(
             amount: 1,
             name: 'بوتو بيرياني',
             imageUrl:

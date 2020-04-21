@@ -1,26 +1,45 @@
+import 'dart:convert';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:zouqadmin/pages/dialogWorning.dart';
+import 'package:zouqadmin/services/delete.dart';
+import 'package:zouqadmin/services/show.dart';
 import 'package:zouqadmin/theme/common.dart';
+import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/chips/ratingChip.dart';
 import 'package:zouqadmin/widgets/rate_card.dart';
 
 class ItemDetail extends StatefulWidget {
+  final String id;
+
+  const ItemDetail({@required this.id});
   @override
-  _ItemDetailState createState() => _ItemDetailState();
+  _ItemDetailState createState() => _ItemDetailState(id: this.id);
 }
 
 class _ItemDetailState extends State<ItemDetail> {
+  final String id;
+  _ItemDetailState({this.id});
   int _current = 0;
   VideoPlayerController _controller;
   Future<void> _initializeVideoPlayerFuture;
 
-  static final List<String> imgList = [
-    'https://assets.bonappetit.com/photos/597f6564e85ce178131a6475/16:9/w_1200,c_limit/0817-murray-mancini-dried-tomato-pie.jpg',
-    'https://assets.bonappetit.com/photos/597f6564e85ce178131a6475/16:9/w_1200,c_limit/0817-murray-mancini-dried-tomato-pie.jpg',
-    'https://assets.bonappetit.com/photos/597f6564e85ce178131a6475/16:9/w_1200,c_limit/0817-murray-mancini-dried-tomato-pie.jpg',
-    'https://assets.bonappetit.com/photos/597f6564e85ce178131a6475/16:9/w_1200,c_limit/0817-murray-mancini-dried-tomato-pie.jpg',
-    // 'https://assets.bonappetit.com/photos/597f6564e85ce178131a6475/16:9/w_1200,c_limit/0817-murray-mancini-dried-tomato-pie.jpg',
+  String name;
+  String videoUrl;
+  String rate;
+  String price;
+  String description;
+  bool isLoading = true;
+
+  static List<String> imgList = [
+    //   'https://assets.bonappetit.com/photos/597f6564e85ce178131a6475/16:9/w_1200,c_limit/0817-murray-mancini-dried-tomato-pie.jpg',
+    //   'https://assets.bonappetit.com/photos/597f6564e85ce178131a6475/16:9/w_1200,c_limit/0817-murray-mancini-dried-tomato-pie.jpg',
+    //   'https://assets.bonappetit.com/photos/597f6564e85ce178131a6475/16:9/w_1200,c_limit/0817-murray-mancini-dried-tomato-pie.jpg',
+    //   'https://assets.bonappetit.com/photos/597f6564e85ce178131a6475/16:9/w_1200,c_limit/0817-murray-mancini-dried-tomato-pie.jpg',
+    //   // 'https://assets.bonappetit.com/photos/597f6564e85ce178131a6475/16:9/w_1200,c_limit/0817-murray-mancini-dried-tomato-pie.jpg',
+    //
   ];
 
   final List child = map<Widget>(
@@ -59,21 +78,96 @@ class _ItemDetailState extends State<ItemDetail> {
       );
     },
   ).toList();
+
   static List<T> map<T>(List list, Function handler) {
     List<T> result = [];
     for (var i = 0; i < list.length; i++) {
       result.add(handler(i, list[i]));
     }
+    
     return result;
+  }
+
+  deleteProduct() {
+    print('Deleting ' + id.toString());
+    
+    Delete().delete(productID: id).then((onValue) {
+      if (onValue.toString().contains('success')) {
+        
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => DialogWorning(
+                  mss: 'The product has been deleted successfully!',
+                )).then((_) {
+          popPage(context);
+        });
+      } else {
+        print('Error ' + onValue.toString());
+        
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => DialogWorning(
+                  mss:
+                      'Something went wrong please check your connection and try again!',
+                ));
+      }
+    });
   }
 
   @override
   void initState() {
-    _controller = VideoPlayerController.network(
-      'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-    );
+
+    Show().show(productID: id).then((onValue) {
+      print('Product ID : ' + id.toString());
+      print('onValue : ' + onValue.toString());
+      var x = jsonDecode(onValue.toString());
+      var y = x['product'];
+      print(y.toString());
+      setState(() {
+        this.name = y['name'];
+        this.price = y['price'];
+        this.rate = y['rate'].toString();
+        this.description = y['description'];
+        this.videoUrl = y['video'];
+        List<dynamic> list = y['media'];
+        imgList.clear();
+        
+        list.forEach((f) {
+          setState(() {
+            imgList.add(f.toString());
+          });
+        });
+        
+      });
+
+      // if (onValue.toString().contains('success')) {
+      
+      //   print(onValue.toString());
+      // }
+      // else {
+      //   print('Error ' + onValue.toString());
+      
+      //   showDialog(
+      //       context: context,
+      //       builder: (BuildContext context) => DialogWorning(
+      //             mss:'Something went wrong please check your connection and try again!',
+      //           ));
+      // }
+    }).then((_){
+              print('=>><< ' + this.videoUrl);
+       _controller = VideoPlayerController.network(
+        
+        this.videoUrl == null
+            ? 'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'
+            : this.videoUrl);
     _initializeVideoPlayerFuture = _controller.initialize();
     vedioStart();
+    }).whenComplete((){
+      setState(() {
+        isLoading = false;
+      });
+    });
+   
     super.initState();
   }
 
@@ -83,8 +177,9 @@ class _ItemDetailState extends State<ItemDetail> {
     super.dispose();
   }
 
-  void vedioStart(){
-    child.insert(0,
+  void vedioStart() {
+    child.insert(
+        0,
         Container(
           margin: EdgeInsets.all(5.0),
           child: ClipRRect(
@@ -112,7 +207,7 @@ class _ItemDetailState extends State<ItemDetail> {
                   left: 50.0,
                   right: 50.0,
                   top: 50.0,
-                  child:InkWell(
+                  child: InkWell(
                     onTap: () {
                       setState(() {
                         if (_controller.value.isPlaying) {
@@ -122,7 +217,9 @@ class _ItemDetailState extends State<ItemDetail> {
                         }
                       });
                     },
-                    child:_controller.value.isPlaying? Container(): Image.asset("assets/icons/Play.png"),
+                    child: _controller.value.isPlaying
+                        ? Container()
+                        : Image.asset("assets/icons/Play.png"),
                   ),
                 )
               ],
@@ -133,7 +230,34 @@ class _ItemDetailState extends State<ItemDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return isLoading
+        ? Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.grey[400],
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(Colors.grey[300]),
+                      strokeWidth: 2,
+                    ),
+                  ),
+                  Text(
+                    'Loading...',
+                    textDirection: TextDirection.ltr,
+                    style:
+                        paragarph4.copyWith(color: Colors.grey[400], height: 2),
+                  )
+                ],
+              ),
+            ),
+          )
+        :Scaffold(
       appBar: AppBar(
         backgroundColor: mainColor,
         title: Text(
@@ -199,11 +323,11 @@ class _ItemDetailState extends State<ItemDetail> {
                           ),
                         ),
                       ),
-                      RatingChip(rating: 4.9),
+                      RatingChip(rating: double.parse(this.rate)),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
-                          'ملفوفة في أوراق الموز',
+                          '${this.name}',
                           style: TextStyle(
                             fontSize: 25,
                             color: textColor,
@@ -214,7 +338,7 @@ class _ItemDetailState extends State<ItemDetail> {
                       Padding(
                         padding: EdgeInsets.only(right: 20),
                         child: Text(
-                          'شرائح دجاج مشوية ، طرية تقدم على أرز حار',
+                          '${this.description}',
                           style: TextStyle(
                             fontSize: 15,
                             color: smallTextColor,
@@ -253,7 +377,7 @@ class _ItemDetailState extends State<ItemDetail> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                " ريال 236 ",
+                "${this.price}",
                 style: priceText1.copyWith(fontSize: 18),
               ),
               Row(
@@ -284,8 +408,11 @@ class _ItemDetailState extends State<ItemDetail> {
                   ),
                   Container(
                     padding: EdgeInsets.all(12),
-                    child: Center(
-                      child: Image.asset("assets/icons/delete.png"),
+                    child: GestureDetector(
+                      onTap: deleteProduct,
+                      child: Center(
+                        child: Image.asset("assets/icons/delete.png"),
+                      ),
                     ),
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.black, width: 0.1),

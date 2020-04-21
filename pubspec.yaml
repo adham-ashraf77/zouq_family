@@ -40,10 +40,10 @@ dependencies:
   pin_code_fields: ^2.4.0
   dio: ^3.0.9
   file_picker: ^1.6.2
+  image_picker: ^0.6.5
   multi_image_picker: ^4.6.4
   path_provider: ^1.6.5
-
-
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
