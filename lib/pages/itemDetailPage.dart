@@ -86,7 +86,7 @@ class _ItemDetailState extends State<ItemDetail> {
       await launch(
         url,
         forceSafariVC: false,
-        forceWebView: true,
+        forceWebView: false,
 
         headers: <String, String>{'my_header_key': 'my_header_value'},
       );
