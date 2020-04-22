@@ -51,7 +51,6 @@ class MyApp extends StatelessWidget {
             OrdersViewPage.routeName: (context) => OrdersViewPage(),
           },
 
-          ///Change this to `Home()` or `OrdersViewPage()` to view other pages!
         );
       }),
     );

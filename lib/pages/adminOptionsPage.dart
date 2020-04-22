@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -5,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zouqadmin/pages/adminEditProfilePage.dart';
 import 'package:zouqadmin/pages/adminWalletPage.dart';
 import 'package:zouqadmin/pages/auth/login_screen.dart';
+import 'package:zouqadmin/services/getuser.dart';
 import 'package:zouqadmin/theme/common.dart';
 
 class AdminOptionsPage extends StatefulWidget {
@@ -14,206 +17,235 @@ class AdminOptionsPage extends StatefulWidget {
 
 class _AdminOptionsPageState extends State<AdminOptionsPage> {
   IconData trailingIcon = Icons.arrow_forward_ios;
+  String name;
+  String avatarImageUrl;
+  @override
+  void didChangeDependencies() {
+    SharedPreferences.getInstance().then((onValue) {
+      String token = onValue.getString('token');
+      GetUser().getUser(token: token).then((value) {
+        var x = jsonDecode(value.toString());
+        print('X = ' + x['user'].toString());
+        setState(() {
+          name = x['user']['name'];
+          avatarImageUrl = x['user']['image'];
+        });
+      });
+    });
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-        children: <Widget>[
-          Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20.0, right: 10.0),
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AdminProfileEditor(),
-                      ),
-                    );
-                  },
-                  icon: Icon(
-                    Icons.edit,
-                    color: Color(0xff8c8c8c),
+      body: SingleChildScrollView(
+              child: Column(
+          // padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          children: <Widget>[
+            Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20.0, right: 10.0),
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AdminProfileEditor(),
+                        ),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.edit,
+                      color: Color(0xff8c8c8c),
+                    ),
                   ),
-                ),
-              )),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.15,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(profileImg)), //TODO add server image if _isLoggedIn is true
+                )),
+            // Container(
+            //   height: MediaQuery.of(context).size.height * 0.15,
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(50),
+            //     image: DecorationImage(
+            //         image: avatarImageUrl == null
+            //             ? AssetImage(profileImg)
+            //             : NetworkImage(
+            //                 '$avatarImageUrl')), //TODO add server image if _isLoggedIn is true
+            //   ),
+            // ),
+            CircleAvatar(
+              backgroundColor: Colors.transparent,
+                radius: 50,
+                backgroundImage: avatarImageUrl == null
+                    ? AssetImage(profileImg)
+                    : NetworkImage('$avatarImageUrl')),
+
+            SizedBox(
+              height: 10.0,
             ),
-          ),
-          SizedBox(
-            height: 10.0,
-          ),
-          Center(
-            child: Text(
-               'أسم الأسرة المنتجة',
-              style: moreTextStyle,
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AdminWalletPage()));
-            },
-            child: ListTile(
-              leading: Text("المحفظة", style: moreTextStyle),
-              trailing: Text(
-                "450 ريال",
-                style: moreSmallTextStyle,
+            Center(
+              child: Text(
+                this.name == null ? 'Loading...' : this.name,
+                style: moreTextStyle,
               ),
             ),
-          ),
-          Divider(
-            color: iconsFaded,
-            indent: 25,
-          ),
-          ListTile(
-            trailing: Icon(
-              trailingIcon,
-              size: 15.0,
-            ),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Text(
-                  "العربية",
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AdminWalletPage()));
+              },
+              child: ListTile(
+                leading: Text("المحفظة", style: moreTextStyle),
+                trailing: Text(
+                  "450 ريال",
                   style: moreSmallTextStyle,
                 ),
-              ],
+              ),
             ),
-            leading: Text("اللغة", style: moreTextStyle),
-          ),
-          Divider(
-            color: iconsFaded,
-            indent: 25,
-          ),
-          GestureDetector(
-            onTap: () {
+            Divider(
+              color: iconsFaded,
+              indent: 25,
+            ),
+            ListTile(
+              trailing: Icon(
+                trailingIcon,
+                size: 15.0,
+              ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Text(
+                    "العربية",
+                    style: moreSmallTextStyle,
+                  ),
+                ],
+              ),
+              leading: Text("اللغة", style: moreTextStyle),
+            ),
+            Divider(
+              color: iconsFaded,
+              indent: 25,
+            ),
+            GestureDetector(
+              onTap: () {
 //              Navigator.push(context,
 //                  MaterialPageRoute(builder: (context) => ContactPage()));
-            },
-            child: ListTile(
+              },
+              child: ListTile(
+                trailing: Icon(
+                  trailingIcon,
+                  size: 15.0,
+                ),
+                leading: Text(
+                  "اتصل بنا",
+                  style: moreTextStyle,
+                  textAlign: TextAlign.end,
+                ),
+              ),
+            ),
+            Divider(
+              color: iconsFaded,
+              indent: 25,
+            ),
+            ListTile(
               trailing: Icon(
                 trailingIcon,
                 size: 15.0,
               ),
               leading: Text(
-                "اتصل بنا",
+                "قيم التطبيق",
                 style: moreTextStyle,
                 textAlign: TextAlign.end,
               ),
             ),
-          ),
-          Divider(
-            color: iconsFaded,
-            indent: 25,
-          ),
-          ListTile(
-            trailing: Icon(
-              trailingIcon,
-              size: 15.0,
+            Divider(
+              color: iconsFaded,
+              indent: 25,
             ),
-            leading: Text(
-              "قيم التطبيق",
-              style: moreTextStyle,
-              textAlign: TextAlign.end,
-            ),
-          ),
-          Divider(
-            color: iconsFaded,
-            indent: 25,
-          ),
-          ListTile(
-            trailing: Icon(
-              trailingIcon,
-              size: 15.0,
-            ),
-            leading: Text(
-              "سياسة الاستخدام",
-              style: moreTextStyle,
-              textAlign: TextAlign.end,
-            ),
-          ),
-          Divider(
-            color: iconsFaded,
-            indent: 25,
-          ),
-          ListTile(
-            trailing: Icon(
-              trailingIcon,
-              size: 15.0,
-            ),
-            leading: Text(
-              "الاسئلة الشائعة",
-              style: moreTextStyle,
-              textAlign: TextAlign.end,
-            ),
-          ),
-          Divider(
-            color: iconsFaded,
-            indent: 25,
-          ),
-          ListTile(
-            leading: GestureDetector(
-              onTap: () async{
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                prefs.clear();
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => LoginPage())
-                );
-              },
-              child: Text(
-                'تسجيل الخروج',
-                style: moreTextStyle.copyWith(
-                    color: rejectedColor),
+            ListTile(
+              trailing: Icon(
+                trailingIcon,
+                size: 15.0,
+              ),
+              leading: Text(
+                "سياسة الاستخدام",
+                style: moreTextStyle,
                 textAlign: TextAlign.end,
               ),
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                child: CircleAvatar(
-                  backgroundColor: Color(0xffdb4a39),
-                  child: IconButton(
-                    onPressed: () {
-                      //TODO add google+ pageview
-                    },
-                    icon: Icon(
-                      FontAwesomeIcons.googlePlusG,
-                      color: Colors.white,
+            Divider(
+              color: iconsFaded,
+              indent: 25,
+            ),
+            ListTile(
+              trailing: Icon(
+                trailingIcon,
+                size: 15.0,
+              ),
+              leading: Text(
+                "الاسئلة الشائعة",
+                style: moreTextStyle,
+                textAlign: TextAlign.end,
+              ),
+            ),
+            Divider(
+              color: iconsFaded,
+              indent: 25,
+            ),
+            ListTile(
+              leading: GestureDetector(
+                onTap: () async {
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  prefs.clear();
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => LoginPage()));
+                },
+                child: Text(
+                  'تسجيل الخروج',
+                  style: moreTextStyle.copyWith(color: rejectedColor),
+                  textAlign: TextAlign.end,
+                ),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: CircleAvatar(
+                    backgroundColor: Color(0xffdb4a39),
+                    child: IconButton(
+                      onPressed: () {
+                        //TODO add google+ pageview
+                      },
+                      icon: Icon(
+                        FontAwesomeIcons.googlePlusG,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                child: CircleAvatar(
-                  backgroundColor: Color(0xff4267b2),
-                  child: IconButton(
-                    onPressed: () {
-                      //TODO add facebook pageview
-                    },
-                    icon: Icon(
-                      FontAwesomeIcons.facebookF,
-                      color: Colors.white,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: CircleAvatar(
+                    backgroundColor: Color(0xff4267b2),
+                    child: IconButton(
+                      onPressed: () {
+                        //TODO add facebook pageview
+                      },
+                      icon: Icon(
+                        FontAwesomeIcons.facebookF,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 60.0,
-          ),
-        ],
+              ],
+            ),
+            SizedBox(
+              height: 60.0,
+            ),
+          ],
+        ),
       ),
     );
   }

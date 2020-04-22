@@ -2,14 +2,17 @@ import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 //import 'package:video_player/video_player.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
+import 'package:zouqadmin/pages/editItemPage.dart';
 import 'package:zouqadmin/services/delete.dart';
 import 'package:zouqadmin/services/show.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/chips/ratingChip.dart';
 import 'package:zouqadmin/widgets/rate_card.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 class ItemDetail extends StatefulWidget {
   final String id;
@@ -43,6 +46,7 @@ class _ItemDetailState extends State<ItemDetail> {
   ];
 
   List child;
+  
 
   static List<T> map<T>(List list, Function handler) {
     List<T> result = [];
@@ -77,13 +81,27 @@ class _ItemDetailState extends State<ItemDetail> {
     });
   }
 
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        forceSafariVC: false,
+        forceWebView: true,
+
+        headers: <String, String>{'my_header_key': 'my_header_value'},
+      );
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   initImages() {
     Show().show(productID: id).then((onValue) {
       print('Product ID : ' + id.toString());
       print('onValue : ' + onValue.toString());
       var x = jsonDecode(onValue.toString());
       var y = x['product'];
-      print('=>>> ' + y.toString());
+      
       setState(() {
         this.name = y['name'];
         this.price = y['price'];
@@ -92,7 +110,7 @@ class _ItemDetailState extends State<ItemDetail> {
         this.videoUrl = y['video'];
         List<dynamic> list = y['media'];
         imgList.clear();
-        print('=>>> ' + y.toString());
+        
         list.forEach((f) {
           setState(() {
             imgList.add(f.toString());
@@ -156,6 +174,39 @@ class _ItemDetailState extends State<ItemDetail> {
           );
         },
       ).toList();
+      print('Video url : '+  this.videoUrl);
+
+          child.insert(
+        0,
+        Container(
+          margin: EdgeInsets.all(5.0),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  height: 240,
+                  child: Container(
+                    //todo add thumbnail
+                  ),
+                ),
+                Positioned(
+                  bottom: 200.0,
+                  left: 50.0,
+                  right: 50.0,
+                  top: 50.0,
+                  child: InkWell(
+                    onTap: () {
+                   //TODO add url launcher
+                      _launchURL(this.videoUrl);
+                    },
+                    child:  Image.asset("assets/icons/Play.png"),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ));
     }).whenComplete(() {
       print('gazar');
       setState(() {
@@ -185,42 +236,42 @@ class _ItemDetailState extends State<ItemDetail> {
 //            borderRadius: BorderRadius.all(Radius.circular(15.0)),
 //            child: Stack(
 //              children: <Widget>[
-////                Container(
-////                  height: 240,
-////                  child: FutureBuilder(
-////                    future: _initializeVideoPlayerFuture,
-////                    builder: (context, snapshot) {
-////                      if (snapshot.connectionState == ConnectionState.done) {
-////                        return AspectRatio(
-////                          aspectRatio: _controller.value.aspectRatio,
-////                          child: VideoPlayer(_controller),
-////                        );
-////                      } else {
-////                        return Container();
-////                      }
-////                    },
-////                  ),
-////                ),
-////                Positioned(
-////                  bottom: 200.0,
-////                  left: 50.0,
-////                  right: 50.0,
-////                  top: 50.0,
-////                  child: InkWell(
-////                    onTap: () {
-////                      setState(() {
-////                        if (_controller.value.isPlaying) {
-////                          _controller.pause();
-////                        } else {
-////                          _controller.play();
-////                        }
-////                      });
-////                    },
-////                    child: _controller.value.isPlaying
-////                        ? Container()
-////                        : Image.asset("assets/icons/Play.png"),
-////                  ),
-////                )
+//                Container(
+//                  height: 240,
+//                  child: FutureBuilder(
+//                    future: _initializeVideoPlayerFuture,
+//                    builder: (context, snapshot) {
+//                      if (snapshot.connectionState == ConnectionState.done) {
+//                        return AspectRatio(
+//                          aspectRatio: _controller.value.aspectRatio,
+//                          child: VideoPlayer(_controller),
+//                        );
+//                      } else {
+//                        return Container();
+//                      }
+//                    },
+//                  ),
+//                ),
+//                Positioned(
+//                  bottom: 200.0,
+//                  left: 50.0,
+//                  right: 50.0,
+//                  top: 50.0,
+//                  child: InkWell(
+//                    onTap: () {
+//                      setState(() {
+//                        if (_controller.value.isPlaying) {
+//                          _controller.pause();
+//                        } else {
+//                          _controller.play();
+//                        }
+//                      });
+//                    },
+//                    child: _controller.value.isPlaying
+//                        ? Container()
+//                        : Image.asset("assets/icons/Play.png"),
+//                  ),
+//                )
 //              ],
 //            ),
 //          ),
@@ -378,6 +429,7 @@ class _ItemDetailState extends State<ItemDetail> {
                         InkWell(
                           onTap: () {
                             // popPage(context);
+                            pushPage(context, EditItemPage(id: id,));
                           },
                           child: Container(
                             decoration: BoxDecoration(
