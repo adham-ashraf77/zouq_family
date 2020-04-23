@@ -100,10 +100,17 @@ class _MarketProfileCardContecntState extends State<MarketProfileCardContecnt> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        "${widget.description}",
-                        style: paragarph3,
-                      ),
+                      SizedBox(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.5,
+                        child: Text(
+                          "${widget.description}",
+                          overflow: TextOverflow.ellipsis,
+                          style: paragarph3,
+                        ),
+                      )
                     ],
                   ),
                   Row(

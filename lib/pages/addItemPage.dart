@@ -4,14 +4,13 @@ import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
 import 'package:zouqadmin/services/addproduct.dart';
 import 'package:zouqadmin/theme/common.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 
 class AddItemPage extends StatefulWidget {
   @override
@@ -203,6 +202,7 @@ class _AddItemPageState extends State<AddItemPage> {
                   ));
         } else {
           //TODO uploading
+          print('hi from else');
           AddProduct().addProduct(
               catID: categoryID + 1,
               desc: descTextFieldController.text,
@@ -211,7 +211,7 @@ class _AddItemPageState extends State<AddItemPage> {
               price: priceTextFieldController.text,
               video: productVideo,
               context: context
-              );
+          );
         }
       } else {
         showDialog(
