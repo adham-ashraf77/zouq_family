@@ -8,6 +8,8 @@ import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/AppButton.dart';
 import 'package:zouqadmin/services/resetpassword.dart';
+import '../../I10n/app_localizations.dart';
+
 class Forgetpass extends StatefulWidget {
   Forgetpass({this.title});
 
@@ -42,7 +44,8 @@ class _ForgetpassState extends State<Forgetpass> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(' نسيت كلمة المرور ', style: headers4),
+        title: Text(AppLocalizations.of(context).translate('forgot'),
+            style: headers4),
         centerTitle: true,
         leading: IconButton(
             icon: Icon(
@@ -79,11 +82,14 @@ class _ForgetpassState extends State<Forgetpass> {
                 Expanded(
                   flex: 7,
                   child: TextFormField(
-                    decoration: InputDecoration(hintText: 'رقم الهاتـف'),
+                    decoration: InputDecoration(
+                        hintText: AppLocalizations.of(context)
+                            .translate('telephone')),
                     controller: phoneController,
                     validator: (value) {
                       if (value.trim().length < 9) {
-                        return 'Please enter a valid phone number';
+                        return AppLocalizations.of(context)
+                            .translate('phoneError');
                       }
                       return null;
                     },
@@ -120,15 +126,15 @@ class _ForgetpassState extends State<Forgetpass> {
               height: 50,
             ),
             AppButton(
-              text: 'إرسال كـود التحقق',
+              text: AppLocalizations.of(context).translate('sendCode'),
               onClick: () {
-if (_formKey.currentState.validate()) {
+                if (_formKey.currentState.validate()) {
                   ResetPassword()
                       .resetPassword(
                           phone: _countryCode.replaceAll("+", "") +
                               phoneController.text)
                       .then((response) {
-                        print('here' + response.toString());
+                    print('here' + response.toString());
                     if (response.data['message'] ==
                             ('confirmation code has been sent successfully') ||
                         response.statusCode == 200 ||
@@ -136,7 +142,8 @@ if (_formKey.currentState.validate()) {
                       pushPage(
                           context,
                           VerificationcodePage(
-                            phone:_countryCode.replaceAll("+", "") + phoneController.text,
+                            phone: _countryCode.replaceAll("+", "") +
+                                phoneController.text,
                             flag: 2,
                           ));
                     } else {
@@ -147,19 +154,23 @@ if (_formKey.currentState.validate()) {
                               ));
                     }
                   }).catchError((onError) {
-                    if(onError.toString().contains('Http status error [404]'))
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) => DialogWorning(
-                              mss: "Phone number isn't valid, please check your input",
-                            ));else showDialog(
-                        context: context,
-                        builder: (BuildContext context) => DialogWorning(
-                          mss: 'Something went wrong please try again later',//"$onError",
-                        ));
-
+                    if (onError.toString().contains('Http status error [404]'))
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => DialogWorning(
+                                mss:
+                                    "Phone number isn't valid, please check your input",
+                              ));
+                    else
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => DialogWorning(
+                                mss:
+                                    'Something went wrong please try again later', //"$onError",
+                              ));
                   });
-                }              },
+                }
+              },
             ),
           ],
         ),

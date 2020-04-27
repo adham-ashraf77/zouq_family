@@ -10,6 +10,14 @@ import 'package:zouqadmin/pages/auth/login_screen.dart';
 import 'package:zouqadmin/services/getuser.dart';
 import 'package:zouqadmin/theme/common.dart';
 
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+
 class AdminOptionsPage extends StatefulWidget {
   @override
   _AdminOptionsPageState createState() => _AdminOptionsPageState();
@@ -39,7 +47,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-              child: Column(
+        child: Column(
           // padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           children: <Widget>[
             Align(
@@ -73,7 +81,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
             //   ),
             // ),
             CircleAvatar(
-              backgroundColor: Colors.transparent,
+                backgroundColor: Colors.transparent,
                 radius: 50,
                 backgroundImage: avatarImageUrl == null
                     ? AssetImage(profileImg)
@@ -94,7 +102,8 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                     MaterialPageRoute(builder: (context) => AdminWalletPage()));
               },
               child: ListTile(
-                leading: Text("المحفظة", style: moreTextStyle),
+                leading: Text(AppLocalizations.of(context).translate('wallet'),
+                    style: moreTextStyle),
                 trailing: Text(
                   "450 ريال",
                   style: moreSmallTextStyle,
@@ -119,7 +128,8 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                   ),
                 ],
               ),
-              leading: Text("اللغة", style: moreTextStyle),
+              leading: Text(AppLocalizations.of(context).translate('language'),
+                  style: moreTextStyle),
             ),
             Divider(
               color: iconsFaded,
@@ -136,7 +146,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                   size: 15.0,
                 ),
                 leading: Text(
-                  "اتصل بنا",
+                  AppLocalizations.of(context).translate('contactUs'),
                   style: moreTextStyle,
                   textAlign: TextAlign.end,
                 ),
@@ -152,7 +162,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                 size: 15.0,
               ),
               leading: Text(
-                "قيم التطبيق",
+                AppLocalizations.of(context).translate('rateApp'),
                 style: moreTextStyle,
                 textAlign: TextAlign.end,
               ),
@@ -167,7 +177,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                 size: 15.0,
               ),
               leading: Text(
-                "سياسة الاستخدام",
+                AppLocalizations.of(context).translate('EULA'),
                 style: moreTextStyle,
                 textAlign: TextAlign.end,
               ),
@@ -182,7 +192,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                 size: 15.0,
               ),
               leading: Text(
-                "الاسئلة الشائعة",
+                AppLocalizations.of(context).translate('FAQ'),
                 style: moreTextStyle,
                 textAlign: TextAlign.end,
               ),
@@ -194,13 +204,14 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
             ListTile(
               leading: GestureDetector(
                 onTap: () async {
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
                   prefs.clear();
                   Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (context) => LoginPage()));
                 },
                 child: Text(
-                  'تسجيل الخروج',
+                  AppLocalizations.of(context).translate('signOut'),
                   style: moreTextStyle.copyWith(color: rejectedColor),
                   textAlign: TextAlign.end,
                 ),

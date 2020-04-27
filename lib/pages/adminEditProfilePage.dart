@@ -11,6 +11,13 @@ import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+
 enum DeliveryService { doesDelivery, noDelivery }
 
 class AdminProfileEditor extends StatefulWidget {
@@ -54,7 +61,7 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'تعديل الملف الشخصى',
+          AppLocalizations.of(context).translate('editProfile'),
           style: moreTextStyle,
         ),
         centerTitle: true,
@@ -142,7 +149,7 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
 //            ),
             Center(
               child: Text(
-                'تعديل كلمة المرور',
+                AppLocalizations.of(context).translate('changePassword'),
                 style: moreTextStyle,
               ),
             ),
@@ -161,7 +168,8 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
               },
               decoration: InputDecoration(
                   // border: InputBorder.none,
-                  hintText: 'كلمة السر القديمة',
+                  hintText:
+                      AppLocalizations.of(context).translate('oldPassword'),
                   hintStyle: hintTextStyle),
             ),
 
@@ -180,7 +188,8 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
               },
               decoration: InputDecoration(
                   // border: InputBorder.none,
-                  hintText: 'كلمة السر الجديدة',
+                  hintText:
+                      AppLocalizations.of(context).translate('newPassword'),
                   hintStyle: hintTextStyle),
             ),
 
@@ -195,14 +204,15 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
                 if (value.trim().length < 6) {
                   //todo translate
                   return 'Password must be at least 6 characters';
-                }else if (value != newPassTextFieldController.text){
+                } else if (value != newPassTextFieldController.text) {
                   return "Passwords don't match";
                 }
                 return null;
               },
               decoration: InputDecoration(
                   // border: InputBorder.none,
-                  hintText: 'كلمة السر الجديدة',
+                  hintText:
+                      AppLocalizations.of(context).translate('newPassword'),
                   hintStyle: hintTextStyle),
             ),
 
@@ -212,18 +222,22 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
             ListTile(
               title: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                              child: Row(
+                child: Row(
                   children: <Widget>[
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          selectedDeliveryService = DeliveryService.doesDelivery;
+                          selectedDeliveryService =
+                              DeliveryService.doesDelivery;
                         });
                       },
                       child: Container(
                         decoration: BoxDecoration(
                             border: Border.all(
-                              color: Color(0xFF636363),
+                              color: selectedDeliveryService ==
+                                      DeliveryService.doesDelivery
+                                  ? accent
+                                  : Color(0xFF636363),
                             ),
                             borderRadius: BorderRadius.circular(50)),
                         child: CircleAvatar(
@@ -244,7 +258,7 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
                       width: 10.0,
                     ),
                     Text(
-                      'خدمة توصيل',
+                      AppLocalizations.of(context).translate('delivery'),
                       style: productName1,
                     ),
                     SizedBox(
@@ -259,7 +273,10 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
                       child: Container(
                         decoration: BoxDecoration(
                             border: Border.all(
-                              color: Color(0xFF636363),
+                              color: selectedDeliveryService ==
+                                      DeliveryService.noDelivery
+                                  ? accent
+                                  : Color(0xFF636363),
                             ),
                             borderRadius: BorderRadius.circular(50)),
                         child: CircleAvatar(
@@ -279,7 +296,7 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
                       width: 10.0,
                     ),
                     Text(
-                      'لا يقدم الخدمة',
+                      AppLocalizations.of(context).translate('noDelivery'),
                       style: productName1,
                     ),
                   ],
@@ -288,7 +305,7 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
             ),
             DropdownButton(
               isExpanded: true,
-              hint: Text('select city'),
+              hint: Text(AppLocalizations.of(context).translate('selectCity')),
               value: dropdownValue,
               icon: Icon(
                 Icons.arrow_drop_down,
@@ -327,7 +344,8 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
               },
               decoration: InputDecoration(
                   // border: InputBorder.none,
-                  hintText: 'Description',
+                  hintText:
+                      AppLocalizations.of(context).translate('description'),
                   hintStyle: hintTextStyle),
             ),
             SizedBox(
@@ -341,7 +359,7 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
                     value: isdeliveryAvailable,
                     onChanged: _onisdeliveryAvailableChanged),
                 Text(
-                  'Is delivery available ',
+                  AppLocalizations.of(context).translate('isDeliveryAvailab/le'),
                 ),
               ],
             ),
@@ -357,17 +375,17 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
                     pushPage(context, EditPhoneNumberPage());
                   },
                   child: Text(
-                    'تعديل رقم الهاتف',
+                    AppLocalizations.of(context).translate('editPhone'),
                     style: TextStyle(color: Colors.blue),
                   ),
                 ),
                 Text(
-                  ' أو ',
+                  AppLocalizations.of(context).translate('or'),
                   style: TextStyle(color: Colors.black87),
                 ),
                 GestureDetector(
                   child: Text(
-                    ' تغيير كلمة المرور ',
+                    AppLocalizations.of(context).translate('changePassword'),
                     style: TextStyle(color: Colors.blue),
                   ),
                 ),
@@ -382,14 +400,16 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
                       borderRadius: BorderRadius.circular(18.0)),
                   color: accent,
                   child: Text(
-                    'تعديل',
+                    AppLocalizations.of(context).translate('edit'),
                     style: TextStyle(color: Colors.white, fontSize: 25.0),
                   ),
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
                       UpdateProfile()
-                          .updateProfile(descTextFieldController.text,
-                              isdeliveryAvailable ? '1' : '0',newPassTextFieldController.text)
+                          .updateProfile(
+                              descTextFieldController.text,
+                              isdeliveryAvailable ? '1' : '0',
+                              newPassTextFieldController.text)
                           .then((onValue) {
                         print(onValue);
                         showDialog(

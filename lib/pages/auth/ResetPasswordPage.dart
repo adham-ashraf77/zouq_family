@@ -6,10 +6,15 @@ import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/AppButton.dart';
 import 'package:zouqadmin/services/settingnewpassword.dart';
+import '../../I10n/app_localizations.dart';
+import '../../I10n/app_localizations.dart';
+import '../../I10n/app_localizations.dart';
+import '../../I10n/app_localizations.dart';
+import '../../I10n/app_localizations.dart';
 import '../../home.dart';
 
 class ResetPasswordPage extends StatefulWidget {
-   final String phone;
+  final String phone;
   final String title;
   ResetPasswordPage({this.title, this.phone});
   @override
@@ -38,7 +43,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(' انشاء كلمة المرور ', style: headers4),
+        title: Text(AppLocalizations.of(context).translate('createPassword'),
+            style: headers4),
         centerTitle: true,
         leading: IconButton(
             icon: Icon(
@@ -51,15 +57,16 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       ),
       body: Form(
         key: _formKey,
-              child: SingleChildScrollView(
+        child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               SizedBox(
-                height: MediaQuery.of(context).orientation == Orientation.portrait
-                    ? 50
-                    : 20,
+                height:
+                    MediaQuery.of(context).orientation == Orientation.portrait
+                        ? 50
+                        : 20,
               ),
               Center(
                 child: CircleAvatar(
@@ -77,67 +84,75 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 controller: pass1,
                 validator: (value) {
                   if (value.trim().length < 6) {
-                    return 'Password must be at least 6 characters';
+                    return AppLocalizations.of(context)
+                        .translate('shortPassword');
                   }
                   return null;
                 },
-                decoration: InputDecoration(hintText: 'كلمة المرور الجديدة'),
+                decoration: InputDecoration(
+                    hintText:
+                        AppLocalizations.of(context).translate('newPassword')),
                 obscureText: true,
               ),
               SizedBox(
                 height: 20,
               ),
               TextFormField(
-                 controller: pass2,
-                  validator: (value) {
-                    if (value.trim().length < 6) {
-                      return 'Password must be at least 6 characters';
-                    }
-                    return null;
-                  },
+                controller: pass2,
+                validator: (value) {
+                  if (value.trim().length < 6) {
+                    return AppLocalizations.of(context)
+                        .translate('shortPassword');
+                  }
+                  return null;
+                },
                 obscureText: true,
-                decoration:
-                    InputDecoration(hintText: 'تأكيد كلمة المرور الجديدة '),
+                decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context)
+                        .translate('confirmPassword')),
               ),
               SizedBox(
                 height: 50,
               ),
               AppButton(
-                text: 'حــفــظ',
+                text: AppLocalizations.of(context).translate('save'),
                 onClick: () {
-                  if(_formKey.currentState.validate())
-                  if (pass1.text.trim().length > 5) {
+                  if (_formKey.currentState
+                      .validate()) if (pass1.text.trim().length > 5) {
                     //TODO
                     pass1.text == pass2.text
                         ? SetNewPassword()
-                        .setNewPassword(phone: phone, newPassword: pass1.text)
-                        .then((onValue) {
-                      print('onVal ' + onValue.toString());
-                      if(onValue.data['message'] == 'password has been reset successfully')
-                        pushPage(context, LoginPage());
-                      else{
-                        showDialog(
+                            .setNewPassword(
+                                phone: phone, newPassword: pass1.text)
+                            .then((onValue) {
+                            print('onVal ' + onValue.toString());
+                            if (onValue.data['message'] ==
+                                'password has been reset successfully')
+                              pushPage(context, LoginPage());
+                            else {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      DialogWorning(
+                                        mss: onValue.data['message'],
+                                      ));
+                            }
+                          }).catchError((onError) {
+                            print('Error ->' + onError);
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    DialogWorning(
+                                      mss:
+                                          'Something went wrong please try again later', // onError.toString(),
+                                    ));
+                          })
+                        : showDialog(
                             context: context,
                             builder: (BuildContext context) => DialogWorning(
-                              mss: onValue.data['message'],
-                            ));
-                      }
-                    }).catchError((onError){
-                      print('Error ->' + onError);
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) => DialogWorning(
-                            mss: 'Something went wrong please try again later',// onError.toString(),
-                          ));
-                    })
-                        :
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) => DialogWorning(
-                          mss: "Passwords doesn't match",
-                        ));
+                                  mss: "Passwords doesn't match",
+                                ));
                   }
-                
                 },
               ),
             ],

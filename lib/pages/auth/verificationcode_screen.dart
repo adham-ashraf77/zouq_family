@@ -7,6 +7,11 @@ import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/AppButton.dart';
 import 'package:zouqadmin/services/checkpasswordresettingcode.dart';
+import '../../I10n/app_localizations.dart';
+import '../../I10n/app_localizations.dart';
+import '../../I10n/app_localizations.dart';
+import '../../I10n/app_localizations.dart';
+import '../../I10n/app_localizations.dart';
 import '../../home.dart';
 import '../dialogWorning.dart';
 import '../productsPage.dart';
@@ -79,7 +84,8 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
       showDialog(
           context: context,
           builder: (BuildContext context) => DialogWorning(
-                mss: 'Something went wrong please try again later',//onError.toString(),
+                mss:
+                    'Something went wrong please try again later', //onError.toString(),
               ));
     });
   }
@@ -102,7 +108,8 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(' رمز التحقق', style: headers4),
+        title: Text(AppLocalizations.of(context).translate('verifyCode'),
+            style: headers4),
         centerTitle: true,
         leading: IconButton(
             icon: Icon(
@@ -128,7 +135,8 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
             // SizedBox(
             //   height: 5,
             // ),
-            Text('أدخل رمز OTP الخاص بك هنا', style: paragarph2),
+            Text(AppLocalizations.of(context).translate('enterOTPCode'),
+                style: paragarph2),
             SizedBox(
               height: 20,
             ),
@@ -170,7 +178,7 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
               height: 30,
             ),
             AppButton(
-              text: "تحقق",
+              text: AppLocalizations.of(context).translate('check'),
               onClick: () {
                 validation();
               },
@@ -182,15 +190,18 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  'لم تتلقى أي رمز؟ ',
+                  AppLocalizations.of(context).translate('noOTPCode'),
                   style: paragarph4,
+                ),
+                SizedBox(
+                  width: 5,
                 ),
                 InkWell(
                   onTap: () {
                     resendCode();
                   },
                   child: Text(
-                    '  إعادة إرسال رمز جديد ',
+                    AppLocalizations.of(context).translate('resendCode'),
                     style: paragarph4.copyWith(color: accent),
                   ),
                 ),

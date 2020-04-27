@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +15,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zouqadmin/widgets/filterChipWidget.dart';
 import 'package:path/path.dart' as p;
 
+import '../I10n/app_localizations.dart';
+import '../theme/common.dart';
+import '../widgets/AppButton.dart';
 import 'auth/verificationcode_screen.dart';
 
 enum DeliveryService { doesDelivery, noDelivery }
@@ -41,77 +43,76 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   String _phone;
   bool _is_delivery_available;
   File _image;
-  List<int> _categories=[];
+  List<int> _categories = [];
   String _city;
   String _countryCode = "+966";
   List<Categories> _tags = [];
   List<bool> selected = [];
   List<Cities> _allCity = [];
   List<String> _showCity = [];
-  bool _isLooding =false;
-
+  bool _isLooding = false;
 
   Future getImage() async {
     setState(() {
       _loodingImage = true;
     });
     try {
-      var file = await FilePicker.getFile(type: FileType.custom,allowedExtensions: ['jpg', 'png', 'jpeg'],);
+      var file = await FilePicker.getFile(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'png', 'jpeg'],
+      );
 
-      setState(()  {
+      setState(() {
         fileName = p.basename(file.path);
         _image = file;
       });
       setState(() {
         _loodingImage = false;
       });
-    }catch (Exception) {
+    } catch (Exception) {
       print('Except ' + Exception.toString());
       setState(() {
         _image = null;
         _loodingImage = false;
       });
-
     }
   }
 
   validation() {
-    if(_image == null){
+    if (_image == null) {
       setState(() {
         _imageAlert = "please select image";
       });
-    }else{
-     setState(() {
-       _imageAlert ='';
-     });
+    } else {
+      setState(() {
+        _imageAlert = '';
+      });
     }
-    if(selectedDeliveryService == null){
+    if (selectedDeliveryService == null) {
       setState(() {
         _deliveryAlert = "Please select one";
       });
-    }
-    else{
+    } else {
       setState(() {
-        _deliveryAlert ='';
+        _deliveryAlert = '';
       });
     }
-    if(_city == null){
+    if (_city == null) {
       setState(() {
         _cityAlert = "Please select city";
       });
-    }
-    else{
+    } else {
       setState(() {
-        _cityAlert ='';
+        _cityAlert = '';
       });
     }
-    if(_formKey.currentState.validate()){
+    if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      if(_image != null){
-        if(selectedDeliveryService != null){
-          if(_city != null){
+      if (_image != null) {
+        if (selectedDeliveryService != null) {
+          if (_city != null) {
             setState(() {
-              _isLooding =true;
+              _isLooding = true;
             });
             registration();
           }
@@ -122,28 +123,39 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 
   registration() async {
     int idCity;
-    Cities city =  _allCity.firstWhere((c)=>c.text == _city);
+    Cities city = _allCity.firstWhere((c) => c.text == _city);
     idCity = city.id;
     String response1 = await Registeration().registration(
         name: _name,
         email: _email,
         password: _password,
         phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
-      image: _image,
-      city: idCity,
-      is_delivery_available: selectedDeliveryService == DeliveryService.doesDelivery?true:false,
-      categories: _categories
-    );
+        image: _image,
+        city: idCity,
+        is_delivery_available:
+            selectedDeliveryService == DeliveryService.doesDelivery
+                ? true
+                : false,
+        categories: _categories);
     setState(() {
-      _isLooding =false;
+      _isLooding = false;
     });
 
-    if (response1 != "success"){
+    if (response1 != "success") {
       showDialog(
           context: context,
-          builder: (BuildContext context) => DialogWorning(mss:response1 ,));
+          builder: (BuildContext context) => DialogWorning(
+                mss: response1,
+              ));
     } else {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => VerificationcodePage(phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",flag: 1,)));
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => VerificationcodePage(
+                    phone:
+                        "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
+                    flag: 1,
+                  )));
     }
   }
 
@@ -158,28 +170,29 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   void initState() {
     // TODO: implement initState
     setState(() {
-      _isLooding =true;
+      _isLooding = true;
     });
     save();
 
     super.initState();
   }
+
   save() async {
-   await GetData().getCategories();
-   await GetData().getCity();
-   setState(() {
-     _tags = GetData.arCategories;
-     _allCity = GetData.arCity;
-     _allCity.forEach((d){
-       _showCity.add(d.text);
-     });
-     _tags.forEach((d){
-       selected.add(false);
-     });
-   });
-   setState(() {
-     _isLooding =false;
-   });
+    await GetData().getCategories();
+    await GetData().getCity();
+    setState(() {
+      _tags = GetData.arCategories;
+      _allCity = GetData.arCity;
+      _allCity.forEach((d) {
+        _showCity.add(d.text);
+      });
+      _tags.forEach((d) {
+        selected.add(false);
+      });
+    });
+    setState(() {
+      _isLooding = false;
+    });
   }
 
   @override
@@ -191,9 +204,9 @@ class _AdminRegistrationState extends State<AdminRegistration> {
     super.dispose();
   }
 
-  void addCategories(int id){
+  void addCategories(int id) {
     _categories.add(id);
-    _categories.forEach((d){
+    _categories.forEach((d) {
       print(d);
     });
   }
@@ -204,12 +217,12 @@ class _AdminRegistrationState extends State<AdminRegistration> {
       appBar: AppBar(
         elevation: 0.0,
         title: Text(
-          'تسجيل كأسرة المنتجة',
+          AppLocalizations.of(context).translate('signUp'),
           style: moreTextStyle,
         ),
         centerTitle: true,
       ),
-      body:SafeArea(
+      body: SafeArea(
         child: Form(
           key: _formKey,
           child: ListView(
@@ -240,9 +253,8 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                   SizedBox(
                     width: 10,
                   ),
-                  _loodingImage ?CircularProgressIndicator():Container(),
+                  _loodingImage ? CircularProgressIndicator() : Container(),
                 ],
-
               ),
               Center(
                 child: Text(
@@ -269,8 +281,9 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                           return null;
                         },
                         decoration: InputDecoration(
-                            hintText: 'أسم المشترك', hintStyle: hintTextStyle),
-
+                            hintText: AppLocalizations.of(context)
+                                .translate('username'),
+                            hintStyle: hintTextStyle),
                       ),
                     ),
                   ],
@@ -284,16 +297,19 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                         child: TextFormField(
                           maxLength: 12,
                           decoration: InputDecoration(
-                            counterText: "",
+                              counterText: "",
                               border: InputBorder.none,
-                              hintText: 'رقم الهاتف',
+                              hintText: AppLocalizations.of(context)
+                                  .translate('telephone'),
                               hintStyle: hintTextStyle),
                           onSaved: (value) {
                             _phone = value;
                           },
                           validator: (value) {
-                            if (value.trim().length == 0 || value.trim().length < 11) {
-                              return 'Please enter your vaild  mobile number';
+                            if (value.trim().length == 0 ||
+                                value.trim().length < 11) {
+                              return AppLocalizations.of(context)
+                                  .translate('phoneError');
                             }
                             return null;
                           },
@@ -327,7 +343,8 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                     Expanded(
                       child: TextFormField(
                         decoration: InputDecoration(
-                            hintText: 'البريد الاكترونى',
+                            hintText:
+                                AppLocalizations.of(context).translate('email'),
                             hintStyle:
                                 hintTextStyle), //TODO email verification logic
                         onSaved: (value) {
@@ -335,7 +352,8 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                         },
                         validator: (value) {
                           if (value.isEmpty || !value.contains('@')) {
-                            return 'Please enter your Email';
+                            return AppLocalizations.of(context)
+                                .translate('emailError');
                           }
                           return null;
                         },
@@ -351,16 +369,20 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                       child: TextFormField(
                         obscureText: true,
                         decoration: InputDecoration(
-                            hintText: 'كلمة السر', hintStyle: hintTextStyle),
+                            hintText: AppLocalizations.of(context)
+                                .translate('password'),
+                            hintStyle: hintTextStyle),
                         onSaved: (value) {
                           _password = value;
                         },
                         validator: (value) {
-                          if (value.trim().length == 0 ) {
-                            return 'Please enter your password';
+                          if (value.trim().length == 0) {
+                            return AppLocalizations.of(context)
+                                .translate('passwordError');
                           }
-                          if(value.trim().length <6){
-                            return "Password short";
+                          if (value.trim().length < 6) {
+                            return AppLocalizations.of(context)
+                                .translate('shortPassword');
                           }
                         },
                       ),
@@ -381,7 +403,10 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                       child: Container(
                         decoration: BoxDecoration(
                             border: Border.all(
-                              color: Color(0xFF636363),
+                              color: selectedDeliveryService ==
+                                      DeliveryService.doesDelivery
+                                  ? accent
+                                  : Color(0xFF636363),
                             ),
                             borderRadius: BorderRadius.circular(50)),
                         child: CircleAvatar(
@@ -402,7 +427,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                       width: 10.0,
                     ),
                     Text(
-                      'خدمة توصيل',
+                      AppLocalizations.of(context).translate('delivery'),
                       style: productName1,
                     ),
                     SizedBox(
@@ -417,7 +442,10 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                       child: Container(
                         decoration: BoxDecoration(
                             border: Border.all(
-                              color: Color(0xFF636363),
+                              color: selectedDeliveryService ==
+                                      DeliveryService.noDelivery
+                                  ? accent
+                                  : Color(0xFF636363),
                             ),
                             borderRadius: BorderRadius.circular(50)),
                         child: CircleAvatar(
@@ -438,7 +466,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                       width: 10.0,
                     ),
                     Text(
-                      'لا يقدم الخدمة',
+                      AppLocalizations.of(context).translate('noDelivery'),
                       style: productName1,
                     ),
                   ],
@@ -457,24 +485,23 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                 height: MediaQuery.of(context).size.height * 0.1,
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _tags.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: FilterChipWidget(
-                        chipName: _tags[index].text,
-                        isSelected: selected[index],
-                        onSelect: (clicked) {
-                          addCategories(_tags[index].id);
-                          setState(() {
-                            selected[index] = clicked;
-                          });
-                        },
-                      ),
-                    );
-                  }
-                ),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _tags.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: FilterChipWidget(
+                          chipName: _tags[index].text,
+                          isSelected: selected[index],
+                          onSelect: (clicked) {
+                            addCategories(_tags[index].id);
+                            setState(() {
+                              selected[index] = clicked;
+                            });
+                          },
+                        ),
+                      );
+                    }),
               ),
               //TODO fill dropdown button with data from api
               DropdownButton<String>(
@@ -486,7 +513,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                 ),
                 elevation: 10,
                 hint: Text(
-                  "اختار مدينة",
+                  AppLocalizations.of(context).translate('chooseCity'),
                 ),
                 underline: Container(
                   height: 1,
@@ -498,8 +525,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                     _city = newValue;
                   });
                 },
-                items: _showCity
-                    .map<DropdownMenuItem<String>>((String value) {
+                items: _showCity.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -512,18 +538,16 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                 textAlign: TextAlign.start,
               ),
               ListTile(
-                title:_isLooding? Center(child: CircularProgressIndicator(),):  RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0)),
-                    color: accent,
-                    child: Text(
-                      'تسجيل',
-                      style: TextStyle(color: Colors.white, fontSize: 25.0),
-                    ),
-                    onPressed: () {
-                      //TODO admin profile editing code
-                      validation();
-                    }),
+                title: _isLooding
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : AppButton(
+                        text: AppLocalizations.of(context).translate('signUp'),
+                        onClick: () {
+                          //TODO admin profile editing code
+                          validation();
+                        }),
               ),
               //TODO remove row testing alert dialogs
               Row(

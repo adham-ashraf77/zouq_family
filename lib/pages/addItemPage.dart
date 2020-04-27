@@ -12,6 +12,16 @@ import 'package:zouqadmin/pages/dialogWorning.dart';
 import 'package:zouqadmin/services/addproduct.dart';
 import 'package:zouqadmin/theme/common.dart';
 
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+
 class AddItemPage extends StatefulWidget {
   @override
   _AddItemPageState createState() => _AddItemPageState();
@@ -210,8 +220,7 @@ class _AddItemPageState extends State<AddItemPage> {
               listOfPhotos: listOfImages,
               price: priceTextFieldController.text,
               video: productVideo,
-              context: context
-          );
+              context: context);
         }
       } else {
         showDialog(
@@ -260,7 +269,8 @@ class _AddItemPageState extends State<AddItemPage> {
     return Scaffold(
       appBar: AppBar(
         // pinned: true,
-        title: Text("اضافة منتج", style: headers1),
+        title: Text(AppLocalizations.of(context).translate('addProduct'),
+            style: headers1),
         centerTitle: true,
       ),
       body: Padding(
@@ -304,11 +314,11 @@ class _AddItemPageState extends State<AddItemPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'فيديو اختياري',
+                        AppLocalizations.of(context).translate('optionalVideo'),
                         style: TextStyle(fontSize: 23),
                       ),
                       Text(
-                        'مسموح بحد اقصى 10 ثواني',
+                        AppLocalizations.of(context).translate('tenSecLimit'),
                         style: TextStyle(color: Colors.grey, fontSize: 13),
                       ),
                     ],
@@ -322,11 +332,11 @@ class _AddItemPageState extends State<AddItemPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    'صور للمنتج',
+                    AppLocalizations.of(context).translate('productImages'),
                     style: TextStyle(fontSize: 23),
                   ),
                   Text(
-                    'اجبارى-بحد اقصى 5 صور',
+                    AppLocalizations.of(context).translate('imagesLimit'),
                     style: paragarph3,
                   ),
                   SizedBox(
@@ -448,7 +458,7 @@ class _AddItemPageState extends State<AddItemPage> {
                   },
                   decoration: InputDecoration(
                     // border: InputBorder.none,
-                    hintText: 'الاسم',
+                    hintText: AppLocalizations.of(context).translate('name'),
                   ),
                 ),
               ),
@@ -466,7 +476,7 @@ class _AddItemPageState extends State<AddItemPage> {
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     // border: InputBorder.none,
-                    hintText: 'السعر',
+                    hintText: AppLocalizations.of(context).translate('price'),
                   ),
                 ),
               ),
@@ -481,7 +491,7 @@ class _AddItemPageState extends State<AddItemPage> {
                   ),
                   elevation: 10,
                   hint: Text(
-                    "تصنيف المنتج",
+                    AppLocalizations.of(context).translate('productCategory'),
                   ),
                   underline: Container(
                     height: 1,
@@ -523,7 +533,8 @@ class _AddItemPageState extends State<AddItemPage> {
                         width: 0.2,
                       ),
                     ),
-                    hintText: 'وصف المنتج',
+                    hintText: AppLocalizations.of(context)
+                        .translate('productDescription'),
                     hintStyle: TextStyle(color: Colors.black54, fontSize: 15),
                   ),
                   maxLines: 3,
@@ -544,7 +555,7 @@ class _AddItemPageState extends State<AddItemPage> {
                     width: MediaQuery.of(context).size.width * 0.25,
                     child: Center(
                       child: Text(
-                        'اضف',
+                        AppLocalizations.of(context).translate('add'),
                         style: TextStyle(
                             color: mainColor,
                             fontSize: 20,

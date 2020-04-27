@@ -12,6 +12,10 @@ import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/AppButton.dart';
 import 'package:zouqadmin/widgets/roundedAppBar.dart';
 import 'package:zouqadmin/services/getuser.dart';
+import '../../I10n/app_localizations.dart';
+import '../../I10n/app_localizations.dart';
+import '../../I10n/app_localizations.dart';
+import '../../I10n/app_localizations.dart';
 import '../../home.dart';
 import '../adminRegistrationPage.dart';
 
@@ -183,12 +187,13 @@ class _LoginPageState extends State<LoginPage> {
                               controller: phoneNumberTextFieldController,
                               validator: (value) {
                                 if (value.trim().length < 9) {
-                                  return 'Please enter a valid phone number';
+                                  return AppLocalizations.of(context)
+                                      .translate('phoneError');
                                 }
                                 return null;
                               },
                               decoration: InputDecoration(
-                                counterText: "",
+                                  counterText: "",
                                   hintText: AppLocalizations.of(context)
                                       .translate('telephone')),
                             ),
@@ -230,7 +235,8 @@ class _LoginPageState extends State<LoginPage> {
                       child: TextFormField(
                         validator: (value) {
                           if (value.trim().length < 6) {
-                            return 'Password must be at least 6 characters';
+                            return AppLocalizations.of(context)
+                                .translate('shortPassword');
                           }
                           return null;
                         },
@@ -318,7 +324,8 @@ class _LoginPageState extends State<LoginPage> {
                                       context: context,
                                       builder: (BuildContext context) =>
                                           DialogWorning(
-                                            mss: 'Something went wrong please try again later',//onValue.toString(),
+                                            mss:
+                                                'Something went wrong please try again later', //onValue.toString(),
                                           ));
                                 }
                               });
@@ -328,7 +335,8 @@ class _LoginPageState extends State<LoginPage> {
                                 context: context,
                                 builder: (BuildContext context) =>
                                     DialogWorning(
-                                      mss: 'Something went wrong please try again later',//onError.toString(),
+                                      mss:
+                                          'Something went wrong please try again later', //onError.toString(),
                                     ));
                           });
                         }
@@ -344,8 +352,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Center(
                         child: Container(
                           child: Text(
-                            AppLocalizations.of(context)
-                                .translate('forgot password'),
+                            AppLocalizations.of(context).translate('forgot'),
                             style: paragarph3,
                           ),
                         ),
@@ -354,14 +361,11 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: 30,
                     ),
-                    SizedBox(
-                      height: 30,
-                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          'لا تملك حسابا مسبقا ؟ ',
+                          AppLocalizations.of(context).translate('noAccount'),
                           style: paragarph3,
                         ),
                         InkWell(
@@ -372,7 +376,7 @@ class _LoginPageState extends State<LoginPage> {
                                     builder: (context) => AdminRegistration()));
                           },
                           child: Text(
-                            'قم بالاشتراك الان ',
+                            AppLocalizations.of(context).translate('signUpNow'),
                             style: paragarph3.copyWith(color: accent),
                           ),
                         ),

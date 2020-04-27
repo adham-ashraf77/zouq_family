@@ -4,6 +4,12 @@ import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/widgets/commentDesign.dart';
 import 'package:zouqadmin/widgets/ordersViewPageCard.dart';
 
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+
 class OrdersViewPage extends StatelessWidget {
   static const routeName = '/oredersViewPage';
   String link =
@@ -72,10 +78,10 @@ class OrdersViewPage extends StatelessWidget {
                   child: Center(
                       child: Text(
                         type == 1
-                            ? 'طلب جديد'
+                            ? AppLocalizations.of(context).translate('newOrder')
                             : type == 2
-                            ? 'طلب مؤكد'
-                            : type == 3 ? 'طلب تم' : '',
+                            ? AppLocalizations.of(context).translate('confirmedOrder')
+                            : type == 3 ? AppLocalizations.of(context).translate('completedOrder') : '',
                         textDirection: TextDirection.rtl,
                         style: TextStyle(color: type == 1
                             ? Color(0xFFE08248)
@@ -99,7 +105,7 @@ class OrdersViewPage extends StatelessWidget {
                           style: TextStyle(color: Colors.grey),
                         ),
                         Text(
-                          'رقم الطلب',
+                          AppLocalizations.of(context).translate('orderNum'),
                           style: paragarph2.copyWith(
                             color: Colors.black,
                             fontWeight: FontWeight.w400,
@@ -122,7 +128,7 @@ class OrdersViewPage extends StatelessWidget {
                           style: TextStyle(color: Colors.grey),
                         ),
                         Text(
-                          'وقت الطلب',
+                          AppLocalizations.of(context).translate('orderTime'),
                           style: paragarph2.copyWith(
                             color: Colors.black,
                             fontWeight: FontWeight.w400,
@@ -205,7 +211,7 @@ class OrdersViewPage extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          'رقم هاتف',
+                          AppLocalizations.of(context).translate('telephone'),
                           textDirection: TextDirection.rtl,
                           style: paragarph2.copyWith(
                             color: Colors.black,
@@ -230,7 +236,7 @@ class OrdersViewPage extends StatelessWidget {
                   height: 20,
                 ),
                 type == 3 ? SizedBox() : Text(
-                  'الموقع',
+                  AppLocalizations.of(context).translate('location'),
                   style: paragarph2.copyWith(color: Colors.blue),
                 ),
                 SizedBox(

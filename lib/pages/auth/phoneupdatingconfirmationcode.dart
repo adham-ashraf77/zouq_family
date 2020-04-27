@@ -10,6 +10,12 @@ import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/AppButton.dart';
 
+import '../../I10n/app_localizations.dart';
+import '../../I10n/app_localizations.dart';
+import '../../I10n/app_localizations.dart';
+import '../../I10n/app_localizations.dart';
+import '../../I10n/app_localizations.dart';
+
 class PhoneUpdatingCOnfirmationCode extends StatefulWidget {
   final String phone;
   PhoneUpdatingCOnfirmationCode({this.phone});
@@ -42,7 +48,11 @@ class _PhoneUpdatingCOnfirmationCode
         if (onValue == 'success') {
           //TODO push new phone page
           // print('Success');
-          pushPage(context, SetNewPhoneNumberScreen(phone: _phone,));
+          pushPage(
+              context,
+              SetNewPhoneNumberScreen(
+                phone: _phone,
+              ));
         } else {
           if (onValue.toString().contains('confirm code is not valid')) {
             showDialog(
@@ -96,7 +106,9 @@ class _PhoneUpdatingCOnfirmationCode
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text( 'Verify code', //AppLocalizations.of(context).translate('verifyCode')
+        title: Text(
+            AppLocalizations.of(context).translate(
+                'verifyCode'), //AppLocalizations.of(context).translate('verifyCode')
             style: headers4),
         centerTitle: true,
         leading: IconButton(
@@ -123,7 +135,9 @@ class _PhoneUpdatingCOnfirmationCode
             // SizedBox(
             //   height: 5,
             // ),
-            Text('Enter OTP code',//AppLocalizations.of(context).translate('enterOTPCode')
+            Text(
+                AppLocalizations.of(context).translate(
+                    'enterOTPCode'), //AppLocalizations.of(context).translate('enterOTPCode')
                 style: paragarph2),
             SizedBox(
               height: 20,
@@ -166,7 +180,8 @@ class _PhoneUpdatingCOnfirmationCode
               height: 30,
             ),
             AppButton(
-              text: 'Check',//AppLocalizations.of(context).translate('check'),
+              text: AppLocalizations.of(context).translate(
+                  'check'), //AppLocalizations.of(context).translate('check'),
               onClick: () {
                 validation();
               },
@@ -178,7 +193,7 @@ class _PhoneUpdatingCOnfirmationCode
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  "Didn't recieve OPT Code?",
+                  AppLocalizations.of(context).translate('noOTPCode'),
                   // AppLocalizations.of(context).translate('noOTPCode'),
                   style: paragarph4,
                 ),
@@ -191,7 +206,7 @@ class _PhoneUpdatingCOnfirmationCode
                     resendCode();
                   },
                   child: Text(
-                    'Resend code',
+                    AppLocalizations.of(context).translate('resendCode'),
                     // AppLocalizations.of(context).translate('resendCode'),
                     style: paragarph4.copyWith(color: accent),
                   ),

@@ -2,6 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:zouqadmin/theme/common.dart';
 
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+
 class AdminWalletPage extends StatefulWidget {
   @override
   _AdminWalletPageState createState() => _AdminWalletPageState();
@@ -29,7 +38,7 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
           ),
           Center(
             child: Text(
-              'سحب الرصيد',
+              AppLocalizations.of(context).translate('withdraw'),
               style: moreTextStyle,
             ),
           ),
@@ -51,7 +60,7 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                     height: 5.0,
                   ),
                   Text(
-                    'رصيدك الحالى',
+                    AppLocalizations.of(context).translate('currentBalance'),
                     style: moreTextStyle1,
                   )
                 ],
@@ -63,7 +72,7 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
           ),
           Center(
             child: Text(
-              'جميع البيانات التالية مطلوبة لكي تتم عملية سحب الرصيد من محفظتك الى البنك',
+              AppLocalizations.of(context).translate('detailsRequired'),
               style: moreTextStyle1,
               textAlign: TextAlign.center,
             ),
@@ -78,7 +87,8 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                   child: TextField(
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'المبلغ المطلوب سحبه',
+                        hintText: AppLocalizations.of(context)
+                            .translate('transactionAmount'),
                         hintStyle: hintTextStyle),
                   ),
                 ),
@@ -96,7 +106,8 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                   child: TextField(
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'البنك',
+                        hintText:
+                            AppLocalizations.of(context).translate('bank'),
                         hintStyle: hintTextStyle),
                   ),
                 ),
@@ -114,7 +125,8 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                   child: TextField(
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'رقم الحساب البنكي (آيبان) ',
+                        hintText:
+                            AppLocalizations.of(context).translate('bankID'),
                         hintStyle: hintTextStyle),
                   ),
                 ),
@@ -138,7 +150,7 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
               child: TextField(
                 decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: 'تفاصيل',
+                    hintText: AppLocalizations.of(context).translate('details'),
                     hintStyle: hintTextStyle),
               ),
             ),
@@ -152,7 +164,7 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                     borderRadius: BorderRadius.circular(18.0)),
                 color: accent,
                 child: Text(
-                  'سحب',
+                  AppLocalizations.of(context).translate('withdraw'),
                   style: TextStyle(color: Colors.white, fontSize: 25.0),
                 ),
                 onPressed: () {

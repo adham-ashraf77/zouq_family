@@ -6,6 +6,10 @@ import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/widgets/bottomNavigationbar.dart';
 import 'package:zouqadmin/widgets/ordersCardWidget.dart';
 
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
 import 'addItemPage.dart';
 
 class OrdersPage extends StatefulWidget {
@@ -196,7 +200,7 @@ class _OrdersPageState extends State<OrdersPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         // pinned: true,
-        title: Text("ذوق", style: headers1),
+        title: Text(AppLocalizations.of(context).translate('zouq'), style: headers1),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
@@ -240,7 +244,7 @@ class _OrdersPageState extends State<OrdersPage> {
                         color:
                         _isFocused3 ? Colors.blue[300] : Colors.white,
                         child: Center(
-                          child: Text('طلبات قديمة',
+                          child: Text(AppLocalizations.of(context).translate('oldOrders'),
                               style: paragarph3.copyWith(
                                   color: _isFocused3
                                       ? Colors.white
@@ -267,7 +271,7 @@ class _OrdersPageState extends State<OrdersPage> {
                         color:
                         _isFocused2 ? Colors.blue[300] : Colors.white,
                         child: Center(
-                          child: Text('طلبات مؤكدة',
+                          child: Text(AppLocalizations.of(context).translate('confirmedOrders'),
                               style: paragarph3.copyWith(
                                   color: _isFocused2
                                       ? Colors.white
@@ -294,7 +298,7 @@ class _OrdersPageState extends State<OrdersPage> {
                         color:
                         _isFocused1 ? Colors.blue[300] : Colors.white,
                         child: Center(
-                          child: Text('طلبات جديدة',
+                          child: Text(AppLocalizations.of(context).translate('newOrders'),
                               style: paragarph3.copyWith(
                                   color: _isFocused1
                                       ? Colors.white

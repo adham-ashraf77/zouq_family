@@ -6,6 +6,10 @@ import 'package:zouqadmin/pages/dialogWorning.dart';
 import 'package:zouqadmin/services/setnewphonenumber.dart';
 import 'package:zouqadmin/theme/common.dart';
 
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
 import '../home.dart';
 
 class SetNewPhoneNumberScreen extends StatefulWidget {
@@ -44,7 +48,7 @@ class _SetNewPhoneNumberScreenState extends State<SetNewPhoneNumberScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            'كــود التحقق', //AppLocalizations.of(context).translate('verifyCode'),
+            AppLocalizations.of(context).translate('verifyCode'), //AppLocalizations.of(context).translate('verifyCode'),
             style: headers4),
         centerTitle: true,
         leading: IconButton(
@@ -69,7 +73,7 @@ class _SetNewPhoneNumberScreenState extends State<SetNewPhoneNumberScreen> {
                     ),
                     Center(
                       child: Text(
-                        'رقم الهاتف الجديد',
+                        AppLocalizations.of(context).translate('newPhone'),
                         style: moreTextStyle,
                       ),
                     ),
@@ -93,7 +97,7 @@ class _SetNewPhoneNumberScreenState extends State<SetNewPhoneNumberScreen> {
                                 decoration: InputDecoration(
                                   counterText: "",
                                     // border: InputBorder.none,
-                                    hintText: 'رقم الهاتف الجديد',
+                                    hintText: AppLocalizations.of(context).translate('newPhone'),
                                     hintStyle: hintTextStyle),
                               ),
                               // decoration: BoxDecoration(
@@ -129,7 +133,7 @@ class _SetNewPhoneNumberScreenState extends State<SetNewPhoneNumberScreen> {
                               borderRadius: BorderRadius.circular(18.0)),
                           color: accent,
                           child: Text(
-                            'تعديل',
+                            AppLocalizations.of(context).translate('edit'),
                             // AppLocalizations.of(context).translate('edit'),
                             style:
                                 TextStyle(color: Colors.white, fontSize: 25.0),

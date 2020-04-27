@@ -14,6 +14,15 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+
 class EditItemPage extends StatefulWidget {
   final String id;
 
@@ -392,11 +401,11 @@ print('Here ' + listOfImages.toString());
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              'فيديو اختياري',
+                              AppLocalizations.of(context).translate('optionalVideo'),
                               style: TextStyle(fontSize: 23),
                             ),
                             Text(
-                              'مسموح بحد اقصى 10 ثواني',
+                              AppLocalizations.of(context).translate('tenSecLimit'),
                               style:
                                   TextStyle(color: Colors.grey, fontSize: 13),
                             ),
@@ -411,11 +420,11 @@ print('Here ' + listOfImages.toString());
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          'صور للمنتج',
+                          AppLocalizations.of(context).translate('productImages'),
                           style: TextStyle(fontSize: 23),
                         ),
                         Text(
-                          'اجبارى-بحد اقصى 5 صور',
+                          AppLocalizations.of(context).translate('imagesLimit'),
                           style: paragarph3,
                         ),
                         SizedBox(
@@ -538,7 +547,7 @@ print('Here ' + listOfImages.toString());
                         },
                         decoration: InputDecoration(
                           // border: InputBorder.none,
-                          hintText: 'الاسم',
+                          hintText: AppLocalizations.of(context).translate('name'),
                         ),
                       ),
                     ),
@@ -556,7 +565,7 @@ print('Here ' + listOfImages.toString());
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           // border: InputBorder.none,
-                          hintText: 'السعر',
+                          hintText: AppLocalizations.of(context).translate('price'),
                         ),
                       ),
                     ),
@@ -571,7 +580,7 @@ print('Here ' + listOfImages.toString());
                         ),
                         elevation: 10,
                         hint: Text(
-                          "تصنيف المنتج",
+                          AppLocalizations.of(context).translate('productCategory'),
                         ),
                         underline: Container(
                           height: 1,
@@ -613,7 +622,7 @@ print('Here ' + listOfImages.toString());
                               width: 0.2,
                             ),
                           ),
-                          hintText: 'وصف المنتج',
+                          hintText: AppLocalizations.of(context).translate('productDescription'),
                           hintStyle:
                               TextStyle(color: Colors.black54, fontSize: 15),
                         ),
@@ -635,7 +644,7 @@ print('Here ' + listOfImages.toString());
                           width: MediaQuery.of(context).size.width * 0.25,
                           child: Center(
                             child: Text(
-                              'تعديل',
+                              AppLocalizations.of(context).translate('edit'),
                               style: TextStyle(
                                   color: mainColor,
                                   fontSize: 20,

@@ -11,6 +11,8 @@ import 'package:zouqadmin/widgets/cardContents/marketProfileCardContent.dart';
 import 'package:zouqadmin/widgets/chips/tagchip.dart';
 import 'package:zouqadmin/models/product.dart';
 
+import '../I10n/app_localizations.dart';
+
 class ProductsPage extends StatefulWidget {
   @override
   _ProductsPageState createState() => _ProductsPageState();
@@ -50,7 +52,7 @@ class _ProductsPageState extends State<ProductsPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         // pinned: true,
-        title: Text("ذوق", style: headers1),
+        title: Text(AppLocalizations.of(context).translate('zouq'), style: headers1),
         centerTitle: true,
         actions: <Widget>[
           IconButton(

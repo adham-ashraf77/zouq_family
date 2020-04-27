@@ -14,6 +14,9 @@ import 'package:zouqadmin/widgets/chips/ratingChip.dart';
 import 'package:zouqadmin/widgets/rate_card.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+
 class ItemDetail extends StatefulWidget {
   final String id;
 
@@ -309,7 +312,7 @@ class _ItemDetailState extends State<ItemDetail> {
             appBar: AppBar(
               backgroundColor: mainColor,
               title: Text(
-                "تفاصيل المنتج",
+                AppLocalizations.of(context).translate('productDescription'),
                 style: headers3,
               ),
               elevation: 0,
@@ -442,7 +445,7 @@ class _ItemDetailState extends State<ItemDetail> {
                             width: MediaQuery.of(context).size.width * 0.25,
                             child: Center(
                               child: Text(
-                                'تعديل',
+                                AppLocalizations.of(context).translate('edit'),
                                 style: TextStyle(color: mainColor, fontSize: 18),
                               ),
                             ),

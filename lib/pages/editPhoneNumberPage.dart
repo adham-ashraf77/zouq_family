@@ -11,6 +11,12 @@ import 'package:zouqadmin/services/getuser.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+import '../I10n/app_localizations.dart';
+
 class EditPhoneNumberPage extends StatefulWidget {
   @override
   _EditPhoneNumberPageState createState() => _EditPhoneNumberPageState();
@@ -52,7 +58,7 @@ class _EditPhoneNumberPageState extends State<EditPhoneNumberPage> {
       // backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          'ذوق',
+          AppLocalizations.of(context).translate('zouq'),
           style: TextStyle(color: Colors.blue),
         ),
         centerTitle: true,
@@ -70,7 +76,7 @@ class _EditPhoneNumberPageState extends State<EditPhoneNumberPage> {
                     ),
                     Center(
                       child: Text(
-                        'تعديل رقم الهاتف',
+                        AppLocalizations.of(context).translate('editPhone'),
                         style: moreTextStyle,
                       ),
                     ),
@@ -87,13 +93,13 @@ class _EditPhoneNumberPageState extends State<EditPhoneNumberPage> {
                                 controller: phoneTextFieldController,
                                 validator: (value) {
                                   if (value.trim().length < 9) {
-                                    return 'please enter a valid phone number';
+                                    return AppLocalizations.of(context).translate('phoneError');
                                   }
                                   return null;
                                 },
                                 decoration: InputDecoration(
                                     // border: InputBorder.none,
-                                    hintText: phone == null ? 'رقم الهاتف' : phone,
+                                    hintText: phone == null ? AppLocalizations.of(context).translate('telephone') : phone,
                                     hintStyle: hintTextStyle),
                               ),
                               // decoration: BoxDecoration(
@@ -118,7 +124,7 @@ class _EditPhoneNumberPageState extends State<EditPhoneNumberPage> {
                               borderRadius: BorderRadius.circular(18.0)),
                           color: accent,
                           child: Text(
-                            'send',
+                            AppLocalizations.of(context).translate('send'),
                             style:
                                 TextStyle(color: Colors.white, fontSize: 25.0),
                           ),
