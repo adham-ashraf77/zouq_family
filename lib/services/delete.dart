@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Delete {
-  final String _url = "http://api.dhuqapp.com";
+  final String _url = "https://api.dhuqapp.com";
   final String _delete = '/api/family/products/';
 
   Future<dynamic> delete({@required String productID}) async {

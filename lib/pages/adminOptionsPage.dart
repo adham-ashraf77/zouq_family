@@ -27,6 +27,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
   IconData trailingIcon = Icons.arrow_forward_ios;
   String name;
   String avatarImageUrl;
+  String wallet;
   @override
   void didChangeDependencies() {
     SharedPreferences.getInstance().then((onValue) {
@@ -35,8 +36,11 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
         var x = jsonDecode(value.toString());
         print('X = ' + x['user'].toString());
         setState(() {
+           print('[${wallet.toString()}]');
           name = x['user']['name'];
           avatarImageUrl = x['user']['image'];
+          wallet = x['user']['wallet'].toString();
+          print('[$wallet]');
         });
       });
     });
@@ -105,7 +109,8 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                 leading: Text(AppLocalizations.of(context).translate('wallet'),
                     style: moreTextStyle),
                 trailing: Text(
-                  "450 ريال",
+                  wallet.toString() == 'null' ? '0 ريال' :
+                  "$wallet ريال",
                   style: moreSmallTextStyle,
                 ),
               ),

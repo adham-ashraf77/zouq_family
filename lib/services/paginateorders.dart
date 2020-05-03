@@ -4,14 +4,15 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Paginate {
+class PaginateOrders {
   final String _url = "https://api.dhuqapp.com";
+  final String _paginateOrder = '/api/family/orders?status=';
 
 
-  Future<dynamic> paginate({int category = 0, int page = 1, int limit = 1000 }) async {
+  Future<dynamic> paginateOrders({String status}) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
-    Response response = await Dio().get('$_url' + '/api/family/categories/$category/products?page=$page&limit=$limit',
+    Response response = await Dio().get('$_url$_paginateOrder$status',
         options: Options(
           headers: {HttpHeaders.authorizationHeader: "Bearer $token"},
         ));

@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
 
 class AddProduct {
-  final String apiUrl = "http://api.dhuqapp.com";
+  final String apiUrl = "https://api.dhuqapp.com";
   final String addingProduct = "/api/family/products";
   FormData _formData;
   Response response;

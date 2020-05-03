@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
 class SetNewPassword {
-  final String _url = "http://api.dhuqapp.com";
+  final String _url = "https://api.dhuqapp.com";
   final String _reset = "/api/family/reset-password";
   FormData _formData;
 

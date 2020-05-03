@@ -6,7 +6,7 @@ import 'package:zouqadmin/models/categories.dart';
 import 'package:zouqadmin/models/cities.dart';
 
 class GetData{
-  String _url = "http://api.dhuqapp.com";
+  String _url = "https://api.dhuqapp.com";
   String _categories = "/api/content/categories";
   String _cities = "/api/content/cities";
 

@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdatePhoneConfirmCode {
-  final String apiUrl = "http://api.dhuqapp.com";
+  final String apiUrl = "https://api.dhuqapp.com";
   final String confirmCode = "/api/family/check-update-phone-confirm-code";
   FormData _formData;
 

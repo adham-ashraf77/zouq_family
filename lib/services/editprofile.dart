@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateProfile {
-  final String apiUrl = "http://api.dhuqapp.com";
+  final String apiUrl = "https://api.dhuqapp.com";
   final String updateprof = "/api/family/update-profile";
   FormData _formData;
 
