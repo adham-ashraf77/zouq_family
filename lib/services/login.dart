@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Login {
-  final String _url = "http://api.dhuqapp.com";
+  final String _url = "https://api.dhuqapp.com";
   final String _login = "/api/family/login";
   FormData _formData;
 

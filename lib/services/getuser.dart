@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
 class GetUser {
-  final String _url = "http://api.dhuqapp.com";
+  final String _url = "https://api.dhuqapp.com";
   final String _user = "/api/family/user";
 
   Future<dynamic> getUser({@required String token}) async {

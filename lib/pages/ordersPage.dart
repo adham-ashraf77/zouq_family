@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:zouqadmin/models/comment.dart';
 import 'package:zouqadmin/models/order.dart';
 import 'package:zouqadmin/models/product.dart';
+import 'package:zouqadmin/services/paginateorders.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/widgets/bottomNavigationbar.dart';
 import 'package:zouqadmin/widgets/ordersCardWidget.dart';
@@ -21,158 +24,82 @@ class _OrdersPageState extends State<OrdersPage> {
   bool _isFocused1 = true;
   bool _isFocused2 = false;
   bool _isFocused3 = false;
-  List<Order> newOrders = [
-    Order(
-        id: '54676867#',
-        imageUrl: 'http://www.mediafire.com/convkey/e3dc/q0w2dc096ilt7r8zg.jpg',
-        name: 'خالد مرعي',
-        date: '08 May 2020',
-        time: '02:22PM',
-        contents: ' كيك , حلا , ….',
-        product: [
-          Product(
-              amount: 3,
-              price: '45',
-              imageUrl:
-                  'http://www.mediafire.com/convkey/37d2/4rblt3fgtrad9sbzg.jpg',
-              name: 'ملفوفة في أوراق الموز'),
-          Product(
-              amount: 1,
-              name: 'بوتو بيرياني',
-              imageUrl:
-                  'http://www.mediafire.com/convkey/5116/igw7chb8ee4dmlfzg.jpg',
-              price: '45')
-        ]),
-    Order(
-        id: '54676867#',
-        imageUrl: 'http://www.mediafire.com/convkey/e3dc/q0w2dc096ilt7r8zg.jpg',
-        name: 'غادة يوسف',
-        date: '08 May 2020',
-        time: '02:22PM',
-        contents: ' كيك , حلا , ….',
-        product: [
-          Product(
-              amount: 3,
-              price: '45',
-              imageUrl:
-                  'http://www.mediafire.com/convkey/37d2/4rblt3fgtrad9sbzg.jpg',
-              name: 'ملفوفة في أوراق الموز'),
-          Product(
-              amount: 1,
-              name: 'بوتو بيرياني',
-              imageUrl:
-                  'http://www.mediafire.com/convkey/5116/igw7chb8ee4dmlfzg.jpg',
-              price: '45')
-        ]),
-  ];
-  List<Order> completeOrders = [
-    Order(
-      id: '54676867#',
-      imageUrl: 'http://www.mediafire.com/convkey/55ed/l9wgqr9lsqh9hyrzg.jpg',
-      name: 'محمد يونس',
-      date: '08 May 2020',
-      time: '02:22PM',
-      contents: ' كيك , حلا , ….',
-      price: '43 ريال',
-      phoneNumber: '543-649-3478',
-      product: [
-        Product(
-            amount: 3,
-            price: '45',
-            imageUrl:
-                'http://www.mediafire.com/convkey/37d2/4rblt3fgtrad9sbzg.jpg',
-            name: 'ملفوفة في أوراق الموز'),
-        Product(
-            amount: 1,
-            name: 'بوتو بيرياني',
-            imageUrl:
-                'http://www.mediafire.com/convkey/5116/igw7chb8ee4dmlfzg.jpg',
-            price: '45')
-      ],
-    ),
-    Order(
-      id: '54676867#',
-      imageUrl: 'http://www.mediafire.com/convkey/e3dc/q0w2dc096ilt7r8zg.jpg',
-      name: 'أحمد محمد',
-      date: '08 May 2020',
-      time: '02:22PM',
-      contents: ' كيك , حلا , ….',
-      price: '43 ريال',
-      phoneNumber: '543-649-3478',
-   
-      product: [
-        Product(
-            amount: 3,
-            price: '45',
-            imageUrl:
-                'http://www.mediafire.com/convkey/37d2/4rblt3fgtrad9sbzg.jpg',
-            name: 'ملفوفة في أوراق الموز'),
-        Product(
-            amount: 1,
-            name: 'بوتو بيرياني',
-            imageUrl:
-                'http://www.mediafire.com/convkey/5116/igw7chb8ee4dmlfzg.jpg',
-            price: '45')
-      ],
-    ),
-  ];
-  List<Order> oldOrders = [Order(
-      id: '54676867#',
-      imageUrl: 'http://www.mediafire.com/convkey/55ed/l9wgqr9lsqh9hyrzg.jpg',
-      name: 'محمد يونس',
-      date: '08 May 2020',
-      time: '02:22PM',
-      contents: ' كيك , حلا , ….',
-      price: '43 ريال',
-      phoneNumber: '543-649-3478',
-       rate: 4.9,
-      comments: [
-        Comment(name : 'محمد يوسف', comment: 'الطعام مذاقة جيد ولم يتأخر التوصيل , انصح بطلب هذا المنتج فانة رائع', imageUrl: 'http://www.mediafire.com/convkey/f3dd/rp9c5h7xajnzrh8zg.jpg', rate: 4.9)
-      ],
-      product: [
-        Product(
-            amount: 3,
-            price: '45',
-            imageUrl:
-                'http://www.mediafire.com/convkey/37d2/4rblt3fgtrad9sbzg.jpg',
-            name: 'ملفوفة في أوراق الموز'),
-        Product(
-            amount: 1,
-            name: 'بوتو بيرياني',
-            imageUrl:
-                'http://www.mediafire.com/convkey/5116/igw7chb8ee4dmlfzg.jpg',
-            price: '45')
-      ],
-    ),
-    Order(
-      id: '54676867#',
-      imageUrl: 'http://www.mediafire.com/convkey/e3dc/q0w2dc096ilt7r8zg.jpg',
-      name: 'أحمد محمد',
-      date: '08 May 2020',
-      time: '02:22PM',
-      contents: ' كيك , حلا , ….',
-      price: '43 ريال',
-      phoneNumber: '543-649-3478',
-      rate: 4.9,
-      comments: [
-        Comment(name : 'محمد يوسف', comment: 'الطعام مذاقة جيد ولم يتأخر التوصيل , انصح بطلب هذا المنتج فانة رائع', imageUrl: 'http://www.mediafire.com/convkey/f3dd/rp9c5h7xajnzrh8zg.jpg', rate: 4.9)
-      ],
-      product: [
-        Product(
-            amount: 3,
-            price: '45',
-            imageUrl:
-                'http://www.mediafire.com/convkey/37d2/4rblt3fgtrad9sbzg.jpg',
-            name: 'ملفوفة في أوراق الموز'),
-        Product(
-            amount: 1,
-            name: 'بوتو بيرياني',
-            imageUrl:
-                'http://www.mediafire.com/convkey/5116/igw7chb8ee4dmlfzg.jpg',
-            price: '45')
-      ],
-    ),];
+  List<Order> newOrders = [];
+  List<Order> completeOrders = [];
+  List<Order> oldOrders = [];
 
+  @override
+  void didChangeDependencies() {
+    PaginateOrders().paginateOrders(status: 'new').then((onValue) {
+      newOrders.clear();
+      List x = jsonDecode(onValue.toString())['orders'];
+      for (int i = 0; i < x.length; i++) {
+        setState(() {
+          newOrders.add(Order(
+            id: x[i]['id'].toString() + '#',
+            name: x[i]['client']['name'].toString(),
+            date: x[i]['created_at'].toString(),
+            contents: x[i]['products_meta'].toString(),
+            imageUrl: x[i]['client']['image'].toString(),
+            time: "",
+            comments: [],
+            product: [],
+            price: x[i]['total'],
+          ));
+        });
+      }
+      // print('Old Orders  : ' + x.length.toString());
+    });
+    PaginateOrders().paginateOrders(status: 'old').then((onValue) {
+      oldOrders.clear();
+      List x = jsonDecode(onValue.toString())['orders'];
+      //  print('Old Orders  : ' + x.toString());
+      for (int i = 0; i < x.length; i++) {
+        setState(() {
+          oldOrders.add(Order(
+            id: x[i]['id'].toString() + '#',
+            name: x[i]['client']['name'].toString(),
+            date: x[i]['created_at'].toString(),
+            contents: x[i]['products_meta'].toString(),
+            imageUrl: x[i]['client']['image'].toString(),
+            time: "",
+            comments: [],
+            product: [],
+            price: x[i]['total'],
+            rate: 0,
+            phoneNumber: x[i]['client']['phone'],
+
+          ));
+        });
+      }
+      // print('Old Orders  : ' + x.length.toString());
+    });
+     PaginateOrders().paginateOrders(status: 'approved').then((onValue) {
+      completeOrders.clear();
+      List x = jsonDecode(onValue.toString())['orders'];
+      //  print('Old Orders  : ' + x.toString());
+      for (int i = 0; i < x.length; i++) {
+        setState(() {
+          completeOrders.add(Order(
+            id: x[i]['id'].toString() + '#',
+            name: x[i]['client']['name'].toString(),
+            date: x[i]['created_at'].toString(),
+            contents: x[i]['products_meta'].toString(),
+            imageUrl: x[i]['client']['image'].toString(),
+            time: "",
+            comments: [],
+            product: [],
+            price: x[i]['total'],
+            rate: 0,
+            phoneNumber: x[i]['client']['phone'],
+
+          ));
+        });
+      }
+      // print('Old Orders  : ' + x.length.toString());
+    });
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -200,7 +127,8 @@ class _OrdersPageState extends State<OrdersPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         // pinned: true,
-        title: Text(AppLocalizations.of(context).translate('zouq'), style: headers1),
+        title: Text(AppLocalizations.of(context).translate('zouq'),
+            style: headers1),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
@@ -241,14 +169,14 @@ class _OrdersPageState extends State<OrdersPage> {
                       child: Container(
                         width: (allWidth - 37) / 3,
                         height: 35,
-                        color:
-                        _isFocused3 ? Colors.blue[300] : Colors.white,
+                        color: _isFocused3 ? Colors.blue[300] : Colors.white,
                         child: Center(
-                          child: Text(AppLocalizations.of(context).translate('oldOrders'),
+                          child: Text(
+                              AppLocalizations.of(context)
+                                  .translate('oldOrders'),
                               style: paragarph3.copyWith(
-                                  color: _isFocused3
-                                      ? Colors.white
-                                      : Colors.black,
+                                  color:
+                                      _isFocused3 ? Colors.white : Colors.black,
                                   fontSize: 15,
                                   fontWeight: FontWeight.w100)),
                         ),
@@ -268,14 +196,14 @@ class _OrdersPageState extends State<OrdersPage> {
                       child: Container(
                         width: (allWidth - 37) / 3,
                         height: 35,
-                        color:
-                        _isFocused2 ? Colors.blue[300] : Colors.white,
+                        color: _isFocused2 ? Colors.blue[300] : Colors.white,
                         child: Center(
-                          child: Text(AppLocalizations.of(context).translate('confirmedOrders'),
+                          child: Text(
+                              AppLocalizations.of(context)
+                                  .translate('confirmedOrders'),
                               style: paragarph3.copyWith(
-                                  color: _isFocused2
-                                      ? Colors.white
-                                      : Colors.black,
+                                  color:
+                                      _isFocused2 ? Colors.white : Colors.black,
                                   fontSize: 15,
                                   fontWeight: FontWeight.w100)),
                         ),
@@ -295,14 +223,14 @@ class _OrdersPageState extends State<OrdersPage> {
                       child: Container(
                         width: (allWidth - 37) / 3,
                         height: 35,
-                        color:
-                        _isFocused1 ? Colors.blue[300] : Colors.white,
+                        color: _isFocused1 ? Colors.blue[300] : Colors.white,
                         child: Center(
-                          child: Text(AppLocalizations.of(context).translate('newOrders'),
+                          child: Text(
+                              AppLocalizations.of(context)
+                                  .translate('newOrders'),
                               style: paragarph3.copyWith(
-                                  color: _isFocused1
-                                      ? Colors.white
-                                      : Colors.black,
+                                  color:
+                                      _isFocused1 ? Colors.white : Colors.black,
                                   fontSize: 15,
                                   fontWeight: FontWeight.w100)),
                         ),
@@ -318,39 +246,39 @@ class _OrdersPageState extends State<OrdersPage> {
           ),
           _isFocused1
               ? Expanded(
-            child: ListView.builder(
-              itemCount: newOrders.length,
-              itemBuilder: (context, i) {
-                return OrdersCard(
-                  order: newOrders[i],
-                  type: 1,
-                );
-              },
-            ),
-          )
+                  child: ListView.builder(
+                    itemCount: newOrders.length,
+                    itemBuilder: (context, i) {
+                      return OrdersCard(
+                        order: newOrders[i],
+                        type: 1,
+                      );
+                    },
+                  ),
+                )
               : _isFocused2
-              ? Expanded(
-            child: ListView.builder(
-              itemCount: completeOrders.length,
-              itemBuilder: (context, i) {
-                return OrdersCard(
-                  order: completeOrders[i],
-                  type: 2,
-                );
-              },
-            ),
-          )
-              : Expanded(
-            child: ListView.builder(
-              itemCount: oldOrders.length,
-              itemBuilder: (context, i) {
-                return OrdersCard(
-                  order: oldOrders[i],
-                  type: 3,
-                );
-              },
-            ),
-          ),
+                  ? Expanded(
+                      child: ListView.builder(
+                        itemCount: completeOrders.length,
+                        itemBuilder: (context, i) {
+                          return OrdersCard(
+                            order: completeOrders[i],
+                            type: 2,
+                          );
+                        },
+                      ),
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        itemCount: oldOrders.length,
+                        itemBuilder: (context, i) {
+                          return OrdersCard(
+                            order: oldOrders[i],
+                            type: 3,
+                          );
+                        },
+                      ),
+                    ),
         ],
       ),
     );

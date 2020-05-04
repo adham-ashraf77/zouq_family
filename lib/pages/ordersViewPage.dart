@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:zouqadmin/models/order.dart';
+import 'package:zouqadmin/models/product.dart';
+import 'package:zouqadmin/services/getorderwithproducts.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/widgets/commentDesign.dart';
 import 'package:zouqadmin/widgets/ordersViewPageCard.dart';
@@ -10,8 +14,18 @@ import '../I10n/app_localizations.dart';
 import '../I10n/app_localizations.dart';
 import '../I10n/app_localizations.dart';
 
-class OrdersViewPage extends StatelessWidget {
+class OrdersViewPage extends StatefulWidget {
   static const routeName = '/oredersViewPage';
+  final String id;
+
+  const OrdersViewPage({@required this.id});
+
+  @override
+  _OrdersViewPageState createState() => _OrdersViewPageState(id);
+}
+
+class _OrdersViewPageState extends State<OrdersViewPage> {
+  final String id;
   String link =
       'https://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=600x300&maptype=roadmap' +
           '&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318' +
@@ -21,12 +35,44 @@ class OrdersViewPage extends StatelessWidget {
   ///TODO .. The Google Maps Platform server rejected your request. You must enable Billing on the Google Cloud Project at https://console.cloud.google.com/project/_/billing/enable Learn more at https://developers.google.com/maps/gmp-get-started
   final int type = 1;
 
+  _OrdersViewPageState(this.id);
+  String rate;
+  bool firstTime = true;
+  String latitude;
+  String longitude;
   @override
   Widget build(BuildContext context) {
     final List index = ModalRoute.of(context).settings.arguments;
     final Order order = index[0];
     final int type = index[1];
-    print(order.name);
+
+    firstTime
+        ? GetOrderWithProducts()
+            .getOrderWithProducts(id: order.id)
+            .then((onValue) {
+            //TODO here and using onValue u can get any info about the product
+            latitude = jsonDecode(onValue.toString())['order']['latitude'];
+            longitude = jsonDecode(onValue.toString())['order']['longitude'];
+            // print('X = ' + latitude + ' = ' + longitude);
+            List x = jsonDecode(onValue.toString())['order']['products'];
+            for (int i = 0; i < x.length; i++) {
+              setState(() {
+                rate =
+                    jsonDecode(onValue.toString())['order']['rate'].toString();
+                order.product.add(Product(
+                  name: x[i]['name'],
+                  price: x[i]['price'],
+                  imageUrl: x[i]['caption'],
+                  amount: x[i]['cart']['quantity'],
+                ));
+              });
+            }
+          }).whenComplete(() {
+            setState(() {
+              this.firstTime = false;
+            });
+          })
+        : null;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -43,7 +89,8 @@ class OrdersViewPage extends StatelessWidget {
                   ),
                   child: CircleAvatar(
                     backgroundColor: Colors.grey[200],
-                    backgroundImage: NetworkImage('${order.imageUrl}'),
+                    backgroundImage:
+                        NetworkImage('${order.imageUrl.toString()}'),
                     radius: 50,
                   ),
                 ),
@@ -51,7 +98,7 @@ class OrdersViewPage extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  order.name,
+                  order.name.toString(),
                   style: paragarph1.copyWith(
                       fontWeight: FontWeight.w500, color: Color(0xFF535353)),
                 ),
@@ -63,33 +110,40 @@ class OrdersViewPage extends StatelessWidget {
                       color: type == 1
                           ? Color(0xFFF39D67).withOpacity(0.2)
                           : type == 2
-                          ? Color(0xFFF39D67)
-                          : type == 3 ? Color(0xFF48CF84): Colors.blue, // border color
+                              ? Color(0xFFF39D67)
+                              : type == 3
+                                  ? Color(0xFF48CF84)
+                                  : Colors.blue, // border color
                       border: Border.all(
                         color: type == 1
                             ? Color(0xFFF39D67)
                             : type == 2
-                            ? Color(0xFFF39D67)
-                            : type == 3 ? Color(0xFF48CF84): Colors.blue,
+                                ? Color(0xFFF39D67)
+                                : type == 3 ? Color(0xFF48CF84) : Colors.blue,
                       ),
                       borderRadius: BorderRadius.circular(10)),
                   width: 80,
                   height: 30,
                   child: Center(
                       child: Text(
-                        type == 1
-                            ? AppLocalizations.of(context).translate('newOrder')
-                            : type == 2
-                            ? AppLocalizations.of(context).translate('confirmedOrder')
-                            : type == 3 ? AppLocalizations.of(context).translate('completedOrder') : '',
-                        textDirection: TextDirection.rtl,
-                        style: TextStyle(color: type == 1
+                    type == 1
+                        ? AppLocalizations.of(context).translate('newOrder')
+                        : type == 2
+                            ? AppLocalizations.of(context)
+                                .translate('confirmedOrder')
+                            : type == 3
+                                ? AppLocalizations.of(context)
+                                    .translate('completedOrder')
+                                : '',
+                    textDirection: TextDirection.rtl,
+                    style: TextStyle(
+                        color: type == 1
                             ? Color(0xFFE08248)
                             : type == 2
-                            ? Colors.white
-                            : type == 3 ? Colors.white: Colors.blue,
-                            fontSize: 16),
-                      )),
+                                ? Colors.white
+                                : type == 3 ? Colors.white : Colors.blue,
+                        fontSize: 16),
+                  )),
                 ),
                 SizedBox(
                   height: 40,
@@ -101,7 +155,7 @@ class OrdersViewPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          '${order.id}',
+                          '${order.id.toString()}',
                           style: TextStyle(color: Colors.grey),
                         ),
                         Text(
@@ -124,7 +178,9 @@ class OrdersViewPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          '${order.time}' + '  ' + '${order.date}',
+                          '${order.time.toString()}' +
+                              '  ' +
+                              '${order.date.toString()}',
                           style: TextStyle(color: Colors.grey),
                         ),
                         Text(
@@ -145,43 +201,42 @@ class OrdersViewPage extends StatelessWidget {
                     ),
                     type == 2 || type == 3
                         ? Row(
-                      mainAxisAlignment:
-                      MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Container(
-                              width: 35,
-                              height: 35,
-                              child: Image.asset(
-                                'assets/images/whatsicon.png',
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  Container(
+                                    width: 35,
+                                    height: 35,
+                                    child: Image.asset(
+                                      'assets/images/whatsicon.png',
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    '${order.phoneNumber.toString()}',
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ],
                               ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              '${order.phoneNumber}',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          'محادثة whatsapp',
-                          textDirection: TextDirection.rtl,
-                          style: paragarph2.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w100,
-                          ),
-                        ),
-                      ],
-                    )
+                              Text(
+                                'محادثة whatsapp',
+                                textDirection: TextDirection.rtl,
+                                style: paragarph2.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w100,
+                                ),
+                              ),
+                            ],
+                          )
                         : SizedBox(),
                     type == 2 || type == 3
                         ? Divider(
-                      height: 2,
-                      color: Colors.grey[300],
-                    )
+                            height: 2,
+                            color: Colors.grey[300],
+                          )
                         : SizedBox(),
                     SizedBox(
                       height: type == 2 || type == 3 ? 20 : 0,
@@ -189,43 +244,43 @@ class OrdersViewPage extends StatelessWidget {
                     /////
                     type == 2 || type == 3
                         ? Row(
-                      mainAxisAlignment:
-                      MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            SizedBox(
-                              width: 5,
-                            ),
-                            CircleAvatar(
-                              backgroundColor: accent,
-                              radius: 12,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              '${order.phoneNumber}',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          AppLocalizations.of(context).translate('telephone'),
-                          textDirection: TextDirection.rtl,
-                          style: paragarph2.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w100,
-                          ),
-                        ),
-                      ],
-                    )
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  CircleAvatar(
+                                    backgroundColor: accent,
+                                    radius: 12,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    '${order.phoneNumber.toString()}',
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                AppLocalizations.of(context)
+                                    .translate('telephone'),
+                                textDirection: TextDirection.rtl,
+                                style: paragarph2.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w100,
+                                ),
+                              ),
+                            ],
+                          )
                         : SizedBox(),
                     type == 2 || type == 3
                         ? Divider(
-                      height: 2,
-                      color: Colors.grey[300],
-                    )
+                            height: 2,
+                            color: Colors.grey[300],
+                          )
                         : SizedBox(),
                     SizedBox(
                       height: type == 2 || type == 3 ? 20 : 0,
@@ -235,32 +290,37 @@ class OrdersViewPage extends StatelessWidget {
                 SizedBox(
                   height: 20,
                 ),
-                type == 3 ? SizedBox() : Text(
-                  AppLocalizations.of(context).translate('location'),
-                  style: paragarph2.copyWith(color: Colors.blue),
-                ),
+                type == 3
+                    ? SizedBox()
+                    : Text(
+                        AppLocalizations.of(context).translate('location'),
+                        style: paragarph2.copyWith(color: Colors.blue),
+                      ),
                 SizedBox(
-                  height:  type == 3 ? 0 : 20,
+                  height: type == 3 ? 0 : 20,
                 ),
                 type == 2 || type == 1
                     ? ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                      color: Colors.grey[200],
-                      height: 100,
-                      width: MediaQuery.of(context).size.width,
-                      child: Image.network('https://www.mediafire.com/convkey/b31a/c318q2te6lqziqzzg.jpg')), ///TODO this url must be replaced with `link` variable
-                )
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                            color: Colors.grey[200],
+                            height: 100,
+                            width: MediaQuery.of(context).size.width,
+                            child: Image.network(
+                                'https://www.mediafire.com/convkey/b31a/c318q2te6lqziqzzg.jpg')),
+
+                        ///TODO this url must be replaced with `link` variable
+                      )
                     : Container(
-                  height:  100 * order.comments.length.toDouble(),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: order.comments.length,
-                    itemBuilder:(context,i){
-                      return  CommentDesign(comment : order.comments[i]);
-                    },
-                  ),
-                ),
+                        height: 100 * order.comments.length.toDouble(),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: order.comments.length,
+                          itemBuilder: (context, i) {
+                            return CommentDesign(comment: order.comments[i]);
+                          },
+                        ),
+                      ),
                 SizedBox(
                   height: 20,
                 ),
@@ -312,7 +372,8 @@ class OrdersViewPage extends StatelessWidget {
                                 color: Colors.white,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(50)),
-                                border: Border.all(color: Color(0xFFDADADA),width: 2)),
+                                border: Border.all(
+                                    color: Color(0xFFDADADA), width: 2)),
                           ),
                           SizedBox(
                             width: 12,
@@ -326,10 +387,11 @@ class OrdersViewPage extends StatelessWidget {
                               size: 23,
                             ),
                             decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(50)),
-                                border: Border.all(color: Color(0xFFDADADA),width: 2),
+                              color: Colors.white,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(50)),
+                              border: Border.all(
+                                  color: Color(0xFFDADADA), width: 2),
                             ),
                           ),
                         ],
@@ -350,9 +412,8 @@ class OrdersViewPage extends StatelessWidget {
                                 border: Border.all(color: Colors.grey[300])),
                           )
                         : Row(
-                          children: <Widget>[
-                            
-                            Container(
+                            children: <Widget>[
+                              Container(
                                 height: 40,
                                 width: 40,
                                 child: Icon(
@@ -364,17 +425,27 @@ class OrdersViewPage extends StatelessWidget {
                                     color: Colors.red[300],
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(50)),
-                                    border: Border.all(color: Colors.grey[300])),
-                              ),SizedBox(width: 10,),Text(order.rate.toString(),style: paragarph1.copyWith(fontWeight: FontWeight.w100),),
-                          ],
-                        ),
+                                    border:
+                                        Border.all(color: Colors.grey[300])),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                rate == null ? '0' : rate,
+                                style: paragarph1.copyWith(
+                                    fontWeight: FontWeight.w100),
+                              ),
+                            ],
+                          ),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 30.0),
                 child: Text(
-                  'ريال ' + '236',
+                  '${order.price}' + ' ' + 'ريال',
                   textDirection: TextDirection.rtl,
-                  style: paragarph1.copyWith(fontWeight: FontWeight.w200,color: Colors.blue),
+                  style: paragarph1.copyWith(
+                      fontWeight: FontWeight.w200, color: Colors.blue),
                 ),
               ),
             ],

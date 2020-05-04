@@ -264,7 +264,8 @@ class _LoginPageState extends State<LoginPage> {
                           Login()
                               .login(
                                   password: passwordTextFieldController.text,
-                                  phone: (this._countryCode +
+                                  phone: (
+                                    this._countryCode +//  TODO uncomment this
                                           phoneNumberTextFieldController.text)
                                       .replaceAll("+", ''))
                               .then((onValue) {
