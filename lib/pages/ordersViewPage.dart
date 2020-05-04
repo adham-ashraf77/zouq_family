@@ -38,6 +38,8 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
   _OrdersViewPageState(this.id);
   String rate;
   bool firstTime = true;
+  String latitude;
+  String longitude;
   @override
   Widget build(BuildContext context) {
     final List index = ModalRoute.of(context).settings.arguments;
@@ -49,7 +51,9 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
             .getOrderWithProducts(id: order.id)
             .then((onValue) {
             //TODO here and using onValue u can get any info about the product
-
+            latitude = jsonDecode(onValue.toString())['order']['latitude'];
+            longitude = jsonDecode(onValue.toString())['order']['longitude'];
+            // print('X = ' + latitude + ' = ' + longitude);
             List x = jsonDecode(onValue.toString())['order']['products'];
             for (int i = 0; i < x.length; i++) {
               setState(() {

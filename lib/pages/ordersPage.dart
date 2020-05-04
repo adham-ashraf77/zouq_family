@@ -24,170 +24,9 @@ class _OrdersPageState extends State<OrdersPage> {
   bool _isFocused1 = true;
   bool _isFocused2 = false;
   bool _isFocused3 = false;
-  List<Order> newOrders = [
-    Order(
-        id: '54676867#',
-        imageUrl: 'http://www.mediafire.com/convkey/e3dc/q0w2dc096ilt7r8zg.jpg',
-        name: 'خالد مرعي',
-        date: '08 May 2020',
-        time: '02:22PM',
-        contents: ' كيك , حلا , ….',
-        product: [
-          Product(
-              amount: 3,
-              price: '45',
-              imageUrl:
-                  'http://www.mediafire.com/convkey/37d2/4rblt3fgtrad9sbzg.jpg',
-              name: 'ملفوفة في أوراق الموز'),
-          Product(
-              amount: 1,
-              name: 'بوتو بيرياني',
-              imageUrl:
-                  'http://www.mediafire.com/convkey/5116/igw7chb8ee4dmlfzg.jpg',
-              price: '45')
-        ]),
-    Order(
-        id: '54676867#',
-        imageUrl: 'http://www.mediafire.com/convkey/e3dc/q0w2dc096ilt7r8zg.jpg',
-        name: 'غادة يوسف',
-        date: '08 May 2020',
-        time: '02:22PM',
-        contents: ' كيك , حلا , ….',
-        product: [
-          Product(
-              amount: 3,
-              price: '45',
-              imageUrl:
-                  'http://www.mediafire.com/convkey/37d2/4rblt3fgtrad9sbzg.jpg',
-              name: 'ملفوفة في أوراق الموز'),
-          Product(
-              amount: 1,
-              name: 'بوتو بيرياني',
-              imageUrl:
-                  'http://www.mediafire.com/convkey/5116/igw7chb8ee4dmlfzg.jpg',
-              price: '45')
-        ]),
-  ];
-  List<Order> completeOrders = [
-    Order(
-      id: '54676867#',
-      imageUrl: 'http://www.mediafire.com/convkey/55ed/l9wgqr9lsqh9hyrzg.jpg',
-      name: 'محمد يونس',
-      date: '08 May 2020',
-      time: '02:22PM',
-      contents: ' كيك , حلا , ….',
-      price: '43 ريال',
-      phoneNumber: '543-649-3478',
-      product: [
-        Product(
-            amount: 3,
-            price: '45',
-            imageUrl:
-                'http://www.mediafire.com/convkey/37d2/4rblt3fgtrad9sbzg.jpg',
-            name: 'ملفوفة في أوراق الموز'),
-        Product(
-            amount: 1,
-            name: 'بوتو بيرياني',
-            imageUrl:
-                'http://www.mediafire.com/convkey/5116/igw7chb8ee4dmlfzg.jpg',
-            price: '45')
-      ],
-    ),
-    Order(
-      id: '54676867#',
-      imageUrl: 'http://www.mediafire.com/convkey/e3dc/q0w2dc096ilt7r8zg.jpg',
-      name: 'أحمد محمد',
-      date: '08 May 2020',
-      time: '02:22PM',
-      contents: ' كيك , حلا , ….',
-      price: '43 ريال',
-      phoneNumber: '543-649-3478',
-      product: [
-        Product(
-            amount: 3,
-            price: '45',
-            imageUrl:
-                'http://www.mediafire.com/convkey/37d2/4rblt3fgtrad9sbzg.jpg',
-            name: 'ملفوفة في أوراق الموز'),
-        Product(
-            amount: 1,
-            name: 'بوتو بيرياني',
-            imageUrl:
-                'http://www.mediafire.com/convkey/5116/igw7chb8ee4dmlfzg.jpg',
-            price: '45')
-      ],
-    ),
-  ];
-  List<Order> oldOrders = [
-    Order(
-      id: '54676867#',
-      imageUrl: 'http://www.mediafire.com/convkey/55ed/l9wgqr9lsqh9hyrzg.jpg',
-      name: 'محمد يونس',
-      date: '08 May 2020',
-      time: '02:22PM',
-      contents: ' كيك , حلا , ….',
-      price: '43 ريال',
-      phoneNumber: '543-649-3478',
-      rate: 4.9,
-      comments: [
-        Comment(
-            name: 'محمد يوسف',
-            comment:
-                'الطعام مذاقة جيد ولم يتأخر التوصيل , انصح بطلب هذا المنتج فانة رائع',
-            imageUrl:
-                'http://www.mediafire.com/convkey/f3dd/rp9c5h7xajnzrh8zg.jpg',
-            rate: 4.9)
-      ],
-      product: [
-        Product(
-            amount: 3,
-            price: '45',
-            imageUrl:
-                'http://www.mediafire.com/convkey/37d2/4rblt3fgtrad9sbzg.jpg',
-            name: 'ملفوفة في أوراق الموز'),
-        Product(
-            amount: 1,
-            name: 'بوتو بيرياني',
-            imageUrl:
-                'http://www.mediafire.com/convkey/5116/igw7chb8ee4dmlfzg.jpg',
-            price: '45')
-      ],
-    ),
-    Order(
-      id: '54676867#',
-      imageUrl: 'http://www.mediafire.com/convkey/e3dc/q0w2dc096ilt7r8zg.jpg',
-      name: 'أحمد محمد',
-      date: '08 May 2020',
-      time: '02:22PM',
-      contents: ' كيك , حلا , ….',
-      price: '43 ريال',
-      phoneNumber: '543-649-3478',
-      rate: 4.9,
-      comments: [
-        Comment(
-            name: 'محمد يوسف',
-            comment:
-                'الطعام مذاقة جيد ولم يتأخر التوصيل , انصح بطلب هذا المنتج فانة رائع',
-            imageUrl:
-                'http://www.mediafire.com/convkey/f3dd/rp9c5h7xajnzrh8zg.jpg',
-            rate: 4.9)
-      ],
-      product: [
-        Product(
-            amount: 3,
-            price: '45',
-            imageUrl:
-                'http://www.mediafire.com/convkey/37d2/4rblt3fgtrad9sbzg.jpg',
-            name: 'ملفوفة في أوراق الموز'),
-        Product(
-            amount: 1,
-            name: 'بوتو بيرياني',
-            imageUrl:
-                'http://www.mediafire.com/convkey/5116/igw7chb8ee4dmlfzg.jpg',
-            price: '45')
-      ],
-    ),
-  ];
+  List<Order> newOrders = [];
+  List<Order> completeOrders = [];
+  List<Order> oldOrders = [];
 
   @override
   void didChangeDependencies() {
@@ -214,7 +53,7 @@ class _OrdersPageState extends State<OrdersPage> {
     PaginateOrders().paginateOrders(status: 'old').then((onValue) {
       oldOrders.clear();
       List x = jsonDecode(onValue.toString())['orders'];
-       print('Old Orders  : ' + x.toString());
+      //  print('Old Orders  : ' + x.toString());
       for (int i = 0; i < x.length; i++) {
         setState(() {
           oldOrders.add(Order(
@@ -238,7 +77,7 @@ class _OrdersPageState extends State<OrdersPage> {
      PaginateOrders().paginateOrders(status: 'approved').then((onValue) {
       completeOrders.clear();
       List x = jsonDecode(onValue.toString())['orders'];
-       print('Old Orders  : ' + x.toString());
+      //  print('Old Orders  : ' + x.toString());
       for (int i = 0; i < x.length; i++) {
         setState(() {
           completeOrders.add(Order(
