@@ -3,15 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:zouqadmin/models/order.dart';
 import 'package:zouqadmin/models/product.dart';
+import 'package:zouqadmin/services/end_order.dart';
 import 'package:zouqadmin/services/getorderwithproducts.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/widgets/commentDesign.dart';
 import 'package:zouqadmin/widgets/ordersViewPageCard.dart';
 
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
 import '../I10n/app_localizations.dart';
 
 class OrdersViewPage extends StatefulWidget {
@@ -40,6 +37,11 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
   bool firstTime = true;
   String latitude;
   String longitude;
+
+  endOrder(String orderId) {
+    EndOrder().endOrder(orderId);
+  }
+
   @override
   Widget build(BuildContext context) {
     final List index = ModalRoute.of(context).settings.arguments;
@@ -75,6 +77,10 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
         : null;
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text("ذوق", style: TextStyle(color: Colors.blue),),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -397,20 +403,23 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                         ],
                       )
                     : type == 2
-                        ? Container(
-                            height: 40,
-                            width: 110,
-                            child: Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 23,
-                            ),
-                            decoration: BoxDecoration(
-                                color: Colors.green[300],
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(50)),
-                                border: Border.all(color: Colors.grey[300])),
-                          )
+                    ? InkWell(
+                  onTap: () => endOrder(order.id),
+                  child: Container(
+                    height: 40,
+                    width: 110,
+                    child: Icon(
+                      Icons.check,
+                      color: Colors.white,
+                      size: 23,
+                    ),
+                    decoration: BoxDecoration(
+                        color: Colors.green[300],
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(50)),
+                        border: Border.all(color: Colors.grey[300])),
+                  ),
+                )
                         : Row(
                             children: <Widget>[
                               Container(

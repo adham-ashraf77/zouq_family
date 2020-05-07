@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,12 +11,6 @@ import 'package:zouqadmin/pages/auth/login_screen.dart';
 import 'package:zouqadmin/services/getuser.dart';
 import 'package:zouqadmin/theme/common.dart';
 
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
 import '../I10n/app_localizations.dart';
 
 class AdminOptionsPage extends StatefulWidget {
@@ -28,6 +23,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
   String name;
   String avatarImageUrl;
   String wallet;
+  String token;
   @override
   void didChangeDependencies() {
     SharedPreferences.getInstance().then((onValue) {
@@ -45,6 +41,12 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
       });
     });
     super.didChangeDependencies();
+  }
+
+  getUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    token = prefs.getString('token');
+    Response response = await Dio().get("path");
   }
 
   @override
@@ -103,13 +105,16 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
             GestureDetector(
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AdminWalletPage()));
+                    MaterialPageRoute(builder: (context) =>
+                        AdminWalletPage(
+                            wallet
+                        )));
               },
               child: ListTile(
                 leading: Text(AppLocalizations.of(context).translate('wallet'),
                     style: moreTextStyle),
                 trailing: Text(
-                  wallet.toString() == 'null' ? '0 ريال' :
+                  wallet.toString() == 'null' ? 'خطأ' :
                   "$wallet ريال",
                   style: moreSmallTextStyle,
                 ),

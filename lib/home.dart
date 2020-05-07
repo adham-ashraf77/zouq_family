@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zouqadmin/pages/adminOptionsPage.dart';
-import 'package:zouqadmin/pages/adminRegistrationPage.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
 import 'package:zouqadmin/pages/ordersPage.dart';
 import 'package:zouqadmin/pages/productsPage.dart';
@@ -41,12 +40,14 @@ class _HomeState extends State<Home> {
           isLoading = false;
         });
       } else {
-        GetUser().getUser(token: token).then((onValue) {
+        GetUser().getUser(token: token).then((onValue) async {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
           setState(() {
             user = onValue;
-            print(user);
+            print('user info : $user');
             isLoading = false;
           });
+          prefs.setString("userId", "${user["user"]["id"]}");
         }).catchError((onError) {
           print('Error ' + onError.toString());
           showDialog(

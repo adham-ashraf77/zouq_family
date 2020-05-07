@@ -1,17 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:zouqadmin/models/comment.dart';
 import 'package:zouqadmin/models/order.dart';
-import 'package:zouqadmin/models/product.dart';
 import 'package:zouqadmin/services/paginateorders.dart';
 import 'package:zouqadmin/theme/common.dart';
-import 'package:zouqadmin/widgets/bottomNavigationbar.dart';
 import 'package:zouqadmin/widgets/ordersCardWidget.dart';
 
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
 import '../I10n/app_localizations.dart';
 import 'addItemPage.dart';
 
@@ -32,20 +26,23 @@ class _OrdersPageState extends State<OrdersPage> {
   void didChangeDependencies() {
     PaginateOrders().paginateOrders(status: 'new').then((onValue) {
       newOrders.clear();
-      List x = jsonDecode(onValue.toString())['orders'];
-      for (int i = 0; i < x.length; i++) {
+      List data = jsonDecode(onValue.toString())['orders'];
+      for (int i = 0; i < data.length; i++) {
+
         setState(() {
-          newOrders.add(Order(
-            id: x[i]['id'].toString() + '#',
-            name: x[i]['client']['name'].toString(),
-            date: x[i]['created_at'].toString(),
-            contents: x[i]['products_meta'].toString(),
-            imageUrl: x[i]['client']['image'].toString(),
-            time: "",
-            comments: [],
-            product: [],
-            price: x[i]['total'],
-          ));
+          newOrders.add(
+            Order(
+              id: data[i]['id'].toString(),
+              name: data[i]['client']['name'].toString(),
+              date: data[i]['created_at'].toString(),
+              contents: data[i]['products_meta'].toString(),
+              imageUrl: data[i]['client']['image'].toString(),
+              time: "",
+              comments: [],
+              product: [],
+              price: data[i]['total'],
+            ),
+          );
         });
       }
       // print('Old Orders  : ' + x.length.toString());
@@ -57,7 +54,7 @@ class _OrdersPageState extends State<OrdersPage> {
       for (int i = 0; i < x.length; i++) {
         setState(() {
           oldOrders.add(Order(
-            id: x[i]['id'].toString() + '#',
+            id: x[i]['id'].toString(),
             name: x[i]['client']['name'].toString(),
             date: x[i]['created_at'].toString(),
             contents: x[i]['products_meta'].toString(),
@@ -68,20 +65,19 @@ class _OrdersPageState extends State<OrdersPage> {
             price: x[i]['total'],
             rate: 0,
             phoneNumber: x[i]['client']['phone'],
-
           ));
         });
       }
       // print('Old Orders  : ' + x.length.toString());
     });
-     PaginateOrders().paginateOrders(status: 'approved').then((onValue) {
+    PaginateOrders().paginateOrders(status: 'approved').then((onValue) {
       completeOrders.clear();
       List x = jsonDecode(onValue.toString())['orders'];
       //  print('Old Orders  : ' + x.toString());
       for (int i = 0; i < x.length; i++) {
         setState(() {
           completeOrders.add(Order(
-            id: x[i]['id'].toString() + '#',
+            id: x[i]['id'].toString(),
             name: x[i]['client']['name'].toString(),
             date: x[i]['created_at'].toString(),
             contents: x[i]['products_meta'].toString(),
@@ -92,7 +88,6 @@ class _OrdersPageState extends State<OrdersPage> {
             price: x[i]['total'],
             rate: 0,
             phoneNumber: x[i]['client']['phone'],
-
           ));
         });
       }
@@ -127,16 +122,14 @@ class _OrdersPageState extends State<OrdersPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         // pinned: true,
-        title: Text(AppLocalizations.of(context).translate('zouq'),
-            style: headers1),
+        title: Text(AppLocalizations.of(context).translate('zouq'), style: headers1),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
             icon: new Image.asset('assets/icons/add.png'),
             onPressed: () {
               //TODO go add product screen
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddItemPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AddItemPage()));
             },
           ),
         ],
@@ -171,12 +164,9 @@ class _OrdersPageState extends State<OrdersPage> {
                         height: 35,
                         color: _isFocused3 ? Colors.blue[300] : Colors.white,
                         child: Center(
-                          child: Text(
-                              AppLocalizations.of(context)
-                                  .translate('oldOrders'),
+                          child: Text(AppLocalizations.of(context).translate('oldOrders'),
                               style: paragarph3.copyWith(
-                                  color:
-                                      _isFocused3 ? Colors.white : Colors.black,
+                                  color: _isFocused3 ? Colors.white : Colors.black,
                                   fontSize: 15,
                                   fontWeight: FontWeight.w100)),
                         ),
@@ -198,12 +188,9 @@ class _OrdersPageState extends State<OrdersPage> {
                         height: 35,
                         color: _isFocused2 ? Colors.blue[300] : Colors.white,
                         child: Center(
-                          child: Text(
-                              AppLocalizations.of(context)
-                                  .translate('confirmedOrders'),
+                          child: Text(AppLocalizations.of(context).translate('confirmedOrders'),
                               style: paragarph3.copyWith(
-                                  color:
-                                      _isFocused2 ? Colors.white : Colors.black,
+                                  color: _isFocused2 ? Colors.white : Colors.black,
                                   fontSize: 15,
                                   fontWeight: FontWeight.w100)),
                         ),
@@ -225,12 +212,9 @@ class _OrdersPageState extends State<OrdersPage> {
                         height: 35,
                         color: _isFocused1 ? Colors.blue[300] : Colors.white,
                         child: Center(
-                          child: Text(
-                              AppLocalizations.of(context)
-                                  .translate('newOrders'),
+                          child: Text(AppLocalizations.of(context).translate('newOrders'),
                               style: paragarph3.copyWith(
-                                  color:
-                                      _isFocused1 ? Colors.white : Colors.black,
+                                  color: _isFocused1 ? Colors.white : Colors.black,
                                   fontSize: 15,
                                   fontWeight: FontWeight.w100)),
                         ),

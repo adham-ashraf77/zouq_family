@@ -75,9 +75,16 @@ class _MarketProfileCardContecntState extends State<MarketProfileCardContecnt> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text(
-                        "${widget.title}",
-                        style: headers4,
+                      SizedBox(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.4,
+                        child: Text(
+                          "${widget.title}",
+                          overflow: TextOverflow.ellipsis,
+                          style: headers4,
+                        ),
                       ),
                       Row(
                         children: <Widget>[

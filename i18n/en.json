@@ -55,7 +55,7 @@
   "detailsRequired": "All of the following details is required to transfer money from your wallet to the bank",
   "transactionAmount": "Transaction amount",
   "bank": "Bank",
-  "bankId": "Account's ID",
+  "bankId": "bank account number (iban)",
   "details": "Details",
   "editProfile": "Edit profile",
   "description": "Description",

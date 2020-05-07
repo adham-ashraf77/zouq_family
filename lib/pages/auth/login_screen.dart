@@ -5,16 +5,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zouqadmin/I10n/app_localizations.dart';
 import 'package:zouqadmin/pages/auth/forgetpass_screen.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
-import 'package:zouqadmin/pages/productsPage.dart';
+import 'package:zouqadmin/services/getuser.dart';
 import 'package:zouqadmin/services/login.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/AppButton.dart';
 import 'package:zouqadmin/widgets/roundedAppBar.dart';
-import 'package:zouqadmin/services/getuser.dart';
-import '../../I10n/app_localizations.dart';
-import '../../I10n/app_localizations.dart';
-import '../../I10n/app_localizations.dart';
+
 import '../../I10n/app_localizations.dart';
 import '../../home.dart';
 import '../adminRegistrationPage.dart';
@@ -265,7 +262,7 @@ class _LoginPageState extends State<LoginPage> {
                               .login(
                                   password: passwordTextFieldController.text,
                                   phone: (
-                                    this._countryCode +//  TODO uncomment this
+                                      //  this._countryCode +//  TODO uncomment this
                                           phoneNumberTextFieldController.text)
                                       .replaceAll("+", ''))
                               .then((onValue) {
