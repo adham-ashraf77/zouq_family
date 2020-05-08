@@ -13,14 +13,7 @@ import 'package:zouqadmin/services/addproduct.dart';
 import 'package:zouqadmin/theme/common.dart';
 
 import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
+
 
 class AddItemPage extends StatefulWidget {
   @override

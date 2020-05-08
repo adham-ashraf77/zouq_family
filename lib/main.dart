@@ -8,7 +8,6 @@ import 'package:zouqadmin/theme/common.dart';
 
 import 'I10n/AppLanguage.dart';
 import 'I10n/app_localizations.dart';
-import 'home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
