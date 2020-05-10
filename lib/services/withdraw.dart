@@ -7,7 +7,7 @@ class Withdraw {
   final String _url = "https://api.dhuqapp.com";
   final String _withdraw = "/api/family/submit-withdrawal-request";
 
-  withdrawMoney({int iban, String bankName, int quantity}) async {
+  withdrawMoney({int iban, String bankName, double quantity}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     Response _response;

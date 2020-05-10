@@ -25,7 +25,7 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
     Withdraw().withdrawMoney(
       bankName: bankNameController.text,
       iban: int.parse(IbanController.text),
-      quantity: int.parse(quantityController.text),
+      quantity: double.parse(quantityController.text),
     );
   }
 

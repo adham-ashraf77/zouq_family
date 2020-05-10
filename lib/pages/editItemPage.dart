@@ -240,8 +240,8 @@ class _EditItemPageState extends State<EditItemPage> {
       print('onValue : ' + onValue.toString());
       var x = jsonDecode(onValue.toString());
       var y = x['product'];
-      _dropdownValue = ['حلوى', 'مكسرات', 'اطعمه', 'مطبوخات'][int.parse(
-          y['category']['text_en'].toString().replaceAll('category_', ''))];
+//      _dropdownValue = ['حلوى', 'مكسرات', 'اطعمه', 'مطبوخات'][int.parse(
+//          y['category']['text_en'].toString().replaceAll('category_', ''))];
       categoryID = int.parse(
           y['category']['text_en'].toString().replaceAll('category_', ''));
       setState(() {

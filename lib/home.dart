@@ -44,10 +44,10 @@ class _HomeState extends State<Home> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           setState(() {
             user = onValue;
+            prefs.setString("userId", "${user["user"]["id"]}");
             print('user info : $user');
             isLoading = false;
           });
-          prefs.setString("userId", "${user["user"]["id"]}");
         }).catchError((onError) {
           print('Error ' + onError.toString());
           showDialog(
