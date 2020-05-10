@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:zouqadmin/models/order.dart';
 import 'package:zouqadmin/models/product.dart';
 import 'package:zouqadmin/services/end_order.dart';
@@ -40,6 +41,20 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
 
   endOrder(String orderId) {
     EndOrder().endOrder(orderId);
+  }
+
+  void whatsAppOpen({String phone}) async {
+    final snackBar = SnackBar(content: Text('please install whatsapp'));
+    var whatsappUrl = "whatsapp://send?phone=$phone&text=hello";
+    await canLaunch(whatsappUrl) ? launch(whatsappUrl) : Scaffold.of(context).showSnackBar(snackBar);
+  }
+
+  Future<void> _makePhoneCall(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -206,37 +221,42 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                       height: 20,
                     ),
                     type == 2 || type == 3
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        ? InkWell(
+                      onTap: () {
+                        if (type == 2) whatsAppOpen(phone: order.phoneNumber);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(
                             children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Container(
-                                    width: 35,
-                                    height: 35,
-                                    child: Image.asset(
-                                      'assets/images/whatsicon.png',
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    '${order.phoneNumber.toString()}',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                'محادثة whatsapp',
-                                textDirection: TextDirection.rtl,
-                                style: paragarph2.copyWith(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w100,
+                              Container(
+                                width: 35,
+                                height: 35,
+                                child: Image.asset(
+                                  'assets/images/whatsicon.png',
                                 ),
                               ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                '${order.phoneNumber.toString()}',
+                                style: TextStyle(color: Colors.grey),
+                              ),
                             ],
-                          )
+                          ),
+                          Text(
+                            'محادثة whatsapp',
+                            textDirection: TextDirection.rtl,
+                            style: paragarph2.copyWith(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w100,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
                         : SizedBox(),
                     type == 2 || type == 3
                         ? Divider(
@@ -249,38 +269,41 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                     ),
                     /////
                     type == 2 || type == 3
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        ? InkWell(
+                      onTap: () => _makePhoneCall('tel:${order.phoneNumber}'),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(
                             children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  CircleAvatar(
-                                    backgroundColor: accent,
-                                    radius: 12,
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    '${order.phoneNumber.toString()}',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                ],
+                              SizedBox(
+                                width: 5,
+                              ),
+                              CircleAvatar(
+                                backgroundColor: accent,
+                                radius: 12,
+                              ),
+                              SizedBox(
+                                width: 10,
                               ),
                               Text(
-                                AppLocalizations.of(context)
-                                    .translate('telephone'),
-                                textDirection: TextDirection.rtl,
-                                style: paragarph2.copyWith(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w100,
-                                ),
+                                '${order.phoneNumber.toString()}',
+                                style: TextStyle(color: Colors.grey),
                               ),
                             ],
-                          )
+                          ),
+                          Text(
+                            AppLocalizations.of(context)
+                                .translate('telephone'),
+                            textDirection: TextDirection.rtl,
+                            style: paragarph2.copyWith(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w100,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
                         : SizedBox(),
                     type == 2 || type == 3
                         ? Divider(
