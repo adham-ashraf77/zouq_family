@@ -12,10 +12,6 @@ import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 
 import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
 
 class EditPhoneNumberPage extends StatefulWidget {
   @override

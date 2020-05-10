@@ -15,7 +15,6 @@ import 'package:zouqadmin/widgets/rate_card.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
 
 class ItemDetail extends StatefulWidget {
   final String id;

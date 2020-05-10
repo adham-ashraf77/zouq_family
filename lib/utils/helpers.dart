@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 ////////////////////////////////////////////////
 /// GPS and location helpers
 ////////////////////////////////////////////////
 
-Future<double> getDistanceBetween(LatLng firstPoint, LatLng secondPoint) async {
-  double distanceInMeters = await Geolocator().distanceBetween(
-      firstPoint.latitude,
-      firstPoint.longitude,
-      secondPoint.latitude,
-      secondPoint.longitude);
-  return distanceInMeters;
-}
+// Future<double> getDistanceBetween(LatLng firstPoint, LatLng secondPoint) async {
+//   double distanceInMeters = await Geolocator().distanceBetween(
+//       firstPoint.latitude,
+//       firstPoint.longitude,
+//       secondPoint.latitude,
+//       secondPoint.longitude);
+//   return distanceInMeters;
+// }
 
 Future<Position> getCurrentLocation() async {
   Position position = await Geolocator()

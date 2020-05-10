@@ -7,9 +7,6 @@ import 'package:zouqadmin/services/setnewphonenumber.dart';
 import 'package:zouqadmin/theme/common.dart';
 
 import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
-import '../I10n/app_localizations.dart';
 import '../home.dart';
 
 class SetNewPhoneNumberScreen extends StatefulWidget {
