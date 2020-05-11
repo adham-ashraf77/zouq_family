@@ -10,6 +10,7 @@ import 'package:zouqadmin/pages/dialogWorning.dart';
 import 'package:zouqadmin/pages/ordersPage.dart';
 import 'package:zouqadmin/pages/productsPage.dart';
 import 'package:zouqadmin/services/getuser.dart';
+import 'package:zouqadmin/services/notifications.dart';
 import 'package:zouqadmin/theme/common.dart';
 
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
@@ -45,8 +46,7 @@ class _HomeState extends State<Home> {
     _fcm.requestNotificationPermissions(IosNotificationSettings());
     fcmToken = await _fcm.getToken();
     print("device token $fcmToken");
-    // var data = {"registration_id": fcmToken, "type": "android"};
-    // response = await dio.post("", data: data);
+    Notifications().sendFcmToken(fcmToken: fcmToken);
 
     _fcm.configure(
       onMessage: (Map<String, dynamic> message) async {
