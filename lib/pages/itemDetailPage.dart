@@ -1,9 +1,10 @@
 import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-//import 'package:video_player/video_player.dart';
+import 'package:zouqadmin/models/product_comments&rating.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
 import 'package:zouqadmin/pages/editItemPage.dart';
 import 'package:zouqadmin/services/delete.dart';
@@ -12,21 +13,21 @@ import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/chips/ratingChip.dart';
 import 'package:zouqadmin/widgets/rate_card.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../I10n/app_localizations.dart';
 
 class ItemDetail extends StatefulWidget {
-  final String id;
+  final String orderId;
 
-  const ItemDetail({@required this.id});
+  const ItemDetail({@required this.orderId});
   @override
-  _ItemDetailState createState() => _ItemDetailState(id: this.id);
+  _ItemDetailState createState() => _ItemDetailState(orderId: this.orderId);
 }
 
 class _ItemDetailState extends State<ItemDetail> {
-  final String id;
-  _ItemDetailState({this.id});
+  final String orderId;
+
+  _ItemDetailState({this.orderId});
   int _current = 0;
   //VideoPlayerController _controller;
   Future<void> _initializeVideoPlayerFuture;
@@ -37,6 +38,7 @@ class _ItemDetailState extends State<ItemDetail> {
   String price;
   String description;
   bool isLoading = true;
+  List<ProductsCommentsAndRating> productsCommentsAndRating = List<ProductsCommentsAndRating>();
 
   static List<String> imgList = [
     //   'https://assets.bonappetit.com/photos/597f6564e85ce178131a6475/16:9/w_1200,c_limit/0817-murray-mancini-dried-tomato-pie.jpg',
@@ -60,9 +62,9 @@ class _ItemDetailState extends State<ItemDetail> {
   }
 
   deleteProduct() {
-    print('Deleting ' + id.toString());
+    print('Deleting ' + orderId.toString());
 
-    Delete().delete(productID: id).then((onValue) {
+    Delete().delete(productID: orderId).then((onValue) {
       if (onValue.toString().contains('success')) {
         showDialog(
             context: context,
@@ -98,8 +100,8 @@ class _ItemDetailState extends State<ItemDetail> {
   }
 
   initImages() {
-    Show().show(productID: id).then((onValue) {
-      print('Product ID : ' + id.toString());
+    Show().show(productID: orderId).then((onValue) {
+      print('Product ID : ' + orderId.toString());
       print('onValue : ' + onValue.toString());
       var x = jsonDecode(onValue.toString());
       var y = x['product'];
@@ -217,10 +219,19 @@ class _ItemDetailState extends State<ItemDetail> {
     });
   }
 
+  getComments() async {
+    Response response = await Dio().get("https://api.dhuqapp.com/api/client/products/${widget.orderId}/reviews");
+    List data = response.data['reviews'];
+    data.forEach((element) {
+      productsCommentsAndRating.add(ProductsCommentsAndRating.fromJson(element));
+    });
+  }
+
   @override
   void initState() {
-    initImages();
     super.initState();
+    getComments();
+    initImages();
   }
 
   @override
@@ -392,13 +403,23 @@ class _ItemDetailState extends State<ItemDetail> {
                                 ),
                               ),
                             ),
-                            RateCard(
-                              image:
-                                  "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-                              name: 'محمد يوسف',
-                              desc: 'الطعام مذاقة جيد ولم يتأخر التوصيل , انصح بطلب هذا المنتج فانة رائع',
-                              rate: 4.9,
-                            ),
+                            ListView.builder(
+                              primary: false,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: productsCommentsAndRating.length,
+                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              itemBuilder: (context, index) {
+                                return RateCard(
+                                  image:
+                                  "${productsCommentsAndRating[index].userInfo.photo}",
+                                  name: '${productsCommentsAndRating[index].userInfo.name}',
+                                  desc:
+                                  '${productsCommentsAndRating[index].comment}',
+                                  rate: productsCommentsAndRating[index].rate.toDouble(),
+                                );
+                              },
+                            )
                           ],
                         ),
                       ),
@@ -431,7 +452,7 @@ class _ItemDetailState extends State<ItemDetail> {
                         InkWell(
                           onTap: () {
                             // popPage(context);
-                            pushPage(context, EditItemPage(id: id,));
+                            pushPage(context, EditItemPage(id: orderId,));
                           },
                           child: Container(
                             decoration: BoxDecoration(
