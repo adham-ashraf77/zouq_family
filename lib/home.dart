@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zouqadmin/pages/adminOptionsPage.dart';
@@ -5,8 +10,22 @@ import 'package:zouqadmin/pages/dialogWorning.dart';
 import 'package:zouqadmin/pages/ordersPage.dart';
 import 'package:zouqadmin/pages/productsPage.dart';
 import 'package:zouqadmin/services/getuser.dart';
+import 'package:zouqadmin/services/notifications.dart';
 import 'package:zouqadmin/theme/common.dart';
 
+Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
+  if (message.containsKey('data')) {
+    // Handle data message
+    final dynamic data = message['data'];
+  }
+
+  if (message.containsKey('notification')) {
+    // Handle notification message
+    final dynamic notification = message['notification'];
+  }
+
+  // Or do other work.
+}
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -16,6 +35,56 @@ class _HomeState extends State<Home> {
   int _currentIndex = 0;
   bool isLoading = false;
   var user;
+  
+  final Firestore _db = Firestore.instance;
+  final FirebaseMessaging _fcm = FirebaseMessaging();
+  String fcmToken = "";
+  Dio dio = new Dio();
+  Response response;
+
+  fireBaseNotifications() async {
+    _fcm.requestNotificationPermissions(IosNotificationSettings());
+    fcmToken = await _fcm.getToken();
+    print("device token $fcmToken");
+    Notifications().sendFcmToken(fcmToken: fcmToken);
+
+    _fcm.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: ListTile(
+              title: Text(
+                Platform.isIOS
+                    ? message['aps']['alert']['title']
+                    : message['notification']['title'],
+              ),
+              subtitle: Text(
+                Platform.isIOS
+                    ? message['aps']['alert']['body']
+                    : message['notification']['body'],
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        // TODO optional
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        // TODO optional
+      },
+    );
+  }
 
   final List<Widget> _children = [
     OrdersPage(),
@@ -63,6 +132,13 @@ class _HomeState extends State<Home> {
       }
     });
     super.didChangeDependencies();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fireBaseNotifications();
   }
 
   @override
