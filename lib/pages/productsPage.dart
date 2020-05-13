@@ -1,15 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:zouqadmin/models/product.dart';
 import 'package:zouqadmin/pages/addItemPage.dart';
 import 'package:zouqadmin/pages/itemDetailPage.dart';
 import 'package:zouqadmin/services/paginate.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/widgets/UiCard.dart';
-import 'package:zouqadmin/widgets/bottomNavigationbar.dart';
 import 'package:zouqadmin/widgets/cardContents/marketProfileCardContent.dart';
 import 'package:zouqadmin/widgets/chips/tagchip.dart';
-import 'package:zouqadmin/models/product.dart';
 
 import '../I10n/app_localizations.dart';
 
@@ -105,7 +104,7 @@ class _ProductsPageState extends State<ProductsPage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ItemDetail(
-                                id: products[index]
+                                orderId: products[index]
                                     .id), //TODO replace with products[index] ID
                           ));
                     },

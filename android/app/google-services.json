@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "950859046013",
+    "firebase_url": "https://zouqadmin.firebaseio.com",
+    "project_id": "zouqadmin",
+    "storage_bucket": "zouqadmin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:950859046013:android:7f5d34ac2efcd5e7c46514",
+        "android_client_info": {
+          "package_name": "com.alexApps.zouqAdmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "950859046013-3bg19dqjb7g9mgu47kt4ep75digp7rls.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjNZ3HVj6wIoJrUQn35AT9vQGiD4AO1W8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "950859046013-3bg19dqjb7g9mgu47kt4ep75digp7rls.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "950859046013-2o9j8ecqhq5bgr5a100pmsjldjk5iia0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.alexApps.zouqAdmin"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
