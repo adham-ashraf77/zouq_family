@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
             DefaultCupertinoLocalizations.delegate
           ],
-          title: 'dhuq Admin',
+          title: 'ذوق - تطبيق الاسرة',
           theme: appTheme,
           home: LoginPage(),
           routes: {
