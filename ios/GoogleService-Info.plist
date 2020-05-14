@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>950859046013-2o9j8ecqhq5bgr5a100pmsjldjk5iia0.apps.googleusercontent.com</string>
+	<string>174279244176-gg4sginggo846smtsdj24mode6p5r3d1.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.950859046013-2o9j8ecqhq5bgr5a100pmsjldjk5iia0</string>
+	<string>com.googleusercontent.apps.174279244176-gg4sginggo846smtsdj24mode6p5r3d1</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCn-ti0IcK84TPqekDpWqLC701q2rlI1KQ</string>
+	<string>AIzaSyBkQ9bHJiuQ1Yf_Uc98rehX-eTMNGXpuhc</string>
 	<key>GCM_SENDER_ID</key>
-	<string>950859046013</string>
+	<string>174279244176</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.alexApps.zouqAdmin</string>
 	<key>PROJECT_ID</key>
-	<string>zouqadmin</string>
+	<string>zouq-client</string>
 	<key>STORAGE_BUCKET</key>
-	<string>zouqadmin.appspot.com</string>
+	<string>zouq-client.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:950859046013:ios:b02a95493c1e2080c46514</string>
+	<string>1:174279244176:ios:e2958054cb3694dc745b15</string>
 	<key>DATABASE_URL</key>
-	<string>https://zouqadmin.firebaseio.com</string>
+	<string>https://zouq-client.firebaseio.com</string>
 </dict>
 </plist>
