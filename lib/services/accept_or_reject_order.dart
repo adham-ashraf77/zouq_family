@@ -7,7 +7,7 @@ class AcceptOrRejectOrder {
   String url = "https://api.dhuqapp.com";
   String order = "/api/family/orders/";
 
-  void postOrderStatus({String orderId, String orderStatus}) async {
+  Future postOrderStatus({String orderId, String orderStatus}) async {
     /// orderStatus is only 2 values approve or reject
     print('orderId : $orderId');
     print('orderStatus : $orderStatus');

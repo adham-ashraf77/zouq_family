@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:zouqadmin/models/order.dart';
+import 'package:zouqadmin/services/accept_or_reject_order.dart';
 import 'package:zouqadmin/services/paginateorders.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/widgets/ordersCardWidget.dart';
@@ -24,11 +25,19 @@ class _OrdersPageState extends State<OrdersPage> {
 
   @override
   void didChangeDependencies() {
+    super.didChangeDependencies();
+    getOrders();
+  }
+
+  acceptOrder({String orderId, String orderStatus}) {
+    AcceptOrRejectOrder().postOrderStatus(orderId: orderId, orderStatus: orderStatus).then((value) => getOrders());
+  }
+
+  getOrders() async {
     PaginateOrders().paginateOrders(status: 'new').then((onValue) {
       newOrders.clear();
       List data = jsonDecode(onValue.toString())['orders'];
       for (int i = 0; i < data.length; i++) {
-
         setState(() {
           newOrders.add(
             Order(
@@ -44,6 +53,7 @@ class _OrdersPageState extends State<OrdersPage> {
             ),
           );
         });
+        print('new order length: ${newOrders.length}');
       }
       // print('Old Orders  : ' + x.length.toString());
     });
@@ -93,7 +103,6 @@ class _OrdersPageState extends State<OrdersPage> {
       }
       // print('Old Orders  : ' + x.length.toString());
     });
-    super.didChangeDependencies();
   }
 
   @override
@@ -122,7 +131,7 @@ class _OrdersPageState extends State<OrdersPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         // pinned: true,
-        title: Text(AppLocalizations.of(context).translate('zouq'), style: headers1),
+        title: Text("ذوق", style: headers1),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
@@ -233,9 +242,27 @@ class _OrdersPageState extends State<OrdersPage> {
                   child: ListView.builder(
                     itemCount: newOrders.length,
                     itemBuilder: (context, i) {
-                      return OrdersCard(
-                        order: newOrders[i],
-                        type: 1,
+                      return Stack(
+                        children: <Widget>[
+                          OrdersCard(
+                              order: newOrders[i],
+                              type: 1,
+                              rejectFunction: () async {
+                                await acceptOrder(orderId: newOrders[i].id, orderStatus: "approve");
+                                setState(() {});
+                              },
+                              acceptFunction: () async {
+                                await acceptOrder(orderId: newOrders[i].id, orderStatus: "reject");
+                                setState(() {});
+                              }
+//                                            if (type == 1){
+//
+//
+//                                            };
+//                                            if (type == 2) whatsAppOpen(phone: order.phoneNumber);
+//                                          },
+                          ),
+                        ],
                       );
                     },
                   ),

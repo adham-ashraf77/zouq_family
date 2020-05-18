@@ -8,9 +8,6 @@ import 'package:zouqadmin/services/paginate.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/widgets/UiCard.dart';
 import 'package:zouqadmin/widgets/cardContents/marketProfileCardContent.dart';
-import 'package:zouqadmin/widgets/chips/tagchip.dart';
-
-import '../I10n/app_localizations.dart';
 
 class ProductsPage extends StatefulWidget {
   @override
@@ -51,7 +48,7 @@ class _ProductsPageState extends State<ProductsPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         // pinned: true,
-        title: Text(AppLocalizations.of(context).translate('zouq'), style: headers1),
+        title: Text("ذوق", style: headers1),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
@@ -67,26 +64,26 @@ class _ProductsPageState extends State<ProductsPage> {
       body: ListView(
         scrollDirection: Axis.vertical,
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(right: 10),
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.1,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 6,
-              itemBuilder: (BuildContext context, int index) {
-                return TagChip(
-                  onSelect: (clicked) {
-                    setState(() {
-                      selcted[index] = clicked;
-                    });
-                  },
-                  isSelected: selcted[index],
-                  tagName: tags[index],
-                );
-              },
-            ),
-          ),
+//          Container(
+//            padding: EdgeInsets.only(right: 10),
+//            width: MediaQuery.of(context).size.width,
+//            height: MediaQuery.of(context).size.height * 0.1,
+//            child: ListView.builder(
+//              scrollDirection: Axis.horizontal,
+//              itemCount: 6,
+//              itemBuilder: (BuildContext context, int index) {
+//                return TagChip(
+//                  onSelect: (clicked) {
+//                    setState(() {
+//                      selcted[index] = clicked;
+//                    });
+//                  },
+//                  isSelected: selcted[index],
+//                  tagName: tags[index],
+//                );
+//              },
+//            ),
+//          ),
           Container(
             height: (allHeight -
                 AppBar().preferredSize.height -

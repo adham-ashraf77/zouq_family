@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:zouqadmin/pages/auth/login_screen.dart';
 import 'package:zouqadmin/pages/ordersViewPage.dart';
+import 'package:zouqadmin/splash_screen.dart';
 import 'package:zouqadmin/theme/common.dart';
 
 import 'I10n/AppLanguage.dart';
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
           ],
           title: 'ذوق - تطبيق الاسرة',
           theme: appTheme,
-          home: LoginPage(),
+          home: SplashScreen(),
           routes: {
             OrdersViewPage.routeName: (context) => OrdersViewPage(),
           },

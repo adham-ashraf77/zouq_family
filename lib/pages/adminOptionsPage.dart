@@ -4,7 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zouqadmin/I10n/AppLanguage.dart';
 import 'package:zouqadmin/pages/adminEditProfilePage.dart';
 import 'package:zouqadmin/pages/adminWalletPage.dart';
 import 'package:zouqadmin/pages/auth/login_screen.dart';
@@ -41,6 +43,37 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
       });
     });
     super.didChangeDependencies();
+  }
+
+  Widget popUp() {
+    var appLanguage = Provider.of<AppLanguage>(context);
+    return CupertinoActionSheet(
+      title: new Text('Language'),
+      message: new Text('Choose your language'),
+      actions: <Widget>[
+        CupertinoActionSheetAction(
+          child: new Text('English'),
+          onPressed: () {
+            appLanguage.changeLanguage(Locale("en"));
+            Navigator.of(context).pop();
+          },
+        ),
+        CupertinoActionSheetAction(
+          child: new Text('Arabic'),
+          onPressed: () {
+            appLanguage.changeLanguage(Locale("ar"));
+            Navigator.of(context).pop();
+          },
+        )
+      ],
+      cancelButton: CupertinoActionSheetAction(
+        child: new Text('cancel'),
+        isDefaultAction: true,
+        onPressed: () {
+          Navigator.pop(context, 'Cancel');
+        },
+      ),
+    );
   }
 
   getUserData() async {
@@ -140,6 +173,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
               ),
               leading: Text(AppLocalizations.of(context).translate('language'),
                   style: moreTextStyle),
+              onTap: () => showCupertinoModalPopup(context: context, builder: (BuildContext context) => popUp()),
             ),
             Divider(
               color: iconsFaded,

@@ -8,12 +8,14 @@ import 'package:zouqadmin/theme/common.dart';
 class OrdersCard extends StatelessWidget {
   final Order order;
   final int type; //1 - new orders, 2 - complete orders, 3 - old orders
+  Function acceptFunction;
+  Function rejectFunction;
 
   acceptOrder({String orderId, String orderStatus}) {
     AcceptOrRejectOrder().postOrderStatus(orderId: orderId, orderStatus: orderStatus);
   }
 
-  OrdersCard({@required this.order, @required this.type});
+  OrdersCard({@required this.order, @required this.type, @required this.acceptFunction, @required this.rejectFunction});
   Widget build(BuildContext context) {
     final double allWidth = MediaQuery.of(context).size.width;
 
@@ -63,7 +65,7 @@ class OrdersCard extends StatelessWidget {
                         children: <Widget>[
                           type == 2
                               ? Text('${this.order.price.toString()}',
-                              style: paragarph3.copyWith(color: Colors.black54, fontWeight: FontWeight.w300))
+                                  style: paragarph3.copyWith(color: Colors.black54, fontWeight: FontWeight.w300))
                               : SizedBox(),
                           Text(
                             this.order.id.toString(),
@@ -131,12 +133,11 @@ class OrdersCard extends StatelessWidget {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
-                                  type == 3 ?
-                                  Container() :
-                                  InkWell(
-                                    onTap: () {
-                                      if (type == 1) acceptOrder(orderId: order.id, orderStatus: "reject");
-                                      if (type == 2) _makePhoneCall('tel:${order.phoneNumber}');
+                                  type == 3
+                                      ? Container()
+                                      : InkWell(
+                                    onTap: type == 1 ? rejectFunction : () {
+                                      if (type == 2) whatsAppOpen(phone: order.phoneNumber);
                                     },
                                     child: Container(
                                       height: MediaQuery
@@ -171,13 +172,13 @@ class OrdersCard extends StatelessWidget {
                                   SizedBox(
                                     width: 13,
                                   ),
-                                  type == 3 ?
-                                  Container() :
-                                  InkWell(
-                                    onTap: () {
-                                      if (type == 1) acceptOrder(orderId: order.id, orderStatus: "approve");
+                                  type == 3
+                                      ? Container()
+                                      : InkWell(
+                                    onTap: type == 1 ? acceptFunction : () {
                                       if (type == 2) whatsAppOpen(phone: order.phoneNumber);
-                                    },
+                                    }
+                                    ,
                                     child: Container(
                                       height: MediaQuery
                                           .of(context)
@@ -209,7 +210,8 @@ class OrdersCard extends StatelessWidget {
                                           ? Icon(
                                         Icons.check,
                                         color: accent,
-                                        size: MediaQuery
+                                        size:
+                                        MediaQuery
                                             .of(context)
                                             .orientation == Orientation.portrait ? 23 : 30,
                                       )
