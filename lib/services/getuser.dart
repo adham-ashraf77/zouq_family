@@ -13,6 +13,6 @@ class GetUser {
           headers: {HttpHeaders.authorizationHeader: "Bearer $token"},
         ));
     print(response);
-    return response;
+    return response.data;
   }
 }
