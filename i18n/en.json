@@ -73,5 +73,9 @@
   "newOrder": "New order",
   "confirmedOrder": "Confirmed order",
   "completedOrder": "Completed order",
-  "newPhone": "New phone number"
+  "newPhone": "New phone number",
+  "lang": "english",
+  "home": "home",
+  "myProducts": "my products",
+  "more": "more"
 }

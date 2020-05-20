@@ -13,6 +13,8 @@ import 'package:zouqadmin/services/getuser.dart';
 import 'package:zouqadmin/services/notifications.dart';
 import 'package:zouqadmin/theme/common.dart';
 
+import 'I10n/app_localizations.dart';
+
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   if (message.containsKey('data')) {
     // Handle data message
@@ -177,15 +179,15 @@ class _HomeState extends State<Home> {
               currentIndex: _currentIndex,
               items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
-                  title: Text('الرئيسية'),
+                  title: Text(AppLocalizations.of(context).translate('home')),
                   icon: Icon(Icons.home),
                 ),
                 BottomNavigationBarItem(
-                  title: Text('منتجاتى'),
+                  title: Text(AppLocalizations.of(context).translate('myProducts')),
                   icon: Icon(Icons.shopping_cart),
                 ),
                 BottomNavigationBarItem(
-                  title: Text('المزيد'),
+                  title: Text(AppLocalizations.of(context).translate('more')),
                   icon: Icon(Icons.more_horiz),
                 ),
               ],

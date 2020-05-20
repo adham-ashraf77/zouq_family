@@ -20,8 +20,8 @@ class Notifications {
           options: Options(
               headers: {HttpHeaders.authorizationHeader: "Bearer $token"}));
       print(response.data);
-    } catch (e) {
-      print('err => ' + e.response);
+    } on DioError catch (e) {
+      print('err => ' + '${e.response.data}');
     }
   }
 

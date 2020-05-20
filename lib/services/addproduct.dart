@@ -41,78 +41,87 @@ class AddProduct {
       print(something.length);
       print('the video length: ${theVideo.length}');
       print('the lenthght of  normal video ${videos.length}');
-      if (listOfPhotos.length == something.length &&
-          theVideo.length == videos.length) {
-        print('hi from equals if');
-        print('hi ^^ ' + video.toString());
-        FormData _formData = video != null
-            ? FormData.fromMap({
-          "name": "$name",
-          "description": "$desc",
-          "price": "$price",
-          "images": something,
-          "video": theVideo[0],
-          "category_id": catID.toString(),
-        })
-            : FormData.fromMap({
-          "name": "$name",
-          "description": "$desc",
-          "price": "$price",
-          "images": something,
-          "category_id": catID.toString(),
-        });
-        try {
-          // print('--------------------> addItemFile: ${_formData.files}');
-          if (token.isNotEmpty) {
-            print('before response');
-            response =
-            await Dio().post("http://api.dhuqapp.com/api/family/products",
-                data: _formData,
-                options: Options(
-                  headers: {
-                    HttpHeaders.authorizationHeader: "Bearer $token"
-                  },
-                ));
-            print('after response');
-            print(response.data);
-          }
-          if (response.statusCode == 200) {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) => DialogWorning(
-                  mss: 'Product has been added successfully',
-                ));
-          } else {
-            print(response.data);
-            showDialog(
-                context: context,
-                builder: (BuildContext context) => DialogWorning(
-                  mss:
-                  'Something is wrong, please check your connection and try again ',
-                ));
-            return "something is wrong";
-          }
-        } on DioError catch (e) {
-          print('Error ' + e.response.data);
-          if (e.response == null) {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) => DialogWorning(
-                  mss: 'connection time out ',
-                ));
-            return "connection time out";
-          }
+    });
+    if (listOfPhotos.length == something.length && theVideo.length == videos.length) {
+      print('hi from equals if');
+      print('hi ^^ ' + video.toString());
+      print('At API call: catID=> $catID');
+      print('At API call: desc=> $desc');
+      print('At API call: name=> $name');
+      something.forEach((element) {
+        print('before API call: listOfPhotos=> ${element.filename}');
+      });
+      print('At API call: price=> $price');
+      print('At API call: video=> ${theVideo[0].filename}');
+      FormData formData = FormData.fromMap({
+        "name": "$name",
+        "description": "$desc",
+        "price": "$price",
+        "images": something,
+        "video": theVideo[0],
+        "category_id": catID.toString(),
+      });
+//      FormData _formData = video != null
+//          ? FormData.fromMap({
+//        "name": "$name",
+//        "description": "$desc",
+//        "price": "$price",
+//        "images": something,
+//        "video": theVideo[0],
+//        "category_id": catID.toString(),
+//      })
+//          : FormData.fromMap({
+//        "name": "$name",
+//        "description": "$desc",
+//        "price": "$price",
+//        "images": something,
+//        "category_id": catID.toString(),
+//      });
+      try {
+        // print('--------------------> addItemFile: ${_formData.files}');
+        if (token.isNotEmpty) {
+          print('before response');
+          response = await Dio().post("http://api.dhuqapp.com/api/family/products",
+              data: formData,
+              options: Options(
+                headers: {HttpHeaders.authorizationHeader: "Bearer $token"},
+              ));
+          print('after response');
+          print(response.data);
+        }
+        if (response.statusCode == 200) {
           showDialog(
               context: context,
               builder: (BuildContext context) => DialogWorning(
-                mss:
-                'Something is wrong, please check your connection and try again ',
-              ));
-          print(e.response.data);
+                    mss: 'Product has been added successfully',
+                  ));
+        } else {
+          print(response.data);
+          showDialog(
+              context: context,
+              builder: (BuildContext context) => DialogWorning(
+                    mss: 'Something is wrong, please check your connection and try again ',
+                  ));
+          return "something is wrong";
         }
+      } on DioError catch (e) {
+        print('Error ' + '${e}');
+        if (e.response == null) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) => DialogWorning(
+                    mss: 'connection time out ',
+                  ));
+          return "connection time out";
+        }
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => DialogWorning(
+                  mss: 'Something is wrong, please check your connection and try again ',
+                ));
+        print(e.response.data);
       }
-      return null;
-    });
+    }
     print('res ' + response.toString());
     return response;
   }

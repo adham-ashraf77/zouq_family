@@ -1,6 +1,4 @@
 
-
-
 import 'package:dio/dio.dart';
 import 'package:zouqadmin/models/categories.dart';
 import 'package:zouqadmin/models/cities.dart';

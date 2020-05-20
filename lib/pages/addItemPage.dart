@@ -8,8 +8,10 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
+import 'package:zouqadmin/models/CategoriesTag.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
 import 'package:zouqadmin/services/addproduct.dart';
+import 'package:zouqadmin/services/getCategories.dart';
 import 'package:zouqadmin/theme/common.dart';
 
 import '../I10n/app_localizations.dart';
@@ -33,6 +35,7 @@ class _AddItemPageState extends State<AddItemPage> {
   final _formKey = GlobalKey<FormState>();
   List<File> productImages = [];
   int categoryID;
+  bool isLoading = true;
 
   List<File> listOfImages = List<File>();
   List<Asset> images = List<Asset>();
@@ -206,6 +209,14 @@ class _AddItemPageState extends State<AddItemPage> {
         } else {
           //TODO uploading
           print('hi from else');
+          print('before API call: catID=> ${categoryID + 1}');
+          print('before API call: desc=> ${descTextFieldController.text}');
+          print('before API call: name=> ${nameTextFieldController.text}');
+          listOfImages.forEach((element) {
+            print('before API call: listOfPhotos=> ${element.path}');
+          });
+          print('before API call: price=> ${priceTextFieldController.text}');
+          print('before API call: video=> ${productVideo.path}');
           AddProduct().addProduct(
               catID: categoryID + 1,
               desc: descTextFieldController.text,
@@ -257,6 +268,29 @@ class _AddItemPageState extends State<AddItemPage> {
     // }
   }
 
+  List<CategoriesTag> categories = List<CategoriesTag>();
+  List<String> catTags = List<String>();
+
+  getCategories() async {
+    await GetCategories().getCategories();
+    setState(() {
+      categories = GetCategories.categories;
+      categories.forEach((element) {
+        catTags.add(element.text_ar);
+      });
+      print("//////////////////////");
+      print(categories.length);
+      isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCategories();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -266,7 +300,11 @@ class _AddItemPageState extends State<AddItemPage> {
             style: headers1),
         centerTitle: true,
       ),
-      body: Padding(
+      body: isLoading ?
+      Center(
+        child: CircularProgressIndicator(),
+      ) :
+      Padding(
         padding: EdgeInsets.only(right: 30),
         child: Form(
           key: _formKey,
@@ -281,8 +319,10 @@ class _AddItemPageState extends State<AddItemPage> {
                 children: <Widget>[
                   InkWell(
                     onTap: () {
-                      getVideo().catchError((onError) {
-                        print('Error caught' + onError.toString());
+                      setState(() {
+                        getVideo().catchError((onError) {
+                          print('Error caught' + onError.toString());
+                        });
                       });
                     },
                     child: Container(
@@ -290,10 +330,12 @@ class _AddItemPageState extends State<AddItemPage> {
                       height: 100,
                       child: Center(
                           child:
-                              // (vbc.value.initialized)
-                              //     ? VideoPlayer(vbc) :
-                              //TODO uncomment the previous files if u want a thumbnail for the video
-                              Image.asset("assets/icons/video.png")),
+                          vbc != null ?
+                          vbc.value.initialized ?
+                          VideoPlayer(vbc) :
+                          VideoPlayer(vbc) :
+                          //TODO uncomment the previous files if u want a thumbnail for the video
+                          Image.asset("assets/icons/video.png")),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.black, width: 0.1),
@@ -418,18 +460,18 @@ class _AddItemPageState extends State<AddItemPage> {
                             height: 70,
                             child: listOfImages.length > index
                                 ? Image.file(
-                                    listOfImages[index],
-                                    fit: BoxFit.fill,
-                                  )
+                              listOfImages[index],
+                              fit: BoxFit.fill,
+                            )
                                 : Icon(
-                                    Icons.add,
-                                    size: 30,
-                                    color: Colors.grey,
-                                  ),
+                              Icons.add,
+                              size: 30,
+                              color: Colors.grey,
+                            ),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               border:
-                                  Border.all(color: Colors.black, width: 0.10),
+                              Border.all(color: Colors.black, width: 0.10),
                             ),
                           ),
                         ),
@@ -494,12 +536,12 @@ class _AddItemPageState extends State<AddItemPage> {
                   onChanged: (String newValue) {
                     setState(() {
                       _dropdownValue = newValue;
-                      categoryID = ['حلوى', 'مكسرات', 'اطعمه', 'مطبوخات']
+                      categoryID = catTags
                           .indexOf(newValue);
                       print('Cat ID' + categoryID.toString());
                     });
                   },
-                  items: <String>['حلوى', 'مكسرات', 'اطعمه', 'مطبوخات']
+                  items: catTags
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,

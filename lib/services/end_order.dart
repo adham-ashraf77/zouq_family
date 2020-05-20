@@ -8,7 +8,7 @@ class EndOrder {
   String order = "/api/family/orders/";
   String finish = "/finish";
 
-  void endOrder(String orderId) async {
+  Future endOrder(String orderId) async {
     print(orderId);
     Response response;
     SharedPreferences prefs = await SharedPreferences.getInstance();

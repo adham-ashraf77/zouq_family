@@ -11,6 +11,7 @@ import 'package:zouqadmin/widgets/commentDesign.dart';
 import 'package:zouqadmin/widgets/ordersViewPageCard.dart';
 
 import '../I10n/app_localizations.dart';
+import '../home.dart';
 
 class OrdersViewPage extends StatefulWidget {
   static const routeName = '/oredersViewPage';
@@ -39,8 +40,11 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
   String latitude;
   String longitude;
 
-  endOrder(String orderId) {
-    EndOrder().endOrder(orderId);
+  endOrder(String orderId) async {
+    await EndOrder().endOrder(orderId);
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => Home(),
+    ));
   }
 
   void whatsAppOpen({String phone}) async {

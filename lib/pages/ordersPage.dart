@@ -29,7 +29,7 @@ class _OrdersPageState extends State<OrdersPage> {
     getOrders();
   }
 
-  acceptOrder({String orderId, String orderStatus}) {
+  acceptOrRejectOrder({String orderId, String orderStatus}) {
     AcceptOrRejectOrder().postOrderStatus(orderId: orderId, orderStatus: orderStatus).then((value) => getOrders());
   }
 
@@ -248,11 +248,11 @@ class _OrdersPageState extends State<OrdersPage> {
                               order: newOrders[i],
                               type: 1,
                               rejectFunction: () async {
-                                await acceptOrder(orderId: newOrders[i].id, orderStatus: "approve");
+                                await acceptOrRejectOrder(orderId: newOrders[i].id, orderStatus: "reject");
                                 setState(() {});
                               },
                               acceptFunction: () async {
-                                await acceptOrder(orderId: newOrders[i].id, orderStatus: "reject");
+                                await acceptOrRejectOrder(orderId: newOrders[i].id, orderStatus: "approve");
                                 setState(() {});
                               }
 //                                            if (type == 1){

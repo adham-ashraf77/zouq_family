@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +29,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
     SharedPreferences.getInstance().then((onValue) {
       String token = onValue.getString('token');
       GetUser().getUser(token: token).then((value) {
-        var x = jsonDecode(value.toString());
+        var x = value;
         print('X = ' + x['user'].toString());
         setState(() {
            print('[${wallet.toString()}]');
@@ -166,7 +164,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Text(
-                    "العربية",
+                    AppLocalizations.of(context).translate('lang'),
                     style: moreSmallTextStyle,
                   ),
                 ],
@@ -194,21 +192,6 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                   style: moreTextStyle,
                   textAlign: TextAlign.end,
                 ),
-              ),
-            ),
-            Divider(
-              color: iconsFaded,
-              indent: 25,
-            ),
-            ListTile(
-              trailing: Icon(
-                trailingIcon,
-                size: 15.0,
-              ),
-              leading: Text(
-                AppLocalizations.of(context).translate('rateApp'),
-                style: moreTextStyle,
-                textAlign: TextAlign.end,
               ),
             ),
             Divider(

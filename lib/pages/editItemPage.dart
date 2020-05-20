@@ -1,18 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
+import 'package:zouqadmin/models/CategoriesTag.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
+import 'package:zouqadmin/services/getCategories.dart';
 import 'package:zouqadmin/services/show.dart';
 import 'package:zouqadmin/services/updateproduct.dart';
 import 'package:zouqadmin/theme/common.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:http/http.dart' as http;
 
 import '../I10n/app_localizations.dart';
 
@@ -224,20 +225,37 @@ class _EditItemPageState extends State<EditItemPage> {
     // }
   }
 
+  List<CategoriesTag> categories = List<CategoriesTag>();
+  List<String> catTags = List<String>();
+
+  getCategories() async {
+    await GetCategories().getCategories();
+    setState(() {
+      categories = GetCategories.categories;
+      print("//////////////////////");
+      print(categories.length);
+      categories.forEach((element) {
+        catTags.add(element.text_ar);
+      });
+    });
+  }
+
   @override
   void initState() {
     setState(() {
       isLoading = true;
     });
+    getCategories();
     Show().show(productID: id).then((onValue) {
       print('Product ID : ' + id.toString());
       print('onValue : ' + onValue.toString());
       var x = jsonDecode(onValue.toString());
       var y = x['product'];
-//      _dropdownValue = ['حلوى', 'مكسرات', 'اطعمه', 'مطبوخات'][int.parse(
-//          y['category']['text_en'].toString().replaceAll('category_', ''))];
-      categoryID = int.parse(
-          y['category']['text_en'].toString().replaceAll('category_', ''));
+      _dropdownValue = '${y['category']['text_ar']}';
+      print('a7o ? $_dropdownValue');
+      categoryID = y['category']['id'];
+//      int.parse(
+//          y['category']['text_en'].toString().replaceAll('category_', ''));
       setState(() {
         this.name = y['name'];
         this.price = y['price'];
@@ -584,12 +602,11 @@ print('Here ' + listOfImages.toString());
                         onChanged: (String newValue) {
                           setState(() {
                             _dropdownValue = newValue;
-                            categoryID = ['حلوى', 'مكسرات', 'اطعمه', 'مطبوخات']
-                                .indexOf(_dropdownValue);
+                            categoryID = catTags.indexOf(_dropdownValue);
                             print('Cat ID' + categoryID.toString());
                           });
                         },
-                        items: <String>['حلوى', 'مكسرات', 'اطعمه', 'مطبوخات']
+                        items: catTags
                             .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
