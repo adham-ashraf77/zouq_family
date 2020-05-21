@@ -172,9 +172,10 @@ class _EditItemPageState extends State<EditItemPage> {
   updateProduct() {
     if (_formKey.currentState.validate()) {
       if (_dropdownValue != null) {
+        print('=============================> ${categoryID + 1}');
         //TODO uploading
         UpdateProduct().updateProduct(
-          catID: categoryID + 1,
+          catID: categoryID,
           desc: descTextFieldController.text,
           name: nameTextFieldController.text,
           listOfPhotos: listOfImages,

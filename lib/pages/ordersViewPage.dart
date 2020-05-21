@@ -468,7 +468,7 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                                 width: 10,
                               ),
                               Text(
-                                rate == null ? '0' : rate,
+                                rate == null || rate == "-1" ? '0' : rate,
                                 style: paragarph1.copyWith(
                                     fontWeight: FontWeight.w100),
                               ),
