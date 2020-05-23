@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Registeration {
@@ -21,8 +22,8 @@ class Registeration {
       bool is_delivery_available,
       File image,
       List<int> categories,
-      int city}) async {
-
+    int city,
+  }) async {
     String fileName = image.path.split('/').last;
     _formData = FormData.fromMap({
       "name": "$name",
@@ -100,6 +101,21 @@ class Registeration {
         prefs.setString("longitude", "${data2['user']['longitude']}");
         prefs.setString("description", "${data2['user']['description']}");
         prefs.setString("is_delivery_available", "${data2['user']['is_delivery_available']}");
+        Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+        try {
+          Response response = await Dio().post(
+              '$_url/api/family/set-location',
+              data: {"latitude": "${position.latitude}", "longitude": "${position.longitude}",},
+              options: Options(
+                  headers: {HttpHeaders.authorizationHeader: "Bearer ${data['token']}"}
+              )
+          );
+        }
+        on DioError catch (e) {
+          print('error in get position');
+          print(e.response.data);
+        }
+
         return "success";
       } else {
         print('not a 200 requesy ${response.data}');

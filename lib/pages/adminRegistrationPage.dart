@@ -1,19 +1,18 @@
 import 'dart:io';
+
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:path/path.dart' as p;
 import 'package:zouqadmin/models/categories.dart';
 import 'package:zouqadmin/models/cities.dart';
-import 'package:zouqadmin/pages/accountFrozen.dart';
-import 'package:zouqadmin/pages/accountNotActivated.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
 import 'package:zouqadmin/services/getData.dart';
 import 'package:zouqadmin/services/registeration.dart';
 import 'package:zouqadmin/theme/common.dart';
-import 'package:country_code_picker/country_code_picker.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zouqadmin/widgets/filterChipWidget.dart';
-import 'package:path/path.dart' as p;
 
 import '../I10n/app_localizations.dart';
 import '../theme/common.dart';
