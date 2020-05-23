@@ -8,14 +8,20 @@ class UpdateProfile {
   final String updateprof = "/api/family/update-profile";
   FormData _formData;
 
-  Future<dynamic> updateProfile(String desc, String ida,String newPassword) async {
+  Future<dynamic> updateProfile({String desc, String ida, String newPassword}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
 
-    _formData = FormData.fromMap({
+    newPassword.isEmpty == true
+        ? _formData = FormData.fromMap({
+            "description": '$desc',
+            'is_delivery_available': '$ida',
+            // 'password' : '$newPassword',
+          })
+        : _formData = FormData.fromMap({
       "description": '$desc',
       'is_delivery_available': '$ida',
-      'password' : '$newPassword',
+      'password': '$newPassword',
     });
     try {
       Response response = await Dio().post("$apiUrl$updateprof",

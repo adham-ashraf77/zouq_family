@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:video_player/video_player.dart';
 import 'package:zouqadmin/models/product_comments&rating.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
 import 'package:zouqadmin/pages/editItemPage.dart';
@@ -38,6 +39,8 @@ class _ItemDetailState extends State<ItemDetail> {
   String price;
   String description;
   bool isLoading = true;
+  bool isPlay = false;
+  VideoPlayerController _controller;
   List<ProductsCommentsAndRating> productsCommentsAndRating = List<ProductsCommentsAndRating>();
 
   static List<String> imgList = [
@@ -99,13 +102,35 @@ class _ItemDetailState extends State<ItemDetail> {
     }
   }
 
-  initImages() {
+  ControllerVideo() async {
+    try {
+      // _controller =await VideoPlayerController.network(_product.video);
+
+      _controller = await VideoPlayerController.network('$videoUrl')
+        ..initialize().then((_) {
+          // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+          print('baka ma');
+          setState(() {});
+        });
+
+      _initializeVideoPlayerFuture = _controller.initialize();
+      await initImages();
+      if (this.videoUrl != '') {
+        await vedioStart();
+      }
+    } catch (e) {
+      print("vvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+      print(e);
+    }
+  }
+
+  Future getData() {
     Show().show(productID: orderId).then((onValue) {
       print('Product ID : ' + orderId.toString());
       print('onValue : ' + onValue.toString());
       var x = jsonDecode(onValue.toString());
       var y = x['product'];
-      
+
       setState(() {
         this.name = y['name'];
         this.price = y['price'];
@@ -114,7 +139,7 @@ class _ItemDetailState extends State<ItemDetail> {
         this.videoUrl = y['video'];
         List<dynamic> list = y['media'];
         imgList.clear();
-        
+
         list.forEach((f) {
           setState(() {
             imgList.add(f.toString());
@@ -122,101 +147,82 @@ class _ItemDetailState extends State<ItemDetail> {
         });
         print('25er sora' + imgList.last);
       });
-
-      // if (onValue.toString().contains('success')) {
-
-      //   print(onValue.toString());
-      // }
-      // else {
-      //   print('Error ' + onValue.toString());
-
-      //   showDialog(
-      //       context: context,
-      //       builder: (BuildContext context) => DialogWorning(
-      //             mss:'Something went wrong please check your connection and try again!',
-      //           ));
-      // }
-    }).then((_) {
-//              print('=>><< ' + this.videoUrl);
-//      _controller = VideoPlayerController.network(
-//
-//          this.videoUrl == null
-//              ? 'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'
-//              : this.videoUrl);
-//      _initializeVideoPlayerFuture = _controller.initialize();
-      // vedioStart();
-      child = map<Widget>(
-        imgList,
-        (index, i) {
-          return Container(
-            margin: EdgeInsets.all(5.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(15.0)),
-              child: Stack(children: <Widget>[
-                Image.network(
-                  i,
-                  fit: BoxFit.cover,
-                  width: 5000,
-                  height: 2000,
-                ),
-                Positioned(
-                  bottom: 0.0,
-                  left: 0.0,
-                  right: 0.0,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Color.fromARGB(200, 0, 0, 0), Color.fromARGB(0, 0, 0, 0)],
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                      ),
-                    ),
-                  ),
-                ),
-              ]),
-            ),
-          );
-        },
-      ).toList();
-      print('Video url : '+  this.videoUrl);
-
-          child.insert(
-        0,
-        Container(
-          margin: EdgeInsets.all(5.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(15.0)),
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  height: 240,
-                  child: Container(
-                    //todo add thumbnail
-                  ),
-                ),
-                Positioned(
-                  bottom: 200.0,
-                  left: 50.0,
-                  right: 50.0,
-                  top: 50.0,
-                  child: InkWell(
-                    onTap: () {
-                   //TODO add url launcher
-                      _launchURL(this.videoUrl);
-                    },
-                    child:  Image.asset("assets/icons/Play.png"),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ));
-    }).whenComplete(() {
-      print('gazar');
+    }).then((value) async {
+      initImages();
+      await ControllerVideo();
       setState(() {
         isLoading = false;
       });
     });
+  }
+
+  initImages() {
+    child = map<Widget>(
+      imgList,
+      (index, i) {
+        return Container(
+          margin: EdgeInsets.all(5.0),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+            child: Stack(children: <Widget>[
+              Image.network(
+                i,
+                fit: BoxFit.cover,
+                width: 5000,
+                height: 2000,
+              ),
+              Positioned(
+                bottom: 0.0,
+                left: 0.0,
+                right: 0.0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Color.fromARGB(200, 0, 0, 0), Color.fromARGB(0, 0, 0, 0)],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+          ),
+        );
+      },
+    ).toList();
+  }
+
+  vedioStart() {
+    child.insert(
+      0,
+      Stack(
+        children: <Widget>[
+          Container(
+            height: 270,
+            child: FutureBuilder(
+              future: _initializeVideoPlayerFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        isPlay = !isPlay;
+                        _controller.value.isPlaying ? _controller.pause() : _controller.play();
+                      });
+                    },
+                    child: AspectRatio(
+                      aspectRatio: _controller.value.aspectRatio,
+                      child: VideoPlayer(_controller),
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
+          ),
+        ],
+      ),);
   }
 
   getComments() async {
@@ -231,7 +237,7 @@ class _ItemDetailState extends State<ItemDetail> {
   void initState() {
     super.initState();
     getComments();
-    initImages();
+    getData();
   }
 
   @override
@@ -310,7 +316,7 @@ class _ItemDetailState extends State<ItemDetail> {
                     ),
                   ),
                   Text(
-                    'Loading...',
+                    AppLocalizations.of(context).translate('loading'),
                     textDirection: TextDirection.ltr,
                     style: paragarph4.copyWith(color: Colors.grey[400], height: 2),
                   )
@@ -331,21 +337,52 @@ class _ItemDetailState extends State<ItemDetail> {
             ),
             body: Stack(
               children: <Widget>[
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: CarouselSlider(
-                    items: child,
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    autoPlay: false,
-                    aspectRatio: 2.0,
-                    enlargeCenterPage: true,
-                    viewportFraction: 1.0,
-                    onPageChanged: (index) {
-                      setState(() {
-                        _current = index;
-                      });
-                    },
-                  ),
+                Stack(
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: CarouselSlider(
+                        items: child,
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.5,
+                        autoPlay: false,
+                        aspectRatio: 2.0,
+                        enlargeCenterPage: true,
+                        viewportFraction: 1.0,
+                        onPageChanged: (index) {
+                          setState(() {
+                            _current = index;
+                          });
+                        },
+                      ),
+                    ),
+
+                    _current == 0 ?
+                    Positioned(
+                      top: MediaQuery
+                          .of(context)
+                          .padding
+                          .top + 50,
+                      right: MediaQuery
+                          .of(context)
+                          .padding
+                          .right + 170,
+                      child: isPlay
+                          ? Container() : IconButton(
+                        onPressed: () {
+                          setState(() {
+                            isPlay = !isPlay;
+                            _controller.value.isPlaying
+                                ? _controller.pause()
+                                : _controller.play();
+                          });
+                        },
+                        icon: Icon(Icons.play_circle_outline, color: Colors.cyan, size: 60,),
+                      ),
+                    ) : Container(),
+                  ],
                 ),
                 DraggableScrollableSheet(
                   initialChildSize: 0.6,
@@ -493,4 +530,5 @@ class _ItemDetailState extends State<ItemDetail> {
             ),
           );
   }
+
 }

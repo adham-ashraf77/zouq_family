@@ -30,7 +30,7 @@ class _RatingChipState extends State<RatingChip> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Text(
-                '${widget.rating}',
+                widget.rating == -1 ? "0.0" : '${widget.rating}',
                 style: TextStyle(color: mainColor, fontSize: 15),
               ),
               //TODO:: @rami fix the spacing between the star and rate value please

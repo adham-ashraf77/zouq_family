@@ -10,8 +10,12 @@ import 'package:zouqadmin/pages/adminWalletPage.dart';
 import 'package:zouqadmin/pages/auth/login_screen.dart';
 import 'package:zouqadmin/services/getuser.dart';
 import 'package:zouqadmin/theme/common.dart';
+import 'package:zouqadmin/utils/networking.dart';
 
 import '../I10n/app_localizations.dart';
+import 'appInfo/EULAPage.dart';
+import 'appInfo/FAQPage.dart';
+import 'contactPage.dart';
 
 class AdminOptionsPage extends StatefulWidget {
   @override
@@ -129,7 +133,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
             ),
             Center(
               child: Text(
-                this.name == null ? 'Loading...' : this.name,
+                this.name == null ? AppLocalizations.of(context).translate('loading') : this.name,
                 style: moreTextStyle,
               ),
             ),
@@ -183,6 +187,15 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
 //                  MaterialPageRoute(builder: (context) => ContactPage()));
               },
               child: ListTile(
+                onTap: () async {
+                  var data = await NetworkHelper().getContactInfo();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ContactPage(
+                                data: data,
+                              )));
+                },
                 trailing: Icon(
                   trailingIcon,
                   size: 15.0,
@@ -199,6 +212,16 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
               indent: 25,
             ),
             ListTile(
+              onTap: () async {
+                var data = await NetworkHelper().getEULA();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            EULAPage(
+                              data: data,
+                            )));
+              },
               trailing: Icon(
                 trailingIcon,
                 size: 15.0,
@@ -214,6 +237,16 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
               indent: 25,
             ),
             ListTile(
+              onTap: () async {
+                var data = await NetworkHelper().getFAQ();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            FAQPage(
+                              data: data,
+                            )));
+              },
               trailing: Icon(
                 trailingIcon,
                 size: 15.0,

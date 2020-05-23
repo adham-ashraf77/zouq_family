@@ -89,7 +89,7 @@ class _MarketProfileCardContecntState extends State<MarketProfileCardContecnt> {
                       Row(
                         children: <Widget>[
                           Text(
-                            "${widget.rating}",
+                            widget.rating == -1 ? "0.0" : "${widget.rating}",
                             style: paragarph4,
                           ),
                           SizedBox(

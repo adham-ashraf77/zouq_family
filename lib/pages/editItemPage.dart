@@ -17,7 +17,6 @@ import 'package:zouqadmin/theme/common.dart';
 
 import '../I10n/app_localizations.dart';
 
-
 class EditItemPage extends StatefulWidget {
   final String id;
 
@@ -53,6 +52,8 @@ class _EditItemPageState extends State<EditItemPage> {
   String description;
   String videoUrl;
   List child;
+  VideoPlayerController _controller;
+  Future<void> _initializeVideoPlayerFuture;
 
   Future<File> _downloadFile(String url, String filename) async {
     http.Client client = new http.Client();
@@ -77,8 +78,7 @@ class _EditItemPageState extends State<EditItemPage> {
 
       final file = File('${(await getTemporaryDirectory()).path}/$name');
       await file.writeAsBytes(
-        byteData.buffer
-            .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes),
+        byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes),
       );
       print('bye');
       return file;
@@ -115,12 +115,7 @@ class _EditItemPageState extends State<EditItemPage> {
     print('Here ' + images.length.toString());
     if (images.length > 0) listOfImages.clear();
     images.forEach((image) async {
-//      images.first.requestOriginal(quality: 100).then((value){
-//
-//        print('yoooooooooooooo${value.buffer}');
-//      });
-      File x = await getImageFileFromAssets(
-          await image.requestOriginal(quality: 100), image.name);
+      File x = await getImageFileFromAssets(await image.requestOriginal(quality: 100), image.name);
 
       setState(() {
         listOfImages.add(x);
@@ -133,39 +128,23 @@ class _EditItemPageState extends State<EditItemPage> {
     //print('--------->${file.first.path}');
   }
 
-  Future getVideo() async {
-    _video = await FilePicker.getFile(type: FileType.video);
-    setState(() {
-      File videoFile = _video;
-      vbc = new VideoPlayerController.file(videoFile)
+  ControllerVideo() async {
+    try {
+      // _controller =await VideoPlayerController.network(_product.video);
+
+      _controller = await VideoPlayerController.network('$videoUrl')
         ..initialize().then((_) {
-          print('Duration : ' +
-              vbc.value.duration.toString().split(':').toString());
-          var duration = vbc.value.duration.toString().split(':');
-          print(duration[0] + ' - ' + duration[1] + ' = ' + duration[2]);
-          if (duration[0].trim() == '0' &&
-              duration[1].trim() == '00' &&
-              double.parse(duration[2]) < 10.0) {
-            print('accepted');
-            productVideo = videoFile;
-          } else {
-            print('rejected');
-            showDialog(
-                context: context,
-                builder: (BuildContext context) => DialogWorning(
-                      mss: 'مسموح بحد أقصي 10 ثواني فقط',
-                    ));
-            productVideo = null;
-          }
+          // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+          print('baka ma');
+          setState(() {});
         });
-
-      // _controller = VideoPlayerController.file(videoFile);
-
-      // // Initialize the controller and store the Future for later use.
-      // _initializeVideoPlayerFuture = _controller.initialize();
-
-      // // Use the controller to loop the video.
-      // _controller.setLooping(true);
+      _initializeVideoPlayerFuture = _controller.initialize();
+    } catch (e) {
+      print("vvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+      print(e);
+    }
+    setState(() {
+      isLoading = false;
     });
   }
 
@@ -241,12 +220,7 @@ class _EditItemPageState extends State<EditItemPage> {
     });
   }
 
-  @override
-  void initState() {
-    setState(() {
-      isLoading = true;
-    });
-    getCategories();
+  getData() async {
     Show().show(productID: id).then((onValue) {
       print('Product ID : ' + id.toString());
       print('onValue : ' + onValue.toString());
@@ -281,64 +255,108 @@ class _EditItemPageState extends State<EditItemPage> {
           listOfImages.clear();
         });
         for (var url in list) {
-          try {            
-            i = i + 1;            
+          try {
+            i = i + 1;
             _downloadFile(url, 'file_' + DateTime.now().millisecondsSinceEpoch.toString()).then((onValue) {
               setState(() {
                 listOfImages.add(onValue);
               });
             });
-            // ImageDownloader.downloadImage(url).then((imageId) {
-            //   print('==>>, ' + imageId);
-            //   ImageDownloader.findPath(imageId).then((path) {
-            //     print('==>>, ' + path);
-            //     files.add(File(path));
-            //     print('==>>, ' + path);
-            //     setState(() {
-            //       listOfImages.addAll(files);
-            //       print('==>>, ' + listOfImages.toString());
-            //     });
-            //   });
-            // });
           } catch (error) {
             print(error);
           }
         }
-        _downloadFile(this.videoUrl, 'video_000').then((onValue) {
-          setState(() {
-            productVideo = onValue;
-            print('Video ' + productVideo.toString());
-          });
+        _downloadFile(this.videoUrl, 'video_000').then((onValue) async {
+          productVideo = onValue;
+          await getCurrentVideo();
+          ControllerVideo();
+          print('Video ' + productVideo.toString());
+          if (mounted) setState(() {});
         });
       });
-
-      // if (onValue.toString().contains('success')) {
-
-      //   print(onValue.toString());
-      // }
-      // else {
-      //   print('Error ' + onValue.toString());
-
-      //   showDialog(
-      //       context: context,
-      //       builder: (BuildContext context) => DialogWorning(
-      //             mss:'Something went wrong please check your connection and try again!',
-      //           ));
-      // }
-    }).then((_) {
-      //stop loading or open update button
-      setState(() {
-        isLoading = false;
-      });
     });
+  }
+
+  Future getCurrentVideo() async {
+    //_video = await FilePicker.getFile(type: FileType.video);
+    setState(() {
+      File videoFile = productVideo;
+      vbc = new VideoPlayerController.file(videoFile)
+        ..initialize().then((_) {
+          print('Duration : ' + vbc.value.duration.toString().split(':').toString());
+          var duration = vbc.value.duration.toString().split(':');
+          print(duration[0] + ' - ' + duration[1] + ' = ' + duration[2]);
+          if (duration[0].trim() == '0' && duration[1].trim() == '00' && double.parse(duration[2]) < 10.0) {
+            print('accepted');
+            productVideo = videoFile;
+          } else {
+            print('rejected');
+            showDialog(
+                context: context,
+                builder: (BuildContext context) => DialogWorning(
+                      mss: 'مسموح بحد أقصي 10 ثواني فقط',
+                    ));
+            productVideo = null;
+          }
+        });
+
+      // _controller = VideoPlayerController.file(videoFile);
+
+      // // Initialize the controller and store the Future for later use.
+      // _initializeVideoPlayerFuture = _controller.initialize();
+
+      // // Use the controller to loop the video.
+      // _controller.setLooping(true);
+    });
+  }
+
+  Future getVideo() async {
+    _video = await FilePicker.getFile(type: FileType.video);
+    setState(() {
+      File videoFile = _video;
+      vbc = new VideoPlayerController.file(videoFile)
+        ..initialize().then((_) {
+          print('Duration : ' + vbc.value.duration.toString().split(':').toString());
+          var duration = vbc.value.duration.toString().split(':');
+          print(duration[0] + ' - ' + duration[1] + ' = ' + duration[2]);
+          if (duration[0].trim() == '0' && duration[1].trim() == '00' && double.parse(duration[2]) < 10.0) {
+            print('accepted');
+            productVideo = videoFile;
+          } else {
+            print('rejected');
+            showDialog(
+                context: context,
+                builder: (BuildContext context) => DialogWorning(
+                      mss: 'مسموح بحد أقصي 10 ثواني فقط',
+                    ));
+            productVideo = null;
+          }
+        });
+
+      // _controller = VideoPlayerController.file(videoFile);
+
+      // // Initialize the controller and store the Future for later use.
+      // _initializeVideoPlayerFuture = _controller.initialize();
+
+      // // Use the controller to loop the video.
+      // _controller.setLooping(true);
+    });
+  }
+
+  @override
+  void initState() {
+    setState(() {
+      isLoading = true;
+    });
+    getCategories();
+    getData();
     super.initState();
   }
 
-  
   @override
   Widget build(BuildContext context) {
     // print('Edit id : ' + id);
-print('Here ' + listOfImages.toString());
+    print('Here ' + listOfImages.toString());
     return isLoading
         ? Scaffold(
             backgroundColor: Colors.white,
@@ -351,16 +369,14 @@ print('Here ' + listOfImages.toString());
                     height: 20,
                     child: CircularProgressIndicator(
                       backgroundColor: Colors.grey[400],
-                      valueColor:
-                          new AlwaysStoppedAnimation<Color>(Colors.grey[300]),
+                      valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey[300]),
                       strokeWidth: 2,
                     ),
                   ),
                   Text(
-                    'Loading...',
+                    AppLocalizations.of(context).translate('loading'),
                     textDirection: TextDirection.ltr,
-                    style:
-                        paragarph4.copyWith(color: Colors.grey[400], height: 2),
+                    style: paragarph4.copyWith(color: Colors.grey[400], height: 2),
                   )
                 ],
               ),
@@ -386,26 +402,41 @@ print('Here ' + listOfImages.toString());
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         InkWell(
-                          onTap: () {
-                            getVideo().catchError((onError) {
-                              print('Error caught' + onError.toString());
-                            });
-                          },
+                          onTap: () {},
                           child: Container(
                             width: 160,
                             height: 100,
                             child: Center(
                                 child:
-                                    // (vbc.value.initialized)
-                                    //     ? VideoPlayer(vbc) :
-                                    //TODO uncomment the previous files if u want a thumbnail for the video
-                                    Image.asset("assets/icons/video.png")),
+                                vbc != null ?
+                                vbc.value.initialized ?
+                                VideoPlayer(vbc) :
+                                VideoPlayer(vbc) :
+                                //TODO uncomment the previous files if u want a thumbnail for the video
+                                Image.asset("assets/icons/video.png")),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              border:
-                                  Border.all(color: Colors.black, width: 0.1),
+                              border: Border.all(color: Colors.black, width: 0.1),
                             ),
                           ),
+//                          Container(
+//                            width: 160,
+//                            height: 100,
+//                            child: Center(
+//                                child:
+//                                vbc != null ?
+//                                vbc.value.initialized ?
+//                                VideoPlayer(vbc) :
+//                                VideoPlayer(vbc) :
+//                                //TODO uncomment the previous files if u want a thumbnail for the video
+//                                Image.asset("assets/icons/video.png"),
+//                            ),
+//                            decoration: BoxDecoration(
+//                              borderRadius: BorderRadius.circular(20),
+//                              border:
+//                                  Border.all(color: Colors.black, width: 0.1),
+//                            ),
+//                          ),
                         ),
                         SizedBox(
                           width: 15,
@@ -419,8 +450,7 @@ print('Here ' + listOfImages.toString());
                             ),
                             Text(
                               AppLocalizations.of(context).translate('tenSecLimit'),
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 13),
+                              style: TextStyle(color: Colors.grey, fontSize: 13),
                             ),
                           ],
                         )
@@ -518,7 +548,6 @@ print('Here ' + listOfImages.toString());
                               onTap: () {
                                 // pickImageFromGallery(index);
                                 loadAssets();
-                                
                               },
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(20),
@@ -537,8 +566,7 @@ print('Here ' + listOfImages.toString());
                                         ),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(
-                                        color: Colors.black, width: 0.10),
+                                    border: Border.all(color: Colors.black, width: 0.10),
                                   ),
                                 ),
                               ),
@@ -607,8 +635,7 @@ print('Here ' + listOfImages.toString());
                             print('Cat ID' + categoryID.toString());
                           });
                         },
-                        items: catTags
-                            .map<DropdownMenuItem<String>>((String value) {
+                        items: catTags.map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
@@ -635,8 +662,7 @@ print('Here ' + listOfImages.toString());
                             ),
                           ),
                           hintText: AppLocalizations.of(context).translate('productDescription'),
-                          hintStyle:
-                              TextStyle(color: Colors.black54, fontSize: 15),
+                          hintStyle: TextStyle(color: Colors.black54, fontSize: 15),
                         ),
                         maxLines: 3,
                       ),
@@ -657,10 +683,7 @@ print('Here ' + listOfImages.toString());
                           child: Center(
                             child: Text(
                               AppLocalizations.of(context).translate('edit'),
-                              style: TextStyle(
-                                  color: mainColor,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
+                              style: TextStyle(color: mainColor, fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),

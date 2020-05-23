@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   Text(
-                    'Loading...',
+                    AppLocalizations.of(context).translate('loading'),
                     textDirection: TextDirection.ltr,
                     style:
                         paragarph4.copyWith(color: Colors.grey[400], height: 2),
@@ -261,8 +261,7 @@ class _LoginPageState extends State<LoginPage> {
                           Login()
                               .login(
                                   password: passwordTextFieldController.text,
-                                  phone: (
-                                      //  this._countryCode +//  TODO uncomment this
+                                  phone: (this._countryCode + //  TODO uncomment this
                                           phoneNumberTextFieldController.text)
                                       .replaceAll("+", ''))
                               .then((onValue) {

@@ -125,37 +125,101 @@ class _AdminRegistrationState extends State<AdminRegistration> {
     int idCity;
     Cities city = _allCity.firstWhere((c) => c.text == _city);
     idCity = city.id;
-    String response1 = await Registeration().registration(
-        name: _name,
-        email: _email,
-        password: _password,
-        phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
-        image: _image,
-        city: idCity,
-        is_delivery_available:
-            selectedDeliveryService == DeliveryService.doesDelivery
-                ? true
-                : false,
-        categories: _categories);
-    setState(() {
-      _isLooding = false;
-    });
 
-    if (response1 != "success") {
+    if (_image != null) {
+      if (_name != null) {
+        if (_phone != null || int.parse(_phone) < 7 && int.parse(_phone) > 12) {
+          if (_email != null) {
+            if (_password != null) {
+              if (selectedDeliveryService != null) {
+                if (_categories.isNotEmpty) {
+                  if (_city != null) {
+                    String response1 = await Registeration().registration(
+                        name: _name,
+                        email: _email,
+                        password: _password,
+                        phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
+                        image: _image,
+                        city: idCity,
+                        is_delivery_available: selectedDeliveryService == DeliveryService.doesDelivery ? true : false,
+                        categories: _categories);
+                    setState(() {
+                      _isLooding = false;
+                    });
+
+                    if (response1 != "success") {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => DialogWorning(
+                                mss: response1,
+                              ));
+                    } else {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => VerificationcodePage(
+                                    phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
+                                    flag: 1,
+                                  )));
+                    }
+                  } else {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) => DialogWorning(
+                              mss: AppLocalizations.of(context).translate('chooseCity'),
+                            ));
+                  }
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) => DialogWorning(
+                            mss: AppLocalizations.of(context).translate('categoryError'),
+                          ));
+                  setState(() {
+                    _isLooding = false;
+                  });
+                }
+              } else {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => DialogWorning(
+                          mss: AppLocalizations.of(context).translate('deliveryServiceError'),
+                        ));
+              }
+            } else {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) => DialogWorning(
+                        mss: AppLocalizations.of(context).translate('passwordError'),
+                      ));
+            }
+          } else {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) => DialogWorning(
+                      mss: AppLocalizations.of(context).translate('emailError'),
+                    ));
+          }
+        } else {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) => DialogWorning(
+                    mss: AppLocalizations.of(context).translate('phoneError'),
+                  ));
+        }
+      } else {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => DialogWorning(
+                  mss: AppLocalizations.of(context).translate('nameError'),
+                ));
+      }
+    } else {
       showDialog(
           context: context,
           builder: (BuildContext context) => DialogWorning(
-                mss: response1,
+                mss: AppLocalizations.of(context).translate('imageError'),
               ));
-    } else {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => VerificationcodePage(
-                    phone:
-                        "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
-                    flag: 1,
-                  )));
     }
   }
 
@@ -206,9 +270,10 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 
   void addCategories(int id) {
     _categories.add(id);
-    _categories.forEach((d) {
-      print(d);
+    _categories.forEach((element) {
+      print(element);
     });
+    print('----------------------');
   }
 
   @override
@@ -494,7 +559,16 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                           chipName: _tags[index].text,
                           isSelected: selected[index],
                           onSelect: (clicked) {
-                            addCategories(_tags[index].id);
+                            if (clicked == true) {
+                              addCategories(_tags[index].id);
+                            }
+                            else {
+                              _categories.remove(_tags[index].id);
+                              _categories.forEach((element) {
+                                print(element);
+                              });
+                              print('----------------------');
+                            }
                             setState(() {
                               selected[index] = clicked;
                             });
@@ -550,40 +624,40 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                         }),
               ),
               //TODO remove row testing alert dialogs
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0)),
-                      color: accent,
-                      child: Text(
-                        'test non-active',
-                        style: TextStyle(color: Colors.white, fontSize: 20.0),
-                      ),
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                AccountNotActivatedDialog());
-                      }),
-                  RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0)),
-                      color: accent,
-                      child: Text(
-                        'test frozen',
-                        style: TextStyle(color: Colors.white, fontSize: 20.0),
-                      ),
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                AccountFrozenDialog());
-                      }),
-                ],
-              )
+//              Row(
+//                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                crossAxisAlignment: CrossAxisAlignment.center,
+//                children: <Widget>[
+//                  RaisedButton(
+//                      shape: RoundedRectangleBorder(
+//                          borderRadius: BorderRadius.circular(18.0)),
+//                      color: accent,
+//                      child: Text(
+//                        'test non-active',
+//                        style: TextStyle(color: Colors.white, fontSize: 20.0),
+//                      ),
+//                      onPressed: () {
+//                        showDialog(
+//                            context: context,
+//                            builder: (BuildContext context) =>
+//                                AccountNotActivatedDialog());
+//                      }),
+//                  RaisedButton(
+//                      shape: RoundedRectangleBorder(
+//                          borderRadius: BorderRadius.circular(18.0)),
+//                      color: accent,
+//                      child: Text(
+//                        'test frozen',
+//                        style: TextStyle(color: Colors.white, fontSize: 20.0),
+//                      ),
+//                      onPressed: () {
+//                        showDialog(
+//                            context: context,
+//                            builder: (BuildContext context) =>
+//                                AccountFrozenDialog());
+//                      }),
+//                ],
+//              )
             ],
           ),
         ),

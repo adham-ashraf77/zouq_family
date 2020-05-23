@@ -163,7 +163,7 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   Text(
-                    'Loading...',
+                    AppLocalizations.of(context).translate('loading'),
                     textDirection: TextDirection.ltr,
                     style:
                         paragarph4.copyWith(color: Colors.grey[400], height: 2),

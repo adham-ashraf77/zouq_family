@@ -28,8 +28,14 @@
   "genderError": "Please select your gender",
   "nameError": "Please enter your Name",
   "passwordError": "Please enter your password",
-  "shortPassword": "Password is too short",
+  "passwordShortError": "Password must be at least 6 characters",
+  "passwordMatchError": "Passwords don't match",
+  "descValidError": "Please enter a valid desc, desc must me at least 20 characters",
+  "imageError": "please enter a photo for your shop",
+  "deliveryServiceError": "please select delivery service",
+  "categoryError": "please choose a category",
   "termsError": "Please check Agree to the terms & EULA",
+  "shortPassword": "Password is too short",
   "delivery": "Can deliver",
   "noDelivery": "No Delivery",
   "chooseCity": "Choose city",
@@ -77,5 +83,8 @@
   "lang": "english",
   "home": "home",
   "myProducts": "my products",
-  "more": "more"
+  "more": "more",
+  "loading": "loading...",
+  "appInfo": "Application information",
+  "contactManagement": "Contact the management"
 }
