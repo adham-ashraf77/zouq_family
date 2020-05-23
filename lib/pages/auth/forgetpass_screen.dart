@@ -1,7 +1,6 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:zouqadmin/pages/auth/ResetPasswordPage.dart';
 import 'package:zouqadmin/pages/auth/verificationcode_screen.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
 import 'package:zouqadmin/theme/common.dart';
