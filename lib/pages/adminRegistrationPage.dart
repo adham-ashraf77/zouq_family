@@ -455,85 +455,90 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                 ),
               ),
               ListTile(
-                title: Row(
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedDeliveryService =
-                              DeliveryService.doesDelivery;
-                        });
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: selectedDeliveryService ==
-                                      DeliveryService.doesDelivery
-                                  ? accent
-                                  : Color(0xFF636363),
-                            ),
-                            borderRadius: BorderRadius.circular(50)),
-                        child: CircleAvatar(
-                          child: Icon(
-                            FontAwesomeIcons.check,
-                            color: Colors.white,
-                            size: 9.0,
-                          ),
-                          radius: 10.0,
-                          backgroundColor: selectedDeliveryService ==
+                title: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Row(
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedDeliveryService = DeliveryService.doesDelivery;
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color:
+                                      selectedDeliveryService == DeliveryService.doesDelivery
+                                      ? accent
+                                      : Color(0xFF636363),
+                                ),
+                                borderRadius: BorderRadius.circular(50)),
+                            child: CircleAvatar(
+                              child: Icon(
+                                FontAwesomeIcons.check,
+                                color: Colors.white,
+                                size: 9.0,
+                              ),
+                              radius: 10.0,
+                              backgroundColor: selectedDeliveryService ==
                                   DeliveryService.doesDelivery
-                              ? accent
-                              : Colors.white,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10.0,
-                    ),
-                    Text(
-                      AppLocalizations.of(context).translate('delivery'),
-                      style: productName1,
-                    ),
-                    SizedBox(
-                      width: 20.0,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedDeliveryService = DeliveryService.noDelivery;
-                        });
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: selectedDeliveryService ==
-                                      DeliveryService.noDelivery
                                   ? accent
-                                  : Color(0xFF636363),
+                                  : Colors.white,
                             ),
-                            borderRadius: BorderRadius.circular(50)),
-                        child: CircleAvatar(
-                          child: Icon(
-                            FontAwesomeIcons.check,
-                            color: Colors.white,
-                            size: 9,
                           ),
-                          radius: 10.0,
-                          backgroundColor: selectedDeliveryService ==
-                                  DeliveryService.noDelivery
-                              ? accent
-                              : Colors.white,
                         ),
-                      ),
+                        SizedBox(
+                          width: 10.0,
+                        ),
+                        Text(
+                          AppLocalizations.of(context).translate('delivery'),
+                          style: productName1,
+                        ),
+                        SizedBox(
+                          width: 20.0,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedDeliveryService = DeliveryService.noDelivery;
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: selectedDeliveryService ==
+                                      DeliveryService.noDelivery
+                                      ? accent
+                                      : Color(0xFF636363),
+                                ),
+                                borderRadius: BorderRadius.circular(50)),
+                            child: CircleAvatar(
+                              child: Icon(
+                                FontAwesomeIcons.check,
+                                color: Colors.white,
+                                size: 9,
+                              ),
+                              radius: 10.0,
+                              backgroundColor: selectedDeliveryService ==
+                                  DeliveryService.noDelivery
+                                  ? accent
+                                  : Colors.white,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10.0,
+                        ),
+                        Text(
+                          AppLocalizations.of(context).translate('noDelivery'),
+                          style: productName1,
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      width: 10.0,
-                    ),
-                    Text(
-                      AppLocalizations.of(context).translate('noDelivery'),
-                      style: productName1,
-                    ),
-                  ],
+                  ),
                 ),
               ),
               Padding(
