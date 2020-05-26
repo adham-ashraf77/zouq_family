@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zouqadmin/I10n/app_localizations.dart';

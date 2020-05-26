@@ -231,7 +231,6 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 
   @override
   void initState() {
-    // TODO: implement initState
     setState(() {
       _isLooding = true;
     });
@@ -260,7 +259,6 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _tags.clear();
     _allCity.clear();
     selected.clear();

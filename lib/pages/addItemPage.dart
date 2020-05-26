@@ -286,7 +286,6 @@ class _AddItemPageState extends State<AddItemPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCategories();
   }

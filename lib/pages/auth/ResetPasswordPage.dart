@@ -7,7 +7,6 @@ import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/AppButton.dart';
 import 'package:zouqadmin/services/settingnewpassword.dart';
 import '../../I10n/app_localizations.dart';
-import '../../home.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   final String phone;
