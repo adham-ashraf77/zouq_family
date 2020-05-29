@@ -13,9 +13,10 @@ import 'package:zouqadmin/pages/dialogWorning.dart';
 import 'package:zouqadmin/services/addproduct.dart';
 import 'package:zouqadmin/services/getCategories.dart';
 import 'package:zouqadmin/theme/common.dart';
+import 'package:zouqadmin/widgets/loading_dialog.dart';
 
 import '../I10n/app_localizations.dart';
-
+import '../home.dart';
 
 class AddItemPage extends StatefulWidget {
   @override
@@ -217,6 +218,12 @@ class _AddItemPageState extends State<AddItemPage> {
           });
           print('before API call: price=> ${priceTextFieldController.text}');
           print('before API call: video=> ${productVideo.path}');
+          showDialog(
+              context: context,
+              builder: (BuildContext context) =>
+                  LoadingDialog(
+                    mss: 'يتم الان وضع منتجك على المتجر يرجى الاتظار',
+                  ));
           AddProduct().addProduct(
               catID: categoryID + 1,
               desc: descTextFieldController.text,
@@ -224,7 +231,11 @@ class _AddItemPageState extends State<AddItemPage> {
               listOfPhotos: listOfImages,
               price: priceTextFieldController.text,
               video: productVideo,
-              context: context);
+              context: context).then((value) {
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => Home(),)
+            );
+          });
         }
       } else {
         showDialog(

@@ -11,6 +11,7 @@ class GetCategories {
     try {
       Response response = await Dio().get("$_url$_categories");
       if (response.statusCode >= 200 && response.statusCode <= 299) {
+        print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ${response.data}');
         List<dynamic> data = response.data;
         for (int i = 0; i < data.length; i++) {
           categories.add(CategoriesTag(id: data[i]["id"], text_ar: data[i]["text_ar"], text_en: data[i]["text_en"]));
@@ -20,7 +21,8 @@ class GetCategories {
         print('not a 200 requesy ${response.data}');
       }
     } on DioError catch (e) {
-      print(e.response);
+      print('errooooooooooooor');
+      print(e);
     }
   }
 }
