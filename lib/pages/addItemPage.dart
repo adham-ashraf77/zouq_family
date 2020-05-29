@@ -173,8 +173,7 @@ class _AddItemPageState extends State<AddItemPage> {
           var duration = vbc.value.duration.toString().split(':');
           print(duration[0] + ' - ' + duration[1] + ' = ' + duration[2]);
           if (duration[0].trim() == '0' &&
-              duration[1].trim() == '00' &&
-              double.parse(duration[2]) < 10.0) {
+              duration[1].trim() == '00' && double.parse(duration[2]) < 11.0) {
             print('accepted');
             productVideo = videoFile;
           } else {
