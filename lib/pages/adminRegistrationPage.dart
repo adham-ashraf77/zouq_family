@@ -127,7 +127,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 
     if (_image != null) {
       if (_name != null) {
-        if (_phone != null || int.parse(_phone) < 7 && int.parse(_phone) > 12) {
+        if (_phone != null || int.parse(_phone) == 9) {
           if (_email != null) {
             if (_password != null) {
               if (selectedDeliveryService != null) {
@@ -368,8 +368,8 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                             _phone = value;
                           },
                           validator: (value) {
-                            if (value.trim().length == 0 ||
-                                value.trim().length < 11) {
+                            if (value.trim().length == 0 || value.trim().length != 9) {
+                              print(value.trim().length);
                               return AppLocalizations.of(context)
                                   .translate('phoneError');
                             }
