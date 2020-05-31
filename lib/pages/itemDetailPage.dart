@@ -106,12 +106,7 @@ class _ItemDetailState extends State<ItemDetail> {
     try {
       // _controller =await VideoPlayerController.network(_product.video);
 
-      _controller = await VideoPlayerController.network('$videoUrl')
-        ..initialize().then((_) {
-          // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-          print('baka ma');
-          setState(() {});
-        });
+      _controller = await VideoPlayerController.network('$videoUrl');
 
       _initializeVideoPlayerFuture = _controller.initialize();
       await initImages();
