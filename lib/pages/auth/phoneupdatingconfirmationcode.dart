@@ -55,7 +55,7 @@ class _PhoneUpdatingCOnfirmationCode
             showDialog(
                 context: context,
                 builder: (BuildContext context) => DialogWorning(
-                      mss: 'Confirm code is not valid',
+                      mss: AppLocalizations.of(context).translate('otpError'),
                     ));
           } else if (onValue
               .toString()
@@ -63,14 +63,13 @@ class _PhoneUpdatingCOnfirmationCode
             showDialog(
                 context: context,
                 builder: (BuildContext context) => DialogWorning(
-                      mss: 'confirm code does not exists or expired',
+                  mss: AppLocalizations.of(context).translate('deleteSuccess'),
                     ));
           } else {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => DialogWorning(
-                      mss:
-                          'Something went wrong check you connection and try again!',
+                  mss: AppLocalizations.of(context).translate('deleteSuccess'),
                     ));
           }
         }
@@ -84,14 +83,14 @@ class _PhoneUpdatingCOnfirmationCode
         showDialog(
             context: context,
             builder: (BuildContext context) => DialogWorning(
-                  mss: 'Code has been sent successfully ',
+              mss: AppLocalizations.of(context).translate('otpSuccess'),
                 ));
       } else {
         showDialog(
             context: context,
             builder: (BuildContext context) => DialogWorning(
-                  mss:
-                      'Something went wrong please check your connection and try again',
+              mss:
+              AppLocalizations.of(context).translate('deleteFailed'),
                 ));
       }
     });

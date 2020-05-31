@@ -16,6 +16,7 @@ import 'package:zouqadmin/widgets/chips/ratingChip.dart';
 import 'package:zouqadmin/widgets/rate_card.dart';
 
 import '../I10n/app_localizations.dart';
+import '../home.dart';
 
 class ItemDetail extends StatefulWidget {
   final String orderId;
@@ -72,9 +73,11 @@ class _ItemDetailState extends State<ItemDetail> {
         showDialog(
             context: context,
             builder: (BuildContext context) => DialogWorning(
-                  mss: 'The product has been deleted successfully!',
+              mss: AppLocalizations.of(context).translate('deleteSuccess'),
                 )).then((_) {
-          popPage(context);
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => Home(),
+          ));
         });
       } else {
         print('Error ' + onValue.toString());
@@ -82,7 +85,7 @@ class _ItemDetailState extends State<ItemDetail> {
         showDialog(
             context: context,
             builder: (BuildContext context) => DialogWorning(
-                  mss: 'Something went wrong please check your connection and try again!',
+              mss: AppLocalizations.of(context).translate('deleteFailed'),
                 ));
       }
     });
@@ -355,15 +358,20 @@ class _ItemDetailState extends State<ItemDetail> {
                     ),
 
                     _current == 0 ?
-                    Positioned(
-                      top: MediaQuery
+                    Container(
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.3,
+                      padding: EdgeInsets.only(left: MediaQuery
                           .of(context)
                           .padding
-                          .top + 50,
-                      right: MediaQuery
-                          .of(context)
-                          .padding
-                          .right + 170,
+                          .left + 30),
+                      alignment: Alignment.center,
                       child: isPlay
                           ? Container() : IconButton(
                         onPressed: () {

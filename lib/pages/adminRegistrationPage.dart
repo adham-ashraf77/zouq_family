@@ -147,11 +147,24 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                     });
 
                     if (response1 != "success") {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) => DialogWorning(
-                                mss: response1,
-                              ));
+                      if (response1 == "phoneError")
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => DialogWorning(
+                                  mss: AppLocalizations.of(context).translate('phoneDuplicatedError'),
+                                ));
+                      else if (response1 == "emailError")
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => DialogWorning(
+                                  mss: AppLocalizations.of(context).translate('emailDuplicatedError'),
+                                ));
+                      else
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => DialogWorning(
+                                  mss: response1,
+                                ));
                     } else {
                       Navigator.pushReplacement(
                           context,
@@ -357,7 +370,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                     Expanded(
                       child: Container(
                         child: TextFormField(
-                          maxLength: 12,
+                          maxLength: 9,
                           decoration: InputDecoration(
                               counterText: "",
                               border: InputBorder.none,

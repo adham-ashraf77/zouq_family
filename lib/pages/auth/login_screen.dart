@@ -180,18 +180,16 @@ class _LoginPageState extends State<LoginPage> {
                           Expanded(
                             flex: 7,
                             child: TextFormField(
-                              maxLength: 12,
+                              maxLength: 9,
                               controller: phoneNumberTextFieldController,
                               validator: (value) {
-                                if (value.trim().length < 9) {
-                                  return AppLocalizations.of(context)
-                                      .translate('phoneError');
+                                if (value.trim().length != 9) {
+                                  return AppLocalizations.of(context).translate('phoneError');
                                 }
                                 return null;
                               },
                               decoration: InputDecoration(
-                                  counterText: "",
-                                  hintText: AppLocalizations.of(context)
+                                  counterText: "", hintText: AppLocalizations.of(context)
                                       .translate('telephone')),
                             ),
                           ),
@@ -273,7 +271,7 @@ class _LoginPageState extends State<LoginPage> {
                                   builder: (BuildContext context) =>
                                       DialogWorning(
                                         mss:
-                                            "phone number or password isn't correct, please check your unput and try again",
+                                        AppLocalizations.of(context).translate('loginError'),
                                       ));
                             } else if (onValue.toString().contains(
                                     "your account is not activated yet by the admins") ||
@@ -285,7 +283,7 @@ class _LoginPageState extends State<LoginPage> {
                                   builder: (BuildContext context) =>
                                       DialogWorning(
                                         mss:
-                                            'This account is not activated yet by the admins, try again later',
+                                        AppLocalizations.of(context).translate('notActiveAccount'),
                                       ));
                             } else if (onValue
                                 .toString()
@@ -294,7 +292,7 @@ class _LoginPageState extends State<LoginPage> {
                                   context: context,
                                   builder: (BuildContext context) =>
                                       DialogWorning(
-                                        mss: 'This user is not family',
+                                        mss: AppLocalizations.of(context).translate('loginFailed'),
                                       ));
                             else {
                               showDialog(

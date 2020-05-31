@@ -2,15 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:zouqadmin/pages/auth/ResetPasswordPage.dart';
+import 'package:zouqadmin/services/checkpasswordresettingcode.dart';
 import 'package:zouqadmin/services/registeration.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/AppButton.dart';
-import 'package:zouqadmin/services/checkpasswordresettingcode.dart';
+
 import '../../I10n/app_localizations.dart';
 import '../../home.dart';
 import '../dialogWorning.dart';
-import '../productsPage.dart';
 
 class VerificationcodePage extends StatefulWidget {
   String phone;
@@ -49,7 +49,7 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
       showDialog(
           context: context,
           builder: (BuildContext context) => DialogWorning(
-                mss: response,
+            mss: AppLocalizations.of(context).translate('otpError'),
               ));
     } else {
       pushPage(context, Home());
@@ -72,7 +72,7 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
         showDialog(
             context: context,
             builder: (BuildContext context) => DialogWorning(
-                  mss: onValue.data['message'],
+              mss: AppLocalizations.of(context).translate('failed'),
                 ));
       }
     }).catchError((onError) {
@@ -92,7 +92,7 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
       showDialog(
           context: context,
           builder: (BuildContext context) => DialogWorning(
-                mss: response,
+            mss: AppLocalizations.of(context).translate('deleteFailed'),
               ));
     } else {
       print("success");

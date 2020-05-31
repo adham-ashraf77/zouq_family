@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
 import 'package:zouqadmin/pages/editPhoneNumberPage.dart';
@@ -415,9 +414,9 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
                                 builder: (BuildContext context) =>
                                     DialogWorning(
                                       mss: onValue.toString() == 'success'
-                                          ? 'تم بنجاح'
-                                          : 'Something went wrong please check your inputs and try again',
-                                    ));
+                                            ? AppLocalizations.of(context).translate('success')
+                                            : AppLocalizations.of(context).translate('failed'),
+                                      ));
                           });
                         }
                         //TODO admin profile editing code

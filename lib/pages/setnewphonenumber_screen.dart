@@ -148,8 +148,7 @@ class _SetNewPhoneNumberScreenState extends State<SetNewPhoneNumberScreen> {
                                       builder: (BuildContext context) =>
                                           DialogWorning(
                                             mss:
-                                                'Phone has been updated successfully',
-                                          ));
+                                            AppLocalizations.of(context).translate('success')));
                                       Future.delayed(Duration(seconds: 3),() =>Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(builder: (context) => Home())
                                       ));
@@ -160,7 +159,7 @@ class _SetNewPhoneNumberScreenState extends State<SetNewPhoneNumberScreen> {
                                       builder: (BuildContext context) =>
                                           DialogWorning(
                                             mss:
-                                                'Something went wrong please check your input and try again',
+                                            AppLocalizations.of(context).translate('failed'),
                                           ));
                                 }
                               });

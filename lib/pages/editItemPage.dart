@@ -14,6 +14,7 @@ import 'package:zouqadmin/services/getCategories.dart';
 import 'package:zouqadmin/services/show.dart';
 import 'package:zouqadmin/services/updateproduct.dart';
 import 'package:zouqadmin/theme/common.dart';
+import 'package:zouqadmin/widgets/loading_dialog.dart';
 
 import '../I10n/app_localizations.dart';
 
@@ -53,6 +54,7 @@ class _EditItemPageState extends State<EditItemPage> {
   String videoUrl;
   List child;
   VideoPlayerController _controller;
+  bool isUploading = false;
   Future<void> _initializeVideoPlayerFuture;
 
   Future<File> _downloadFile(String url, String filename) async {
@@ -65,7 +67,7 @@ class _EditItemPageState extends State<EditItemPage> {
     return file;
   }
 
-  Future<void> loadAssets() async {
+  Future<void> loadAssets(int index) async {
     List<Asset> resultList = List<Asset>();
 //    if(file!=null && file.isNotEmpty)
 //      file.clear();
@@ -113,16 +115,12 @@ class _EditItemPageState extends State<EditItemPage> {
     });
     print('hi');
     print('Here ' + images.length.toString());
-    if (images.length > 0) listOfImages.clear();
-    images.forEach((image) async {
-      File x = await getImageFileFromAssets(await image.requestOriginal(quality: 100), image.name);
-
-      setState(() {
-        listOfImages.add(x);
-      });
-      print(image.name);
-      print('fileLength----->${listOfImages.length}');
+    File x = await getImageFileFromAssets(await images.last.requestOriginal(quality: 100), images.last.name);
+    setState(() {
+      listOfImages.insert(index, x);
     });
+    print(images.last.name);
+    print('fileLength----->${listOfImages.length}');
 
     print('hi');
     //print('--------->${file.first.path}');
@@ -146,10 +144,18 @@ class _EditItemPageState extends State<EditItemPage> {
   updateProduct() {
     if (_formKey.currentState.validate()) {
       if (_dropdownValue != null) {
-        print('=============================> ${categoryID + 1}');
-        //TODO uploading
-        UpdateProduct().updateProduct(
-          catID: categoryID,
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => LoadingDialog(
+                  mss: AppLocalizations.of(context).translate('addLoading'),
+                ));
+        print('=============================> ${categoryID}');
+
+        /// the categoryID+1 cuz in backEnd they make that so array index start from 1 not from 0 and donot ask how or why xD
+        /// cuz i personally don`t know
+        UpdateProduct()
+            .updateProduct(
+          catID: categoryID + 1,
           desc: descTextFieldController.text,
           name: nameTextFieldController.text,
           listOfPhotos: listOfImages,
@@ -157,12 +163,29 @@ class _EditItemPageState extends State<EditItemPage> {
           video: productVideo,
           context: context,
           id: id,
-        );
+        )
+            .then((value) {
+          Navigator.of(context).pop();
+          value == 200
+              ? showDialog(
+                  context: context,
+                  builder: (BuildContext context) => DialogWorning(
+                        mss: AppLocalizations.of(context).translate('success'),
+                      ))
+              : showDialog(
+                  context: context,
+                  builder: (BuildContext context) => DialogWorning(
+                        mss: AppLocalizations.of(context).translate('failed'),
+                      ));
+//          Future.delayed(Duration(seconds: 1),(){
+//            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home(),));
+//          });
+        });
       } else {
         showDialog(
             context: context,
             builder: (BuildContext context) => DialogWorning(
-                  mss: 'من فضلك اختر تصنيف للمنتج',
+              mss: AppLocalizations.of(context).translate('categoryError'),
                 ));
       }
     }
@@ -251,11 +274,11 @@ class _EditItemPageState extends State<EditItemPage> {
         });
         for (var url in list) {
           try {
-            i = i + 1;
             _downloadFile(url, 'file_' + DateTime.now().millisecondsSinceEpoch.toString()).then((onValue) {
               setState(() {
-                listOfImages.add(onValue);
+                listOfImages.insert(i, onValue);
               });
+              i = i + 1;
             });
           } catch (error) {
             print(error);
@@ -289,7 +312,7 @@ class _EditItemPageState extends State<EditItemPage> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => DialogWorning(
-                      mss: 'مسموح بحد أقصي 10 ثواني فقط',
+                  mss: AppLocalizations.of(context).translate('videoLengthError'),
                     ));
             productVideo = null;
           }
@@ -311,18 +334,21 @@ class _EditItemPageState extends State<EditItemPage> {
       File videoFile = _video;
       vbc = new VideoPlayerController.file(videoFile)
         ..initialize().then((_) {
-          print('Duration : ' + vbc.value.duration.toString().split(':').toString());
+          print('Duration : ' +
+              vbc.value.duration.toString().split(':').toString());
           var duration = vbc.value.duration.toString().split(':');
           print(duration[0] + ' - ' + duration[1] + ' = ' + duration[2]);
-          if (duration[0].trim() == '0' && duration[1].trim() == '00' && double.parse(duration[2]) < 10.0) {
+          if (duration[0].trim() == '0' &&
+              duration[1].trim() == '00' && double.parse(duration[2]) < 11.0) {
             print('accepted');
             productVideo = videoFile;
           } else {
             print('rejected');
             showDialog(
                 context: context,
-                builder: (BuildContext context) => DialogWorning(
-                      mss: 'مسموح بحد أقصي 10 ثواني فقط',
+                builder: (BuildContext context) =>
+                    DialogWorning(
+                      mss: AppLocalizations.of(context).translate('videoLengthError'),
                     ));
             productVideo = null;
           }
@@ -397,7 +423,13 @@ class _EditItemPageState extends State<EditItemPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            setState(() {
+                              getVideo().catchError((onError) {
+                                print('Error caught' + onError.toString());
+                              });
+                            });
+                          },
                           child: Container(
                             width: 160,
                             height: 100,
@@ -542,7 +574,7 @@ class _EditItemPageState extends State<EditItemPage> {
                             child: InkWell(
                               onTap: () {
                                 // pickImageFromGallery(index);
-                                loadAssets();
+                                loadAssets(index);
                               },
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(20),

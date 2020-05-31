@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
 
+import '../I10n/app_localizations.dart';
+
 class AddProduct {
   final String apiUrl = "https://api.dhuqapp.com";
   final String addingProduct = "/api/family/products";
@@ -93,14 +95,14 @@ class AddProduct {
           showDialog(
               context: context,
               builder: (BuildContext context) => DialogWorning(
-                    mss: 'Product has been added successfully',
+                mss: AppLocalizations.of(context).translate('success'),
                   ));
         } else {
           print(response.data);
           showDialog(
               context: context,
               builder: (BuildContext context) => DialogWorning(
-                    mss: 'Something is wrong, please check your connection and try again ',
+                mss: AppLocalizations.of(context).translate('failed'),
                   ));
           return "something is wrong";
         }
@@ -110,14 +112,14 @@ class AddProduct {
           showDialog(
               context: context,
               builder: (BuildContext context) => DialogWorning(
-                    mss: 'connection time out ',
+                mss: AppLocalizations.of(context).translate('failed'),
                   ));
-          return "connection time out";
+          return AppLocalizations.of(context).translate('failed');
         }
         showDialog(
             context: context,
             builder: (BuildContext context) => DialogWorning(
-                  mss: 'Something is wrong, please check your connection and try again ',
+              mss: AppLocalizations.of(context).translate('failed'),
                 ));
         print(e.response.data);
       }

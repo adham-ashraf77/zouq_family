@@ -86,5 +86,21 @@
   "more": "more",
   "loading": "loading...",
   "appInfo": "Application information",
-  "contactManagement": "Contact the management"
+  "contactManagement": "Contact the management",
+  "phoneDuplicatedError": "this phone number is already registered",
+  "emailDuplicatedError": "this email is already registered",
+  "videoLengthError": "the video must be 10 sec. only",
+  "loginError": "phone number or password isn't correct, please check your input and try again",
+  "notActiveAccount": "your account is not activated yet by the admins",
+  "loginFailed": "this number is for normal user account that already registered please sign in with different number",
+  "addPhotoLengthError": "please choose at least one photo",
+  "chooseCategoryLengthError": "please choose at least one photo category",
+  "otpSuccess": "top code has been sent successfully ",
+  "otpError": "you write a wrong otp code please check again",
+  "otpExpire": "this is otp is invalid or expired please resend again",
+  "success": "success",
+  "failed": "failed, please make sure you write valid information",
+  "deleteSuccess": "The product has been deleted successfully",
+  "deleteFailed": "Something went wrong please check your connection and try again!",
+  "addLoading": "your product is now uploading to the app please wait"
 }

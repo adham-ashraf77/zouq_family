@@ -181,7 +181,7 @@ class _AddItemPageState extends State<AddItemPage> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => DialogWorning(
-                      mss: 'مسموح بحد أقصي 10 ثواني فقط',
+                      mss: AppLocalizations.of(context).translate('videoLengthError'),
                     ));
             productVideo = null;
           }
@@ -204,7 +204,7 @@ class _AddItemPageState extends State<AddItemPage> {
           showDialog(
               context: context,
               builder: (BuildContext context) => DialogWorning(
-                    mss: 'من فضلك اختر على الاقل صورة واحده',
+                mss: AppLocalizations.of(context).translate('addPhotoLengthError'),
                   ));
         } else {
           //TODO uploading
@@ -221,7 +221,7 @@ class _AddItemPageState extends State<AddItemPage> {
               context: context,
               builder: (BuildContext context) =>
                   LoadingDialog(
-                    mss: 'يتم الان وضع منتجك على المتجر يرجى الاتظار',
+                    mss: AppLocalizations.of(context).translate('addLoading'),
                   ));
           AddProduct().addProduct(
               catID: categoryID + 1,
@@ -240,7 +240,7 @@ class _AddItemPageState extends State<AddItemPage> {
         showDialog(
             context: context,
             builder: (BuildContext context) => DialogWorning(
-                  mss: 'من فضلك اختر تصنيف للمنتج',
+              mss: AppLocalizations.of(context).translate('chooseCategoryLengthError'),
                 ));
       }
     }

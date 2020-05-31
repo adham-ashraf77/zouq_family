@@ -46,6 +46,11 @@ class Registeration {
         return "something is wrong";
       }
     } on DioError catch (e) {
+      if (e.response.data["errors"]['phone'] != null) {
+        return "phoneError";
+      } else if (e.response.data["errors"]['email'] != null) {
+        return "emailError";
+      }
       print(e.response);
       return e.response.data['message'];
     }

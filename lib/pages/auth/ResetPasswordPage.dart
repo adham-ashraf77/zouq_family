@@ -2,10 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:zouqadmin/pages/auth/login_screen.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
+import 'package:zouqadmin/services/settingnewpassword.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/AppButton.dart';
-import 'package:zouqadmin/services/settingnewpassword.dart';
+
 import '../../I10n/app_localizations.dart';
 
 class ResetPasswordPage extends StatefulWidget {
@@ -129,7 +130,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                   context: context,
                                   builder: (BuildContext context) =>
                                       DialogWorning(
-                                        mss: onValue.data['message'],
+                                        mss: AppLocalizations.of(context).translate('passwordShortError'),
                                       ));
                             }
                           }).catchError((onError) {
@@ -138,14 +139,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                 context: context,
                                 builder: (BuildContext context) =>
                                     DialogWorning(
-                                      mss:
-                                          'Something went wrong please try again later', // onError.toString(),
+                                      mss: AppLocalizations.of(context)
+                                          .translate('passwordShortError'), // onError.toString(),
                                     ));
                           })
                         : showDialog(
                             context: context,
                             builder: (BuildContext context) => DialogWorning(
-                                  mss: "Passwords doesn't match",
+                              mss: AppLocalizations.of(context).translate('passwordMatchError'),
                                 ));
                   }
                 },

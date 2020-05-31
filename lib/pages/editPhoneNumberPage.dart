@@ -142,8 +142,7 @@ class _EditPhoneNumberPageState extends State<EditPhoneNumberPage> {
                                       context: context,
                                       builder: (BuildContext context) =>
                                           DialogWorning(
-                                            mss:
-                                                'Something went wrong or invalid phone number please check your input and try again',
+                                            mss: AppLocalizations.of(context).translate('phoneDuplicatedError'),
                                           ));
                                 }
                               });

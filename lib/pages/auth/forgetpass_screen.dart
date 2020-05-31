@@ -3,10 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:zouqadmin/pages/auth/verificationcode_screen.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
+import 'package:zouqadmin/services/resetpassword.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/AppButton.dart';
-import 'package:zouqadmin/services/resetpassword.dart';
+
 import '../../I10n/app_localizations.dart';
 
 class Forgetpass extends StatefulWidget {
@@ -149,7 +150,7 @@ class _ForgetpassState extends State<Forgetpass> {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) => DialogWorning(
-                                mss: response.data['message'],
+                            mss: AppLocalizations.of(context).translate('phoneError'),
                               ));
                     }
                   }).catchError((onError) {
@@ -157,16 +158,16 @@ class _ForgetpassState extends State<Forgetpass> {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) => DialogWorning(
-                                mss:
-                                    "Phone number isn't valid, please check your input",
+                            mss:
+                            AppLocalizations.of(context).translate('phoneError'),
                               ));
                     else
                       showDialog(
                           context: context,
                           builder: (BuildContext context) => DialogWorning(
-                                mss:
-                                    'Something went wrong please try again later', //"$onError",
-                              ));
+                            mss:
+                            AppLocalizations.of(context).translate('phoneError'), //"$onError",
+                          ));
                   });
                 }
               },

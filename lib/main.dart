@@ -9,6 +9,11 @@ import 'package:zouqadmin/theme/common.dart';
 import 'I10n/AppLanguage.dart';
 import 'I10n/app_localizations.dart';
 
+//this app is made by: mohamed hamdy, mostafa, khaled doredar
+// supervisor: rami ahmed
+// testing and maintain: omar el-sherif, adham al nagar
+// backend : abdel aziz
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   AppLanguage appLanguage = AppLanguage();
