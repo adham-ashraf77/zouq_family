@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Login {
@@ -12,6 +15,7 @@ class Login {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       Response response = await Dio().post("$_url$_login", data: _formData);
+
       /// `print("========= " + response.statusCode.toString() + " =========")`;
       /// `print(response.data)`;
       if (response.statusCode >= 200 && response.statusCode <= 299) {
@@ -20,6 +24,18 @@ class Login {
         prefs.setString("token", response.data['token']);
         prefs.setString("image", response.data['image']);
         prefs.setString("email", response.data['email']);
+        Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+        try {
+          await Dio().post('$_url/api/family/set-location',
+              data: {
+                "latitude": "${position.latitude}",
+                "longitude": "${position.longitude}",
+              },
+              options: Options(headers: {HttpHeaders.authorizationHeader: "Bearer ${response.data['token']}"}));
+        } on DioError catch (e) {
+          print('error in get position');
+          print(e.response.data);
+        }
         return "success";
       } else {
         print('not a 200 request ${response.data}');
@@ -30,6 +46,5 @@ class Login {
       if (e.response == null) return "connection time out";
       return e.response;
     }
-
   }
 }

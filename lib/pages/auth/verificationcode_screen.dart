@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zouqadmin/pages/auth/ResetPasswordPage.dart';
 import 'package:zouqadmin/services/checkpasswordresettingcode.dart';
 import 'package:zouqadmin/services/registeration.dart';
@@ -57,6 +58,8 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
                 mss: AppLocalizations.of(context).translate('otpError'),
               ));
     } else {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.clear();
       pushPage(context, LoginPage());
     }
     setState(() {

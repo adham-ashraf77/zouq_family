@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Registeration {
@@ -85,13 +84,13 @@ class Registeration {
       Response response =
           await Dio().post("$_url$_activateRegisteredUser", data: _formData);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
-        Map data = response.data;
-        print(data['token']);
-        Response response2 = await Dio().get("$_url$_currentUser",
-            options: Options(headers: {HttpHeaders.authorizationHeader: "Bearer ${data['token']}"}));
-        Map data2 = response2.data;
-        print(data2);
-        //TODO save data in SharedPreferences
+//        Map data = response.data;
+//        print(data['token']);
+//        Response response2 = await Dio().get("$_url$_currentUser",
+//            options: Options(headers: {HttpHeaders.authorizationHeader: "Bearer ${data['token']}"}));
+//        Map data2 = response2.data;
+//        print(data2);
+//        //TODO save data in SharedPreferences
 //        prefs.setString("token", "${data['token']}");
 //        prefs.setString("id", "${data2['user']['id']}");
 //        prefs.setString("name", "${data2['user']['name']}");
@@ -105,28 +104,27 @@ class Registeration {
 //        prefs.setString("longitude", "${data2['user']['longitude']}");
 //        prefs.setString("description", "${data2['user']['description']}");
 //        prefs.setString("is_delivery_available", "${data2['user']['is_delivery_available']}");
-        Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-        try {
-          Response response = await Dio().post('$_url/api/family/set-location',
-              data: {
-                "latitude": "${position.latitude}",
-                "longitude": "${position.longitude}",
-              },
-              options: Options(headers: {HttpHeaders.authorizationHeader: "Bearer ${data['token']}"}));
-        } on DioError catch (e) {
-          print('error in get position');
-          print(e.response.data);
-        }
-
+//        Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+//        try {
+//          Response response = await Dio().post('$_url/api/family/set-location',
+//              data: {
+//                "latitude": "${position.latitude}",
+//                "longitude": "${position.longitude}",
+//              },
+//              options: Options(headers: {HttpHeaders.authorizationHeader: "Bearer ${data['token']}"}));
+//        } on DioError catch (e) {
+//          print('error in get position');
+//          print(e.response.data);
+//        }
         return "success";
       } else {
         print('not a 200 requesy ${response.data}');
         return "something is wrong";
       }
     } on DioError catch (e) {
+      print('naniiiiiiiiiiiiiiiiiiii');
       print(e.response);
-      if (e.response.data["message"] ==
-          "there is no inactive user have this phone number") {
+      if (e.response.data["message"] == "there is no inactive user have this phone number") {
         return "there is no inactive user have this phone number";
       }
       if (e.response == null) return "connection time out";
