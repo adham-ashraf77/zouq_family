@@ -22,6 +22,7 @@ class AddProduct {
       List<File> listOfPhotos,
       int catID,
       @required BuildContext context}) async {
+    FormData formData;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString("token") ?? "";
     print('token: $token');
@@ -46,7 +47,7 @@ class AddProduct {
     });
     if (listOfPhotos.length == something.length && theVideo.length == videos.length) {
       print('hi from equals if');
-      print('hi ^^ ' + video.toString());
+      // print('hi ^^ ' + video.toString());
       print('At API call: catID=> $catID');
       print('At API call: desc=> $desc');
       print('At API call: name=> $name');
@@ -55,14 +56,24 @@ class AddProduct {
       });
       print('At API call: price=> $price');
       print('At API call: video=> ${theVideo[0].filename}');
-      FormData formData = FormData.fromMap({
-        "name": "$name",
-        "description": "$desc",
-        "price": "$price",
-        "images": something,
-        "video": theVideo[0],
-        "category_id": catID.toString(),
-      });
+      if (video == null || video.path.isEmpty == true) {
+        formData = FormData.fromMap({
+          "name": "$name",
+          "description": "$desc",
+          "price": "$price",
+          "images": something,
+          "category_id": catID.toString(),
+        });
+      } else {
+        formData = FormData.fromMap({
+          "name": "$name",
+          "description": "$desc",
+          "price": "$price",
+          "images": something,
+          "video": theVideo[0],
+          "category_id": catID.toString(),
+        });
+      }
 //      FormData _formData = video != null
 //          ? FormData.fromMap({
 //        "name": "$name",
@@ -96,14 +107,14 @@ class AddProduct {
               context: context,
               builder: (BuildContext context) => DialogWorning(
                 mss: AppLocalizations.of(context).translate('success'),
-                  ));
+              ));
         } else {
           print(response.data);
           showDialog(
               context: context,
               builder: (BuildContext context) => DialogWorning(
                 mss: AppLocalizations.of(context).translate('failed'),
-                  ));
+              ));
           return "something is wrong";
         }
       } on DioError catch (e) {
@@ -113,14 +124,14 @@ class AddProduct {
               context: context,
               builder: (BuildContext context) => DialogWorning(
                 mss: AppLocalizations.of(context).translate('failed'),
-                  ));
+              ));
           return AppLocalizations.of(context).translate('failed');
         }
         showDialog(
             context: context,
             builder: (BuildContext context) => DialogWorning(
               mss: AppLocalizations.of(context).translate('failed'),
-                ));
+            ));
         print(e.response.data);
       }
     }

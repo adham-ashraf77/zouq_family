@@ -216,7 +216,7 @@ class _AddItemPageState extends State<AddItemPage> {
             print('before API call: listOfPhotos=> ${element.path}');
           });
           print('before API call: price=> ${priceTextFieldController.text}');
-          print('before API call: video=> ${productVideo.path}');
+          //print('before API call: video=> ${productVideo.path}');
           showDialog(
               context: context,
               builder: (BuildContext context) =>
@@ -225,12 +225,12 @@ class _AddItemPageState extends State<AddItemPage> {
                   ));
           AddProduct().addProduct(
               catID: categoryID + 1,
-              desc: descTextFieldController.text,
-              name: nameTextFieldController.text,
-              listOfPhotos: listOfImages,
-              price: priceTextFieldController.text,
-              video: productVideo,
-              context: context).then((value) {
+                  desc: descTextFieldController.text,
+                  name: nameTextFieldController.text,
+                  listOfPhotos: listOfImages,
+                  price: priceTextFieldController.text,
+                  video: productVideo == null ? File('') : productVideo,
+                  context: context).then((value) {
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => Home(),)
             );
