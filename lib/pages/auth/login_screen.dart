@@ -285,20 +285,22 @@ class _LoginPageState extends State<LoginPage> {
                                         mss:
                                         AppLocalizations.of(context).translate('notActiveAccount'),
                                       ));
-                            } else if (onValue
-                                .toString()
-                                .contains("this isn't an family"))
+                            } else if (onValue.toString().contains("this isn't an family"))
                               showDialog(
                                   context: context,
-                                  builder: (BuildContext context) =>
-                                      DialogWorning(
+                                  builder: (BuildContext context) => DialogWorning(
                                         mss: AppLocalizations.of(context).translate('loginFailed'),
+                                      ));
+                            else if (onValue.toString().contains("disabled-account"))
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) => DialogWorning(
+                                        mss: AppLocalizations.of(context).translate('accountDisable'),
                                       ));
                             else {
                               showDialog(
                                   context: context,
-                                  builder: (BuildContext context) =>
-                                      DialogWorning(
+                                  builder: (BuildContext context) => DialogWorning(
                                         mss: onValue.toString(),
                                       ));
                             }

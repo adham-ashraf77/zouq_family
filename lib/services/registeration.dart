@@ -87,36 +87,33 @@ class Registeration {
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         Map data = response.data;
         print(data['token']);
-        Response response2 = await Dio().get("$_url$_currentUser",options: Options(
-          headers: {HttpHeaders.authorizationHeader:"Bearer ${data['token']}"}
-        ));
+        Response response2 = await Dio().get("$_url$_currentUser",
+            options: Options(headers: {HttpHeaders.authorizationHeader: "Bearer ${data['token']}"}));
         Map data2 = response2.data;
         print(data2);
         //TODO save data in SharedPreferences
-        prefs.setString("token", "${data['token']}");
-        prefs.setString("id", "${data2['user']['id']}");
-        prefs.setString("name", "${data2['user']['name']}");
-        prefs.setString("email", "${data2['user']['email']}");
-        prefs.setString("phone", "${data2['user']['phone']}");
-        prefs.setString("avatar", "${data2['user']['avatar']}");
-        prefs.setString("cityId", "${data2['user']['city']['id']}");
-        prefs.setString("cityTextAr", "${data2['user']['city']['text_ar']}");
-        prefs.setString("cityTextEn", "${data2['user']['city']['text_en']}");
-        prefs.setString("latitude", "${data2['user']['latitude']}");
-        prefs.setString("longitude", "${data2['user']['longitude']}");
-        prefs.setString("description", "${data2['user']['description']}");
-        prefs.setString("is_delivery_available", "${data2['user']['is_delivery_available']}");
+//        prefs.setString("token", "${data['token']}");
+//        prefs.setString("id", "${data2['user']['id']}");
+//        prefs.setString("name", "${data2['user']['name']}");
+//        prefs.setString("email", "${data2['user']['email']}");
+//        prefs.setString("phone", "${data2['user']['phone']}");
+//        prefs.setString("avatar", "${data2['user']['avatar']}");
+//        prefs.setString("cityId", "${data2['user']['city']['id']}");
+//        prefs.setString("cityTextAr", "${data2['user']['city']['text_ar']}");
+//        prefs.setString("cityTextEn", "${data2['user']['city']['text_en']}");
+//        prefs.setString("latitude", "${data2['user']['latitude']}");
+//        prefs.setString("longitude", "${data2['user']['longitude']}");
+//        prefs.setString("description", "${data2['user']['description']}");
+//        prefs.setString("is_delivery_available", "${data2['user']['is_delivery_available']}");
         Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
         try {
-          Response response = await Dio().post(
-              '$_url/api/family/set-location',
-              data: {"latitude": "${position.latitude}", "longitude": "${position.longitude}",},
-              options: Options(
-                  headers: {HttpHeaders.authorizationHeader: "Bearer ${data['token']}"}
-              )
-          );
-        }
-        on DioError catch (e) {
+          Response response = await Dio().post('$_url/api/family/set-location',
+              data: {
+                "latitude": "${position.latitude}",
+                "longitude": "${position.longitude}",
+              },
+              options: Options(headers: {HttpHeaders.authorizationHeader: "Bearer ${data['token']}"}));
+        } on DioError catch (e) {
           print('error in get position');
           print(e.response.data);
         }
