@@ -135,33 +135,36 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
             SizedBox(
               height: 20,
             ),
-            SizedBox(
-              width: 280,
-              child: PinCodeTextField(
-                inactiveColor: Colors.grey[350],
-                textStyle: TextStyle(
-                  color: Colors.white,
-                  fontSize: 23,
+            Directionality(
+              textDirection: TextDirection.ltr,
+              child: SizedBox(
+                width: 280,
+                child: PinCodeTextField(
+                  inactiveColor: Colors.grey[350],
+                  textStyle: TextStyle(
+                    color: Colors.white,
+                    fontSize: 23,
+                  ),
+                  length: 4,
+                  obsecureText: false,
+                  animationType: AnimationType.scale,
+                  shape: PinCodeFieldShape.circle,
+                  animationDuration: Duration(milliseconds: 300),
+                  borderRadius: BorderRadius.circular(5),
+                  fieldHeight: 50,
+                  fieldWidth: 50,
+                  activeFillColor: Colors.grey[350],
+                  activeColor: Colors.grey[350],
+                  inactiveFillColor: Colors.grey[350],
+                  enableActiveFill: true,
+                  selectedFillColor: Colors.grey[200],
+                  selectedColor: Colors.grey[200],
+                  onChanged: (value) {
+                    setState(() {
+                      _currentText = value;
+                    });
+                  },
                 ),
-                length: 4,
-                obsecureText: false,
-                animationType: AnimationType.scale,
-                shape: PinCodeFieldShape.circle,
-                animationDuration: Duration(milliseconds: 300),
-                borderRadius: BorderRadius.circular(5),
-                fieldHeight: 50,
-                fieldWidth: 50,
-                activeFillColor: Colors.grey[350],
-                activeColor: Colors.grey[350],
-                inactiveFillColor: Colors.grey[350],
-                enableActiveFill: true,
-                selectedFillColor: Colors.grey[200],
-                selectedColor: Colors.grey[200],
-                onChanged: (value) {
-                  setState(() {
-                    _currentText = value;
-                  });
-                },
               ),
             ),
             Text(
