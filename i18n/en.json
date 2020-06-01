@@ -103,5 +103,7 @@
   "deleteSuccess": "The product has been deleted successfully",
   "deleteFailed": "Something went wrong please check your connection and try again!",
   "addLoading": "your product is now uploading to the app please wait",
-  "unknownError": "there is an error in the inputs that you write please make sure from the data you have enter"
+  "unknownError": "there is an error in the inputs that you write please make sure from the data you have enter",
+  "chooselang":"Choose your language",
+  "cancel":"Cancel"
 }
