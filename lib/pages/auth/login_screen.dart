@@ -107,16 +107,14 @@ class _LoginPageState extends State<LoginPage> {
                     height: 20,
                     child: CircularProgressIndicator(
                       backgroundColor: Colors.grey[400],
-                      valueColor:
-                          new AlwaysStoppedAnimation<Color>(Colors.grey[300]),
+                      valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey[300]),
                       strokeWidth: 2,
                     ),
                   ),
                   Text(
                     AppLocalizations.of(context).translate('loading'),
                     textDirection: TextDirection.ltr,
-                    style:
-                        paragarph4.copyWith(color: Colors.grey[400], height: 2),
+                    style: paragarph4.copyWith(color: Colors.grey[400], height: 2),
                   )
                 ],
               ),
@@ -166,10 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                     //       image: DecorationImage(image: AssetImage(appLogo))),
                     // ),
                     SizedBox(
-                      height: MediaQuery.of(context).orientation ==
-                              Orientation.portrait
-                          ? 50
-                          : 20,
+                      height: MediaQuery.of(context).orientation == Orientation.portrait ? 50 : 20,
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width - 50,
@@ -183,14 +178,15 @@ class _LoginPageState extends State<LoginPage> {
                               maxLength: 9,
                               controller: phoneNumberTextFieldController,
                               validator: (value) {
-                                if (value.trim().length != 9) {
+                                if (value
+                                    .trim()
+                                    .length != 9) {
                                   return AppLocalizations.of(context).translate('phoneError');
                                 }
                                 return null;
                               },
                               decoration: InputDecoration(
-                                  counterText: "", hintText: AppLocalizations.of(context)
-                                      .translate('telephone')),
+                                  counterText: "", hintText: AppLocalizations.of(context).translate('telephone')),
                             ),
                           ),
                           SizedBox(
@@ -229,16 +225,15 @@ class _LoginPageState extends State<LoginPage> {
                       width: MediaQuery.of(context).size.width - 50,
                       child: TextFormField(
                         validator: (value) {
-                          if (value.trim().length < 6) {
-                            return AppLocalizations.of(context)
-                                .translate('shortPassword');
+                          if (value
+                              .trim()
+                              .length < 6) {
+                            return AppLocalizations.of(context).translate('shortPassword');
                           }
                           return null;
                         },
                         controller: passwordTextFieldController,
-                        decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context)
-                                .translate('password')),
+                        decoration: InputDecoration(hintText: AppLocalizations.of(context).translate('password')),
                         obscureText: true,
                       ),
                     ),
@@ -263,33 +258,28 @@ class _LoginPageState extends State<LoginPage> {
                                           phoneNumberTextFieldController.text)
                                       .replaceAll("+", ''))
                               .then((onValue) {
-                            if (onValue != 'success') if (onValue
-                                .toString()
-                                .contains('authentication failure')) {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      DialogWorning(
-                                        mss:
-                                        AppLocalizations.of(context).translate('loginError'),
-                                      ));
-                            } else if (onValue.toString().contains(
-                                    "your account is not activated yet by the admins") ||
-                                onValue
-                                    .toString()
-                                    .contains("not-active-by-admins")) {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      DialogWorning(
-                                        mss:
-                                        AppLocalizations.of(context).translate('notActiveAccount'),
-                                      ));
-                            } else if (onValue.toString().contains("this isn't an family"))
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) => DialogWorning(
-                                        mss: AppLocalizations.of(context).translate('loginFailed'),
+                            if (onValue != 'success')
+                              if (onValue.toString().contains('authentication failure')) {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        DialogWorning(
+                                          mss: AppLocalizations.of(context).translate('loginError'),
+                                        ));
+                              } else if (onValue.toString().contains("your account is not activated yet by the admins") ||
+                                  onValue.toString().contains("not-active-by-admins")) {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        DialogWorning(
+                                          mss: AppLocalizations.of(context).translate('notActiveAccount'),
+                                        ));
+                              } else if (onValue.toString().contains("this isn't an family"))
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        DialogWorning(
+                                          mss: AppLocalizations.of(context).translate('loginFailed'),
                                       ));
                             else if (onValue.toString().contains("disabled-account"))
                               showDialog(
@@ -321,20 +311,10 @@ class _LoginPageState extends State<LoginPage> {
                                       context: context,
                                       builder: (BuildContext context) =>
                                           DialogWorning(
-                                            mss:
-                                                AppLocalizations.of(context).translate('unknownError'), //onValue.toString(),
+                                            mss: "error from sharedprefs", //onValue.toString(),
                                           ));
                                 }
                               });
-                          }).catchError((onError) {
-                            print('onError' + onError.toString());
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    DialogWorning(
-                                      mss:
-                                      AppLocalizations.of(context).translate('unknownError'), //onError.toString(),
-                                    ));
                           });
                         }
                       },
@@ -367,10 +347,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         InkWell(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AdminRegistration()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => AdminRegistration()));
                           },
                           child: Text(
                             AppLocalizations.of(context).translate('signUpNow'),

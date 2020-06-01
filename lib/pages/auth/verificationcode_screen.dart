@@ -43,17 +43,25 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
     }
   }
 
+  bool isLoadingServer = false;
+
   activate(String code) async {
+    setState(() {
+      isLoadingServer = true;
+    });
     String response = await Registeration().activateRegistered(_phone, code);
     if (response != "success") {
       showDialog(
           context: context,
           builder: (BuildContext context) => DialogWorning(
-            mss: AppLocalizations.of(context).translate('otpError'),
+                mss: AppLocalizations.of(context).translate('otpError'),
               ));
     } else {
       pushPage(context, LoginPage());
     }
+    setState(() {
+      isLoadingServer = false;
+    });
   }
 
   checkToResetPassword(String code) async {
@@ -191,6 +199,8 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
                 SizedBox(
                   width: 5,
                 ),
+
+                isLoadingServer == false ?
                 InkWell(
                   onTap: () {
                     resendCode();
@@ -199,7 +209,7 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
                     AppLocalizations.of(context).translate('resendCode'),
                     style: paragarph4.copyWith(color: accent),
                   ),
-                ),
+                ) : CircularProgressIndicator(),
               ],
             )
           ],
