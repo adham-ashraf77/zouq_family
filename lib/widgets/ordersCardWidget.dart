@@ -102,7 +102,7 @@ class OrdersCard extends StatelessWidget {
                           SizedBox(
                             width: 9,
                           ),
-                          // CircleAvatar(backgroundColor: accent,radius: 9,),
+                     
                           Container(
                             height: 19,
                             width: 19,
@@ -228,26 +228,7 @@ class OrdersCard extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    this.order.contents.toString(),
-                                    style: paragarph3.copyWith(color: Colors.black54, fontWeight: FontWeight.w100),
-                                  ),
-                                  SizedBox(
-                                    width: 9,
-                                  ),
-                                  Icon(
-                                    Icons.shopping_cart,
-                                    color: accent,
-                                    size: 25,
-                                  ),
-                                ],
-                              ),
-                            ),
+                          
                           ],
                         ),
                       ),

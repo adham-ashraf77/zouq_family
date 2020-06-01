@@ -50,8 +50,8 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
   Widget popUp() {
     var appLanguage = Provider.of<AppLanguage>(context);
     return CupertinoActionSheet(
-      title: new Text('Language'),
-      message: new Text('Choose your language'),
+      title: new Text(AppLocalizations.of(context).translate('language') ),
+      message: new Text(AppLocalizations.of(context).translate('chooselang') ),
       actions: <Widget>[
         CupertinoActionSheetAction(
           child: new Text('English'),
@@ -61,7 +61,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
           },
         ),
         CupertinoActionSheetAction(
-          child: new Text('Arabic'),
+          child: new Text('العربية'),
           onPressed: () {
             appLanguage.changeLanguage(Locale("ar"));
             Navigator.of(context).pop();
@@ -69,7 +69,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
         )
       ],
       cancelButton: CupertinoActionSheetAction(
-        child: new Text('cancel'),
+        child: new Text(AppLocalizations.of(context).translate('cancel')),
         isDefaultAction: true,
         onPressed: () {
           Navigator.pop(context, 'Cancel');
@@ -280,21 +280,6 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: CircleAvatar(
-                    backgroundColor: Color(0xffdb4a39),
-                    child: IconButton(
-                      onPressed: () {
-                        //TODO add google+ pageview
-                      },
-                      icon: Icon(
-                        FontAwesomeIcons.googlePlusG,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: CircleAvatar(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zouqadmin/models/order.dart';
 import 'package:zouqadmin/models/product.dart';
@@ -180,152 +181,152 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                 SizedBox(
                   height: 40,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          '${order.id.toString()}',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        Text(
-                          AppLocalizations.of(context).translate('orderNum'),
-                          style: paragarph2.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Divider(
-                      height: 2,
-                      color: Colors.grey[300],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          '${order.time.toString()}' +
-                              '  ' +
-                              '${order.date.toString()}',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        Text(
-                          AppLocalizations.of(context).translate('orderTime'),
-                          style: paragarph2.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Divider(
-                      height: 2,
-                      color: Colors.grey[300],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    type == 2 || type == 3
-                        ? InkWell(
-                      onTap: () {
-                        if (type == 2) whatsAppOpen(phone: order.phoneNumber);
-                      },
-                      child: Row(
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal:10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Container(
-                                width: 35,
-                                height: 35,
-                                child: Image.asset(
-                                  'assets/images/whatsicon.png',
+                          Text(
+                            '${order.id.toString()}',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          Text(
+                            AppLocalizations.of(context).translate('orderNum'),
+                            style: paragarph2.copyWith(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        height: 2,
+                        color: Colors.grey[300],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            '${order.time.toString()}' +
+                                '  ' +
+                                '${order.date.toString()}',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          Text(
+                            AppLocalizations.of(context).translate('orderTime'),
+                            style: paragarph2.copyWith(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        height: 2,
+                        color: Colors.grey[300],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      type == 2 || type == 3
+                          ? InkWell(
+                        onTap: () {
+                          if (type == 2) whatsAppOpen(phone: order.phoneNumber);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Container(
+                                  width: 35,
+                                  height: 35,
+                                  child: Image.asset(
+                                    'assets/images/whatsicon.png',
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                '${order.phoneNumber.toString()}',
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            'محادثة whatsapp',
-                            textDirection: TextDirection.rtl,
-                            style: paragarph2.copyWith(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w100,
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  '${order.phoneNumber.toString()}',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                    )
-                        : SizedBox(),
-                    type == 2 || type == 3
-                        ? Divider(
-                            height: 2,
-                            color: Colors.grey[300],
-                          )
-                        : SizedBox(),
-                    SizedBox(
-                      height: type == 2 || type == 3 ? 20 : 0,
-                    ),
-                    /////
-                    type == 2 || type == 3
-                        ? InkWell(
-                      onTap: () => _makePhoneCall('tel:${order.phoneNumber}'),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              SizedBox(
-                                width: 5,
+                            Text(
+                              'محادثة whatsapp',
+                              textDirection: TextDirection.rtl,
+                              style: paragarph2.copyWith(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w100,
                               ),
-                              CircleAvatar(
-                                backgroundColor: accent,
-                                radius: 12,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                '${order.phoneNumber.toString()}',
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            AppLocalizations.of(context)
-                                .translate('telephone'),
-                            textDirection: TextDirection.rtl,
-                            style: paragarph2.copyWith(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w100,
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                      )
+                          : SizedBox(),
+                      type == 2 || type == 3
+                          ? Divider(
+                              height: 2,
+                              color: Colors.grey[300],
+                            )
+                          : SizedBox(),
+                      SizedBox(
+                        height: type == 2 || type == 3 ? 20 : 0,
                       ),
-                    )
-                        : SizedBox(),
-                    type == 2 || type == 3
-                        ? Divider(
-                            height: 2,
-                            color: Colors.grey[300],
-                          )
-                        : SizedBox(),
-                    SizedBox(
-                      height: type == 2 || type == 3 ? 20 : 0,
-                    ),
-                  ],
+                      /////
+                      type == 2 || type == 3
+                          ? InkWell(
+                        onTap: () => _makePhoneCall('tel:${order.phoneNumber}'),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                FaIcon(FontAwesomeIcons.mobile,),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  '${order.phoneNumber.toString()}',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('telephone'),
+                              textDirection: TextDirection.rtl,
+                              style: paragarph2.copyWith(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w100,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                          : SizedBox(),
+                      type == 2 || type == 3
+                          ? Divider(
+                              height: 2,
+                              color: Colors.grey[300],
+                            )
+                          : SizedBox(),
+                      SizedBox(
+                        height: type == 2 || type == 3 ? 20 : 0,
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 20,
@@ -372,6 +373,7 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                   height: 20,
                 ),
                 ListView.builder(
+                  padding: EdgeInsets.symmetric(horizontal:5),
                   primary: false,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
@@ -391,107 +393,110 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
         borderRadius: BorderRadius.only(
             topRight: Radius.circular(20), topLeft: Radius.circular(20)),
         child: BottomAppBar(
-          child: new Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(left: 20.0, top: 10, bottom: 10),
-                child: type == 1
-                    ? Row(
-                        children: <Widget>[
-                          Container(
-                            height: 40,
-                            width: 40,
-                            child: Icon(
-                              Icons.close,
-                              color: rejectedColor,
-                              size: 23,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal:10,vertical:5),
+            child: new Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0, top: 10, bottom: 10),
+                  child: type == 1
+                      ? Row(
+                          children: <Widget>[
+                            Container(
+                              height: 40,
+                              width: 40,
+                              child: Icon(
+                                Icons.close,
+                                color: rejectedColor,
+                                size: 23,
+                              ),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(50)),
+                                  border: Border.all(
+                                      color: Color(0xFFDADADA), width: 2)),
                             ),
-                            decoration: BoxDecoration(
+                            SizedBox(
+                              width: 12,
+                            ),
+                            Container(
+                              height: 40,
+                              width: 70,
+                              child: Icon(
+                                Icons.check,
+                                color: accent,
+                                size: 23,
+                              ),
+                              decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(50)),
                                 border: Border.all(
-                                    color: Color(0xFFDADADA), width: 2)),
-                          ),
-                          SizedBox(
-                            width: 12,
-                          ),
-                          Container(
-                            height: 40,
-                            width: 70,
-                            child: Icon(
-                              Icons.check,
-                              color: accent,
-                              size: 23,
+                                    color: Color(0xFFDADADA), width: 2),
+                              ),
                             ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
-                              border: Border.all(
-                                  color: Color(0xFFDADADA), width: 2),
-                            ),
-                          ),
-                        ],
-                      )
-                    : type == 2
-                    ? InkWell(
-                  onTap: () => endOrder(order.id),
-                  child: Container(
-                    height: 40,
-                    width: 110,
-                    child: Icon(
-                      Icons.check,
-                      color: Colors.white,
-                      size: 23,
+                          ],
+                        )
+                      : type == 2
+                      ? InkWell(
+                    onTap: () => endOrder(order.id),
+                    child: Container(
+                      height: 40,
+                      width: 110,
+                      child: Icon(
+                        Icons.check,
+                        color: Colors.white,
+                        size: 23,
+                      ),
+                      decoration: BoxDecoration(
+                          color: Colors.green[300],
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(50)),
+                          border: Border.all(color: Colors.grey[300])),
                     ),
-                    decoration: BoxDecoration(
-                        color: Colors.green[300],
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(50)),
-                        border: Border.all(color: Colors.grey[300])),
-                  ),
-                )
-                        : Row(
-                            children: <Widget>[
-                              Container(
-                                height: 40,
-                                width: 40,
-                                child: Icon(
-                                  Icons.star,
-                                  color: Colors.white,
-                                  size: 23,
+                  )
+                          : Row(
+                              children: <Widget>[
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  child: Icon(
+                                    Icons.star,
+                                    color: Colors.white,
+                                    size: 23,
+                                  ),
+                                  decoration: BoxDecoration(
+                                      color: Colors.red[300],
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(50)),
+                                      border:
+                                          Border.all(color: Colors.grey[300])),
                                 ),
-                                decoration: BoxDecoration(
-                                    color: Colors.red[300],
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(50)),
-                                    border:
-                                        Border.all(color: Colors.grey[300])),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                rate == null || rate == "-1" ? '0' : rate,
-                                style: paragarph1.copyWith(
-                                    fontWeight: FontWeight.w100),
-                              ),
-                            ],
-                          ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 30.0),
-                child: Text(
-                  '${order.price}' + ' ' + 'ريال',
-                  textDirection: TextDirection.rtl,
-                  style: paragarph1.copyWith(
-                      fontWeight: FontWeight.w200, color: Colors.blue),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  rate == null || rate == "-1" ? '0' : rate,
+                                  style: paragarph1.copyWith(
+                                      fontWeight: FontWeight.w100),
+                                ),
+                              ],
+                            ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 30.0),
+                  child: Text(
+                    '${order.price}' + ' ' + 'ريال',
+                    textDirection: TextDirection.rtl,
+                    style: paragarph1.copyWith(
+                        fontWeight: FontWeight.w200, color: Colors.blue),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
