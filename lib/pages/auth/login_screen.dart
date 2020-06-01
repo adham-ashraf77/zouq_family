@@ -320,7 +320,7 @@ class _LoginPageState extends State<LoginPage> {
                                       builder: (BuildContext context) =>
                                           DialogWorning(
                                             mss:
-                                                'Something went wrong please try again later', //onValue.toString(),
+                                                AppLocalizations.of(context).translate('unknownError'), //onValue.toString(),
                                           ));
                                 }
                               });
@@ -331,7 +331,7 @@ class _LoginPageState extends State<LoginPage> {
                                 builder: (BuildContext context) =>
                                     DialogWorning(
                                       mss:
-                                          'Something went wrong please try again later', //onError.toString(),
+                                      AppLocalizations.of(context).translate('unknownError'), //onError.toString(),
                                     ));
                           });
                         }

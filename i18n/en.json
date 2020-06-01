@@ -102,5 +102,6 @@
   "failed": "failed, please make sure you write valid information",
   "deleteSuccess": "The product has been deleted successfully",
   "deleteFailed": "Something went wrong please check your connection and try again!",
-  "addLoading": "your product is now uploading to the app please wait"
+  "addLoading": "your product is now uploading to the app please wait",
+  "unknownError": "there is an error in the inputs that you write please make sure from the data you have enter"
 }

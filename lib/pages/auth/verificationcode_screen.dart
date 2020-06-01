@@ -80,8 +80,7 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
       showDialog(
           context: context,
           builder: (BuildContext context) => DialogWorning(
-                mss:
-                    'Something went wrong please try again later', //onError.toString(),
+                mss: AppLocalizations.of(context).translate('unknownError'), //onError.toString(),
               ));
     });
   }
