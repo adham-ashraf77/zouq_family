@@ -136,15 +136,19 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                           ? Color(0xFFF39D67).withOpacity(0.2)
                           : type == 2
                               ? Color(0xFFF39D67)
-                              : type == 3
+                              : type == 3 && order.status == 'done'
                                   ? Color(0xFF48CF84)
-                                  : Colors.blue, // border color
+                                  : type == 3 &&
+                                              order.status ==
+                                                  'c'
+                                                      'anceled' ||
+                                          order.status == "rejected"
+                                      ? Colors.red
+                                      : Colors.blue, // border color
                       border: Border.all(
                         color: type == 1
                             ? Color(0xFFF39D67)
-                            : type == 2
-                                ? Color(0xFFF39D67)
-                                : type == 3 ? Color(0xFF48CF84) : Colors.blue,
+                            : type == 2 ? Color(0xFFF39D67) : type == 3 ? Color(0xFF48CF84) : Colors.blue,
                       ),
                       borderRadius: BorderRadius.circular(10)),
                   width: 80,
@@ -154,12 +158,15 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                     type == 1
                         ? AppLocalizations.of(context).translate('newOrder')
                         : type == 2
-                            ? AppLocalizations.of(context)
-                                .translate('confirmedOrder')
-                            : type == 3
-                                ? AppLocalizations.of(context)
-                                    .translate('completedOrder')
-                                : '',
+                        ? AppLocalizations.of(context)
+                        .translate('confirmedOrder')
+                        : type == 3 && order.status == 'done'
+                        ? AppLocalizations.of(context)
+                        .translate('completedOrder')
+                        : type == 3 && order.status == 'canceled' || order.status == "rejected"
+                        ? AppLocalizations.of(context)
+                        .translate('cancelOrder')
+                        : '',
                     textDirection: TextDirection.rtl,
                     style: TextStyle(
                         color: type == 1

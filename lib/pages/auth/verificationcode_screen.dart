@@ -9,8 +9,8 @@ import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/AppButton.dart';
 
 import '../../I10n/app_localizations.dart';
-import '../../home.dart';
 import '../dialogWorning.dart';
+import 'login_screen.dart';
 
 class VerificationcodePage extends StatefulWidget {
   String phone;
@@ -52,7 +52,7 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
             mss: AppLocalizations.of(context).translate('otpError'),
               ));
     } else {
-      pushPage(context, Home());
+      pushPage(context, LoginPage());
     }
   }
 

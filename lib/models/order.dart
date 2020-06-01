@@ -13,8 +13,11 @@ class Order {
   final double rate;
   final List<Comment> comments;
   final List<Product> product;
+  final String status;
+
   Order(
       {this.id,
+      this.status,
       this.comments,
       this.rate,
       this.phoneNumber,
