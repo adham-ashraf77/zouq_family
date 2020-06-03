@@ -10,6 +10,7 @@ import 'package:zouqadmin/pages/adminEditProfilePage.dart';
 import 'package:zouqadmin/pages/adminWalletPage.dart';
 import 'package:zouqadmin/pages/auth/login_screen.dart';
 import 'package:zouqadmin/services/getuser.dart';
+import 'package:zouqadmin/services/userLanguage.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/networking.dart';
 
@@ -71,14 +72,20 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
       actions: <Widget>[
         CupertinoActionSheetAction(
           child: new Text('English'),
-          onPressed: () {
+          onPressed: ()async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            String token = prefs.getString('token');
+            UserLanguage().setLang(token: token, lang: "en");
             appLanguage.changeLanguage(Locale("en"));
             Navigator.of(context).pop();
           },
         ),
         CupertinoActionSheetAction(
           child: new Text('العربية'),
-          onPressed: () {
+          onPressed: ()async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            String token = prefs.getString('token');
+            UserLanguage().setLang(token: token, lang: "ar");
             appLanguage.changeLanguage(Locale("ar"));
             Navigator.of(context).pop();
           },
