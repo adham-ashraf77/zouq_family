@@ -28,6 +28,8 @@ class Registeration {
     String fileName = image.path.split('/').last;
     _formData = FormData.fromMap({
       "name": "$shopName",
+      "manager_name": "$shopOwnerName",
+      "identity_number": "$pIN",
       "password": "$password",
       "email": "$email",
       "phone": "$phone",

@@ -414,13 +414,13 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                   children: <Widget>[
                     Expanded(
                       child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        maxLength: 10,
                         onSaved: (value) {
                           _pIN = value;
                         },
                         validator: (value) {
-                          if (value
-                              .trim()
-                              .length == 0) {
+                          if (value.trim().length == 0) {
                             return '${AppLocalizations.of(context).translate('pINError')}';
                           }
                           return null;
