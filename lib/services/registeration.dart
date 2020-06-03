@@ -13,26 +13,28 @@ class Registeration {
   final String _currentUser = "/api/family/user";
   FormData _formData;
 
-  Future<String> registration(
-      {String name,
-      String phone,
-      String password,
-      String email,
-      bool is_delivery_available,
-      File image,
-      List<int> categories,
+  Future<String> registration({
+    String shopName,
+    String shopOwnerName,
+    String pIN,
+    String phone,
+    String password,
+    String email,
+    bool is_delivery_available,
+    File image,
+    List<int> categories,
     int city,
   }) async {
     String fileName = image.path.split('/').last;
     _formData = FormData.fromMap({
-      "name": "$name",
+      "name": "$shopName",
       "password": "$password",
       "email": "$email",
       "phone": "$phone",
-      "is_delivery_available": is_delivery_available?1:0,
-      "image": await MultipartFile.fromFile(image.path, filename:fileName),
+      "is_delivery_available": is_delivery_available ? 1 : 0,
+      "image": await MultipartFile.fromFile(image.path, filename: fileName),
       "categories": categories,
-      "city":city,
+      "city": city,
     });
     try {
       Response response =

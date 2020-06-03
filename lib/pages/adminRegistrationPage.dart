@@ -36,7 +36,9 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   String _deliveryAlert = '';
   String _cityAlert = '';
   bool _loodingImage = false;
-  String _name;
+  String _shopName;
+  String _shopOwnerName;
+  String _pIN;
   String _password;
   String _email;
   String _phone;
@@ -126,97 +128,115 @@ class _AdminRegistrationState extends State<AdminRegistration> {
     idCity = city.id;
 
     if (_image != null) {
-      if (_name != null) {
-        if (_phone != null || int.parse(_phone) == 9) {
-          if (_email != null) {
-            if (_password != null) {
-              if (selectedDeliveryService != null) {
-                if (_categories.isNotEmpty) {
-                  if (_city != null) {
-                    String response1 = await Registeration().registration(
-                        name: _name,
-                        email: _email,
-                        password: _password,
-                        phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
-                        image: _image,
-                        city: idCity,
-                        is_delivery_available: selectedDeliveryService == DeliveryService.doesDelivery ? true : false,
-                        categories: _categories);
-                    setState(() {
-                      _isLooding = false;
-                    });
+      if (_shopName != null) {
+        if (_shopOwnerName != null) {
+          if (_pIN != null) {
+            if (_phone != null || int.parse(_phone) == 9) {
+              if (_email != null) {
+                if (_password != null) {
+                  if (selectedDeliveryService != null) {
+                    if (_categories.isNotEmpty) {
+                      if (_city != null) {
+                        String response1 = await Registeration().registration(
+                            shopName: _shopName,
+                            shopOwnerName: _shopOwnerName,
+                            pIN: _pIN,
+                            email: _email,
+                            password: _password,
+                            phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
+                            image: _image,
+                            city: idCity,
+                            is_delivery_available: selectedDeliveryService == DeliveryService.doesDelivery ? true : false,
+                            categories: _categories);
+                        setState(() {
+                          _isLooding = false;
+                        });
 
-                    if (response1 != "success") {
-                      if (response1 == "phoneError")
+                        if (response1 != "success") {
+                          if (response1 == "phoneError")
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) => DialogWorning(
+                                      mss: AppLocalizations.of(context).translate('phoneDuplicatedError'),
+                                    ));
+                          else if (response1 == "emailError")
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) => DialogWorning(
+                                      mss: AppLocalizations.of(context).translate('emailDuplicatedError'),
+                                    ));
+                          else
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) => DialogWorning(
+                                      mss: response1,
+                                    ));
+                        } else {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => VerificationcodePage(
+                                        phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
+                                        flag: 1,
+                                      )));
+                        }
+                      } else {
                         showDialog(
                             context: context,
                             builder: (BuildContext context) => DialogWorning(
-                                  mss: AppLocalizations.of(context).translate('phoneDuplicatedError'),
+                                  mss: AppLocalizations.of(context).translate('chooseCity'),
                                 ));
-                      else if (response1 == "emailError")
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) => DialogWorning(
-                                  mss: AppLocalizations.of(context).translate('emailDuplicatedError'),
-                                ));
-                      else
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) => DialogWorning(
-                                  mss: response1,
-                                ));
+                      }
                     } else {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => VerificationcodePage(
-                                    phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
-                                    flag: 1,
-                                  )));
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => DialogWorning(
+                                mss: AppLocalizations.of(context).translate('categoryError'),
+                              ));
+                      setState(() {
+                        _isLooding = false;
+                      });
                     }
                   } else {
                     showDialog(
                         context: context,
                         builder: (BuildContext context) => DialogWorning(
-                              mss: AppLocalizations.of(context).translate('chooseCity'),
+                              mss: AppLocalizations.of(context).translate('deliveryServiceError'),
                             ));
                   }
                 } else {
                   showDialog(
                       context: context,
                       builder: (BuildContext context) => DialogWorning(
-                            mss: AppLocalizations.of(context).translate('categoryError'),
+                            mss: AppLocalizations.of(context).translate('passwordError'),
                           ));
-                  setState(() {
-                    _isLooding = false;
-                  });
                 }
               } else {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) => DialogWorning(
-                          mss: AppLocalizations.of(context).translate('deliveryServiceError'),
+                          mss: AppLocalizations.of(context).translate('emailError'),
                         ));
               }
             } else {
               showDialog(
                   context: context,
                   builder: (BuildContext context) => DialogWorning(
-                        mss: AppLocalizations.of(context).translate('passwordError'),
+                        mss: AppLocalizations.of(context).translate('phoneError'),
                       ));
             }
           } else {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => DialogWorning(
-                      mss: AppLocalizations.of(context).translate('emailError'),
+                      mss: AppLocalizations.of(context).translate('pINError'),
                     ));
           }
         } else {
           showDialog(
               context: context,
               builder: (BuildContext context) => DialogWorning(
-                    mss: AppLocalizations.of(context).translate('phoneError'),
+                    mss: AppLocalizations.of(context).translate('shopOwnerNameError'),
                   ));
         }
       } else {
@@ -347,17 +367,67 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                     Expanded(
                       child: TextFormField(
                         onSaved: (value) {
-                          _name = value;
+                          _shopName = value;
                         },
                         validator: (value) {
                           if (value.trim().length == 0) {
-                            return 'Please enter your Name';
+                            return '${AppLocalizations.of(context).translate('shopNameError')}';
                           }
                           return null;
                         },
                         decoration: InputDecoration(
                             hintText: AppLocalizations.of(context)
-                                .translate('username'),
+                                .translate('shopName'),
+                            hintStyle: hintTextStyle),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ListTile(
+                title: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextFormField(
+                        onSaved: (value) {
+                          _shopOwnerName = value;
+                        },
+                        validator: (value) {
+                          if (value
+                              .trim()
+                              .length == 0) {
+                            return '${AppLocalizations.of(context).translate('shopOwnerNameError')}';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context)
+                                .translate('shopOwnerName'),
+                            hintStyle: hintTextStyle),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ListTile(
+                title: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextFormField(
+                        onSaved: (value) {
+                          _pIN = value;
+                        },
+                        validator: (value) {
+                          if (value
+                              .trim()
+                              .length == 0) {
+                            return '${AppLocalizations.of(context).translate('pINError')}';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context)
+                                .translate('PIN'),
                             hintStyle: hintTextStyle),
                       ),
                     ),
