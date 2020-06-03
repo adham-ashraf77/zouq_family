@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:zouqadmin/I10n/AppLanguage.dart';
 import 'package:zouqadmin/pages/adminEditProfilePage.dart';
 import 'package:zouqadmin/pages/adminWalletPage.dart';
@@ -28,6 +29,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
   String avatarImageUrl;
   String wallet;
   String token;
+  var links;
   @override
   void didChangeDependencies() {
     SharedPreferences.getInstance().then((onValue) {
@@ -36,7 +38,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
         var x = value;
         print('X = ' + x['user'].toString());
         setState(() {
-           print('[${wallet.toString()}]');
+          print('[${wallet.toString()}]');
           name = x['user']['name'];
           avatarImageUrl = x['user']['image'];
           wallet = x['user']['wallet'].toString();
@@ -47,11 +49,25 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
     super.didChangeDependencies();
   }
 
+  getData() async {
+    var data = await NetworkHelper().getSocialMedia();
+    links = data;
+  }
+
+  launchURL(String url) async {
+    print(url);
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'could not launch $url';
+    }
+  }
+
   Widget popUp() {
     var appLanguage = Provider.of<AppLanguage>(context);
     return CupertinoActionSheet(
-      title: new Text(AppLocalizations.of(context).translate('language') ),
-      message: new Text(AppLocalizations.of(context).translate('chooselang') ),
+      title: new Text(AppLocalizations.of(context).translate('language')),
+      message: new Text(AppLocalizations.of(context).translate('chooselang')),
       actions: <Widget>[
         CupertinoActionSheetAction(
           child: new Text('English'),
@@ -82,6 +98,12 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     token = prefs.getString('token');
     Response response = await Dio().get("path");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
   }
 
   @override
@@ -133,24 +155,24 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
             ),
             Center(
               child: Text(
-                this.name == null ? AppLocalizations.of(context).translate('loading') : this.name,
+                this.name == null
+                    ? AppLocalizations.of(context).translate('loading')
+                    : this.name,
                 style: moreTextStyle,
               ),
             ),
             GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) =>
-                        AdminWalletPage(
-                            wallet
-                        )));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AdminWalletPage(wallet)));
               },
               child: ListTile(
                 leading: Text(AppLocalizations.of(context).translate('wallet'),
                     style: moreTextStyle),
                 trailing: Text(
-                  wallet.toString() == 'null' ? 'خطأ' :
-                  "$wallet ريال",
+                  wallet.toString() == 'null' ? 'خطأ' : "$wallet ريال",
                   style: moreSmallTextStyle,
                 ),
               ),
@@ -175,7 +197,8 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
               ),
               leading: Text(AppLocalizations.of(context).translate('language'),
                   style: moreTextStyle),
-              onTap: () => showCupertinoModalPopup(context: context, builder: (BuildContext context) => popUp()),
+              onTap: () => showCupertinoModalPopup(
+                  context: context, builder: (BuildContext context) => popUp()),
             ),
             Divider(
               color: iconsFaded,
@@ -217,8 +240,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            EULAPage(
+                        builder: (context) => EULAPage(
                               data: data,
                             )));
               },
@@ -242,8 +264,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            FAQPage(
+                        builder: (context) => FAQPage(
                               data: data,
                             )));
               },
@@ -277,25 +298,103 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                 ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: CircleAvatar(
-                    backgroundColor: Color(0xff4267b2),
-                    child: IconButton(
-                      onPressed: () {
-                        //TODO add facebook pageview
-                      },
-                      icon: Icon(
-                        FontAwesomeIcons.facebookF,
-                        color: Colors.white,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    child: CircleAvatar(
+                      backgroundColor: Color(0xff128C7E),
+                      child: IconButton(
+                        onPressed: () {
+                          launchURL(links['whatsapp']);
+                        },
+                        icon: Icon(
+                          FontAwesomeIcons.whatsappSquare,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    child: CircleAvatar(
+                      backgroundColor: Color(0xffc4302b),
+                      child: IconButton(
+                        onPressed: () {
+                          launchURL("${links['youtube']}");
+                        },
+                        icon: Icon(
+                          FontAwesomeIcons.youtubeSquare,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    child: CircleAvatar(
+                      backgroundColor: Color(0xffE1306C),
+                      child: IconButton(
+                        onPressed: () {
+                          launchURL("${links['instagram']}");
+                        },
+                        icon: Icon(
+                          FontAwesomeIcons.instagram,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    child: CircleAvatar(
+                      backgroundColor: Color(0xff4267b2),
+                      child: IconButton(
+                        onPressed: () {
+                          launchURL("${links['facebook']}");
+                        },
+                        icon: Icon(
+                          FontAwesomeIcons.facebookSquare,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.black,
+                      child: IconButton(
+                        onPressed: () {
+                          launchURL("${links['snapchat']}");
+                        },
+                        icon: Icon(
+                          FontAwesomeIcons.snapchatSquare,
+                          color: Color(0xffFFFC00),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    child: CircleAvatar(
+                      backgroundColor: Color(0xff00acee),
+                      child: IconButton(
+                        onPressed: () {
+                          launchURL("${links['twitter']}");
+                        },
+                        icon: Icon(
+                          FontAwesomeIcons.twitterSquare,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             SizedBox(
               height: 60.0,
