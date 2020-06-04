@@ -48,15 +48,24 @@ class _ProductsPageState extends State<ProductsPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         // pinned: true,
-        title: Text("ذوق", style: headers1),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text("ذوق", style: headers1),
+            Image.asset(
+              'assets/images/logo.png',
+              scale: 18,
+            ),
+          ],
+        ),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
             icon: new Image.asset('assets/icons/add.png'),
             onPressed: () {
               //TODO go add product screen
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddItemPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AddItemPage()));
             },
           ),
         ],

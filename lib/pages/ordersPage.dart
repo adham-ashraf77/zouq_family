@@ -134,7 +134,17 @@ class _OrdersPageState extends State<OrdersPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         // pinned: true,
-        title: Text("ذوق", style: headers1),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text("ذوق", style: headers1),
+            Image.asset(
+              'assets/images/logo.png',
+              scale: 18,
+            ),
+          ],
+        ),
         centerTitle: true,
         actions: <Widget>[
           IconButton(

@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zouqadmin/models/order.dart';
 import 'package:zouqadmin/models/product.dart';
+import 'package:zouqadmin/services/accept_or_reject_order.dart';
 import 'package:zouqadmin/services/end_order.dart';
 import 'package:zouqadmin/services/getorderwithproducts.dart';
 import 'package:zouqadmin/theme/common.dart';
@@ -16,16 +17,12 @@ import '../home.dart';
 
 class OrdersViewPage extends StatefulWidget {
   static const routeName = '/oredersViewPage';
-  final String id;
-
-  const OrdersViewPage({@required this.id});
 
   @override
-  _OrdersViewPageState createState() => _OrdersViewPageState(id);
+  _OrdersViewPageState createState() => _OrdersViewPageState();
 }
 
 class _OrdersViewPageState extends State<OrdersViewPage> {
-  final String id;
   String link =
       'https://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=600x300&maptype=roadmap' +
           '&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318' +
@@ -35,7 +32,6 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
   ///TODO .. The Google Maps Platform server rejected your request. You must enable Billing on the Google Cloud Project at https://console.cloud.google.com/project/_/billing/enable Learn more at https://developers.google.com/maps/gmp-get-started
   final int type = 1;
 
-  _OrdersViewPageState(this.id);
   String rate;
   bool firstTime = true;
   String latitude;
@@ -68,10 +64,13 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
     final Order order = index[0];
     final int type = index[1];
 
+    acceptOrRejectOrder({String orderStatus}) async {
+      await AcceptOrRejectOrder().postOrderStatus(orderId: order.id, orderStatus: orderStatus);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home()));
+    }
+
     firstTime
-        ? GetOrderWithProducts()
-            .getOrderWithProducts(id: order.id)
-            .then((onValue) {
+        ? GetOrderWithProducts().getOrderWithProducts(id: order.id).then((onValue) {
             //TODO here and using onValue u can get any info about the product
             latitude = jsonDecode(onValue.toString())['order']['latitude'];
             longitude = jsonDecode(onValue.toString())['order']['longitude'];
@@ -98,7 +97,15 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("ذوق", style: TextStyle(color: Colors.blue),),
+        title:
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text("ذوق", style: TextStyle(color: Colors.blue),),
+            Image.asset('assets/images/logo.png', scale: 22,),
+          ],
+        ),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -404,38 +411,44 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                   child: type == 1
                       ? Row(
                           children: <Widget>[
-                            Container(
-                              height: 40,
-                              width: 40,
-                              child: Icon(
-                                Icons.close,
-                                color: rejectedColor,
-                                size: 23,
+                            InkWell(
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                child: Icon(
+                                  Icons.close,
+                                  color: rejectedColor,
+                                  size: 23,
+                                ),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(50)),
+                                    border: Border.all(
+                                        color: Color(0xFFDADADA), width: 2)),
                               ),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(50)),
-                                  border: Border.all(
-                                      color: Color(0xFFDADADA), width: 2)),
+                              onTap: () => acceptOrRejectOrder(orderStatus: "reject"),
                             ),
                             SizedBox(
                               width: 12,
                             ),
-                            Container(
-                              height: 40,
-                              width: 70,
-                              child: Icon(
-                                Icons.check,
-                                color: accent,
-                                size: 23,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(50)),
-                                border: Border.all(
-                                    color: Color(0xFFDADADA), width: 2),
+                            InkWell(
+                              onTap: () => acceptOrRejectOrder(orderStatus: "approve"),
+                              child: Container(
+                                height: 40,
+                                width: 70,
+                                child: Icon(
+                                  Icons.check,
+                                  color: accent,
+                                  size: 23,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(50)),
+                                  border: Border.all(
+                                      color: Color(0xFFDADADA), width: 2),
+                                ),
                               ),
                             ),
                           ],
