@@ -105,7 +105,10 @@ flutter:
         - asset: assets/fonts/Dubai-Regular.ttf
           weight: 300
         - asset: assets/fonts/Dubai-Bold.ttf
-          weight: 700  
+          weight: 700
+    - family: cairo
+      fonts:
+        - asset: assets/fonts/Cairo-Regular.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
