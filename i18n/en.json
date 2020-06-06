@@ -39,6 +39,9 @@
   "deliveryServiceError": "please select delivery service",
   "categoryError": "please choose a category",
   "termsError": "Please check Agree to the terms & EULA",
+  "terms": "Terms and conditions",
+  "termsAgree": "Agree to Terms & EULA",
+  "percantAgree": "the app has 10% from total sales",
   "shortPassword": "Password is too short",
   "delivery": "Can deliver",
   "noDelivery": "No Delivery",
@@ -70,6 +73,7 @@
   "editProfile": "Edit profile",
   "description": "Description",
   "edit": "Edit",
+  "editStatus": "edit status",
   "or": "Or",
   "editPhone": "Edit phone",
   "isDeliveryAvailable": "Is delivery available",
@@ -110,6 +114,9 @@
   "deleteFailed": "Something went wrong please check your connection and try again!",
   "addLoading": "your product is now uploading to the app please wait",
   "unknownError": "there is an error in the inputs that you write please make sure from the data you have enter",
-  "chooselang":"Choose your language",
-  "cancel":"Cancel"
+  "chooselang": "Choose your language",
+  "cancel": "Cancel",
+  "available": "available",
+  "notAvailable": "not available for now",
+  "onDemand": "on demands request"
 }

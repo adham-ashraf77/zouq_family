@@ -29,12 +29,19 @@ class EditItemPage extends StatefulWidget {
 
 class _EditItemPageState extends State<EditItemPage> {
   final String id;
+
+  bool avalaible = false;
+  bool onDemand = false;
+  bool notAvalaible = false;
+
   _EditItemPageState({this.id});
+
   String _dropdownValue;
   VideoPlayerController vbc;
   File productVideo;
   File _image;
   File _video;
+
   // List<File> images = [null, null, null, null, null];
   final nameTextFieldController = TextEditingController();
   final priceTextFieldController = TextEditingController();
@@ -694,6 +701,8 @@ class _EditItemPageState extends State<EditItemPage> {
                         maxLines: 3,
                       ),
                     ),
+
+                    Padding(padding: EdgeInsets.only(top: 20)),
                     GestureDetector(
                       onTap: updateProduct,
                       child: Padding(

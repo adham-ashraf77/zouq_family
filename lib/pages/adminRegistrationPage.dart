@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:path/path.dart' as p;
 import 'package:zouqadmin/models/categories.dart';
 import 'package:zouqadmin/models/cities.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
+import 'package:zouqadmin/pages/terms.dart';
 import 'package:zouqadmin/services/getData.dart';
 import 'package:zouqadmin/services/registeration.dart';
 import 'package:zouqadmin/theme/common.dart';
@@ -42,6 +44,8 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   String _password;
   String _email;
   String _phone;
+  String _agreeAlert = "";
+  String _percantAlert = "";
   bool _is_delivery_available;
   File _image;
   List<int> _categories = [];
@@ -52,6 +56,9 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   List<Cities> _allCity = [];
   List<String> _showCity = [];
   bool _isLooding = false;
+
+  bool _agree = false;
+  bool percant = false;
 
   Future getImage() async {
     setState(() {
@@ -80,6 +87,24 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   }
 
   validation() {
+    if (percant == false) {
+      setState(() {
+        _percantAlert = AppLocalizations.of(context).translate('percantEror');
+      });
+    } else {
+      setState(() {
+        _percantAlert = "";
+      });
+    }
+    if (_agree == false) {
+      setState(() {
+        _agreeAlert = AppLocalizations.of(context).translate('termsError');
+      });
+    } else {
+      setState(() {
+        _agreeAlert = "";
+      });
+    }
     if (_image == null) {
       setState(() {
         _imageAlert = "please select image";
@@ -112,10 +137,14 @@ class _AdminRegistrationState extends State<AdminRegistration> {
       if (_image != null) {
         if (selectedDeliveryService != null) {
           if (_city != null) {
-            setState(() {
-              _isLooding = true;
-            });
-            registration();
+            if (_agreeAlert.isEmpty) {
+              if (_percantAlert.isEmpty) {
+                setState(() {
+                  _isLooding = true;
+                });
+                registration();
+              }
+            }
           }
         }
       }
@@ -688,6 +717,120 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                 style: TextStyle(color: Colors.red, fontSize: 12),
                 textAlign: TextAlign.start,
               ),
+
+              Padding(
+                padding: EdgeInsets.only(left: 25.0, top: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _agree = !_agree;
+                          });
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: _agree ? accent : Color(0xFF636363),
+                              ),
+                              borderRadius: BorderRadius.circular(50)),
+                          child: CircleAvatar(
+                            child: Icon(
+                              FontAwesomeIcons.check,
+                              color: Colors.white,
+                              size: 9.0,
+                            ),
+                            radius: 10.0,
+                            backgroundColor: _agree ? accent : Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        Response response = await Dio().get('http://api.dhuqapp.com/api/content/page/terms-and-conditions');
+                        var data = response.data;
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => TermsAndConditionsPage(
+                            data: data,
+                          ),
+                        ));
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('termsAgree'),
+                        style: paragarph4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                child: Text(
+                  "$_agreeAlert",
+                  style: TextStyle(color: Colors.red, fontSize: 12),
+                  textAlign: TextAlign.start,
+                ),
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(left: 25.0, top: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            percant = !percant;
+                          });
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: percant ? accent : Color(0xFF636363),
+                              ),
+                              borderRadius: BorderRadius.circular(50)),
+                          child: CircleAvatar(
+                            child: Icon(
+                              FontAwesomeIcons.check,
+                              color: Colors.white,
+                              size: 9.0,
+                            ),
+                            radius: 10.0,
+                            backgroundColor: percant ? accent : Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    InkWell(
+                      child: Text(
+                        AppLocalizations.of(context).translate('percantAgree'),
+                        style: paragarph4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                child: Text(
+                  "$_percantAlert",
+                  style: TextStyle(color: Colors.red, fontSize: 12),
+                  textAlign: TextAlign.start,
+                ),
+              ),
+
               ListTile(
                 title: _isLooding
                     ? Center(
