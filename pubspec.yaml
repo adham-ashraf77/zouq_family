@@ -109,6 +109,9 @@ flutter:
     - family: cairo
       fonts:
         - asset: assets/fonts/Cairo-Regular.ttf
+    - family: insan
+      fonts:
+        - asset: assets/fonts/Insan-Regular.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -117,7 +117,7 @@
   "unknownError": "هناك خطأ فالتطبيق ارجو مراجعه البيانات و المجاوله مره اخرى",
   "chooselang": "اختر اللغة",
   "cancel": "الغاء",
-  "available": "متاح",
-  "notAvailable": "غير متاح حاليا",
-  "onDemand": "على حسب الطلب"
+  "available": "متوفر",
+  "notAvailable": "غير متوفر",
+  "onDemand": "حسب الطلب"
 }

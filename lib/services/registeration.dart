@@ -62,6 +62,13 @@ class Registeration {
         "city": city,
       });
     } else {
+      print(pIN);
+      print(pIN.length);
+      if (pIN.length == 11) {
+        pIN = pIN.substring(0, 10);
+        print(pIN);
+        print(pIN.length);
+      }
       _formData = FormData.fromMap({
         "name": "$shopName",
         "manager_name": "$shopOwnerName",

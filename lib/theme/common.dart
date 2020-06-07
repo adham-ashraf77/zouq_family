@@ -24,10 +24,8 @@ Color confirmedBgColor = Color(0xFFF6EDE7);
 /// Text Styles
 ///////////////////////////////////////////////////////////
 
-TextStyle headers =
-    TextStyle(color: textColor, fontWeight: FontWeight.w700, fontSize: 45);
-TextStyle headers1 =
-    TextStyle(color: textColor, fontWeight: FontWeight.w400, fontSize: 35);
+TextStyle headers = TextStyle(color: textColor, fontWeight: FontWeight.w700, fontSize: 45);
+TextStyle headers1 = TextStyle(color: textColor, fontWeight: FontWeight.w400, fontSize: 40, fontFamily: 'insan');
 TextStyle headers1bold = TextStyle(color: textColor, fontWeight: FontWeight.w700, fontSize: 35);
 TextStyle headers2 = TextStyle(color: textColor, fontWeight: FontWeight.w300, fontSize: 30);
 TextStyle headers3 = TextStyle(color: textColor, fontWeight: FontWeight.w300, fontSize: 25);
