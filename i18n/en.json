@@ -119,5 +119,6 @@
   "available": "available",
   "notAvailable": "not available for now",
   "onDemand": "on demands request",
-  "withdrawSuccess": "withdraw request success"
+  "withdrawSuccess": "withdraw request success",
+  "deleteProductFailed": "you can`t delete this product because there is un finished order contain that product"
 }

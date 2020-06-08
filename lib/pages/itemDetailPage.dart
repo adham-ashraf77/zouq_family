@@ -84,19 +84,25 @@ class _ItemDetailState extends State<ItemDetail> {
         showDialog(
             context: context,
             builder: (BuildContext context) => DialogWorning(
-              mss: AppLocalizations.of(context).translate('deleteSuccess'),
+                  mss: AppLocalizations.of(context).translate('deleteSuccess'),
                 )).then((_) {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => Home(),
           ));
         });
+      } else if (onValue.toString().contains('order contains it')) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => DialogWorning(
+                  mss: AppLocalizations.of(context).translate('deleteProductFailed'),
+                ));
       } else {
         print('Error ' + onValue.toString());
 
         showDialog(
             context: context,
             builder: (BuildContext context) => DialogWorning(
-              mss: AppLocalizations.of(context).translate('deleteFailed'),
+                  mss: AppLocalizations.of(context).translate('deleteFailed'),
                 ));
       }
     });

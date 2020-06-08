@@ -120,5 +120,6 @@
   "available": "متوفر",
   "notAvailable": "غير متوفر",
   "onDemand": "حسب الطلب",
-  "withdrawSuccess": "تم طلب السحب بنجاح"
+  "withdrawSuccess": "تم طلب السحب بنجاح",
+  "deleteProductFailed": "لا يمكن حذف هذا المنتج الان لأن هناك طلب عليه لم بكتمل"
 }
