@@ -21,12 +21,17 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
   TextEditingController IbanController = TextEditingController();
   TextEditingController quantityController = TextEditingController();
 
-  withdraw() {
-    Withdraw().withdrawMoney(
+  withdraw(BuildContext context) async {
+    await Withdraw().withdrawMoney(
       bankName: bankNameController.text,
       iban: int.parse(IbanController.text),
       quantity: double.parse(quantityController.text),
     );
+    final snackBar = SnackBar(content: Text('${AppLocalizations.of(context).translate('withdrawSuccess')}'));
+
+// Find the Scaffold in the widget tree and use it to show a SnackBar.
+    Scaffold.of(context).showSnackBar(snackBar);
+    Future.delayed(Duration(seconds: 2), () => Navigator.of(context).pop());
   }
 
   @override
@@ -36,8 +41,9 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
         title: Text("ذوق", style: TextStyle(color: Colors.blue),),
         centerTitle: true,
       ),
-      body: SafeArea(
-          child: ListView(
+      body: SafeArea(child: Builder(
+        builder: (context) {
+          return ListView(
             padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
             children: <Widget>[
               Center(
@@ -58,8 +64,7 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                   ),
                   child: Column(
                     children: <Widget>[
-                      Text(' ريال' + "${widget.walletAmount}",
-                          style: TextStyle(color: Colors.white, fontSize: 25.0)),
+                      Text(' ريال' + "${widget.walletAmount}", style: TextStyle(color: Colors.white, fontSize: 25.0)),
                       SizedBox(
                         height: 5.0,
                       ),
@@ -92,8 +97,7 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                         controller: quantityController,
                         decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: AppLocalizations.of(context)
-                                .translate('transactionAmount'),
+                            hintText: AppLocalizations.of(context).translate('transactionAmount'),
                             hintStyle: hintTextStyle),
                       ),
                     ),
@@ -112,8 +116,7 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                         controller: bankNameController,
                         decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText:
-                            AppLocalizations.of(context).translate('bank'),
+                            hintText: AppLocalizations.of(context).translate('bank'),
                             hintStyle: hintTextStyle),
                       ),
                     ),
@@ -132,8 +135,7 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                         controller: IbanController,
                         decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText:
-                            AppLocalizations.of(context).translate('bankId'),
+                            hintText: AppLocalizations.of(context).translate('bankId'),
                             hintStyle: hintTextStyle),
                       ),
                     ),
@@ -151,9 +153,7 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                 title: Container(
                   height: 150.0,
                   padding: EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 0.5),
-                      borderRadius: BorderRadius.circular(15.0)),
+                  decoration: BoxDecoration(border: Border.all(width: 0.5), borderRadius: BorderRadius.circular(15.0)),
                   child: TextField(
                     decoration: InputDecoration(
                         border: InputBorder.none,
@@ -167,17 +167,19 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
               ),
               ListTile(
                 title: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
                   color: accent,
                   child: Text(
                     AppLocalizations.of(context).translate('withdraw'),
                     style: TextStyle(color: Colors.white, fontSize: 25.0),
                   ),
-                  onPressed: () => withdraw(),),
+                  onPressed: () => withdraw(context),
+                ),
               ),
             ],
-          )),
+          );
+        },
+      )),
     );
   }
 }

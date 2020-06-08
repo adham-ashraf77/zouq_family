@@ -118,5 +118,6 @@
   "cancel": "Cancel",
   "available": "available",
   "notAvailable": "not available for now",
-  "onDemand": "on demands request"
+  "onDemand": "on demands request",
+  "withdrawSuccess": "withdraw request success"
 }

@@ -119,5 +119,6 @@
   "cancel": "الغاء",
   "available": "متوفر",
   "notAvailable": "غير متوفر",
-  "onDemand": "حسب الطلب"
+  "onDemand": "حسب الطلب",
+  "withdrawSuccess": "تم طلب السحب بنجاح"
 }
