@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 import 'package:zouqadmin/models/product_comments&rating.dart';
@@ -30,17 +32,26 @@ class _ItemDetailState extends State<ItemDetail> {
   final String orderId;
 
   _ItemDetailState({this.orderId});
+
   int _current = 0;
+
   //VideoPlayerController _controller;
   Future<void> _initializeVideoPlayerFuture;
 
   String name;
+  String productStatus;
+  String productMeta;
   String videoUrl;
   String rate;
   String price;
   String description;
+  int productId;
   bool isLoading = true;
   bool isPlay = false;
+  bool avalaible = false;
+  bool onDemand = false;
+  bool notAvalaible = false;
+  TextEditingController onDemandController = TextEditingController();
   VideoPlayerController _controller;
   List<ProductsCommentsAndRating> productsCommentsAndRating = List<ProductsCommentsAndRating>();
 
@@ -73,19 +84,25 @@ class _ItemDetailState extends State<ItemDetail> {
         showDialog(
             context: context,
             builder: (BuildContext context) => DialogWorning(
-              mss: AppLocalizations.of(context).translate('deleteSuccess'),
+                  mss: AppLocalizations.of(context).translate('deleteSuccess'),
                 )).then((_) {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => Home(),
           ));
         });
+      } else if (onValue.toString().contains('order contains it')) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => DialogWorning(
+                  mss: AppLocalizations.of(context).translate('deleteProductFailed'),
+                ));
       } else {
         print('Error ' + onValue.toString());
 
         showDialog(
             context: context,
             builder: (BuildContext context) => DialogWorning(
-              mss: AppLocalizations.of(context).translate('deleteFailed'),
+                  mss: AppLocalizations.of(context).translate('deleteFailed'),
                 ));
       }
     });
@@ -122,14 +139,50 @@ class _ItemDetailState extends State<ItemDetail> {
     }
   }
 
+  void updateStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    FormData formdata;
+    avalaible
+        ? formdata = FormData.fromMap({
+            "availability_status": "ready",
+          })
+        : notAvalaible
+            ? formdata = FormData.fromMap({
+                "availability_status": "unavailable",
+              })
+            : formdata =
+                FormData.fromMap({"availability_status": "upon-request", "availability_meta": "${onDemandController.text}"});
+    try {
+      print(productId);
+      await Dio().post('https://api.dhuqapp.com/api/family/products/$productId/availability',
+          data: formdata,
+          options: Options(
+            headers: {HttpHeaders.authorizationHeader: "Bearer $token"},
+          ));
+      getData();
+      setState(() {});
+//      Navigator.of(context).pushReplacement(
+//          MaterialPageRoute(builder: (context) => Home(),)
+//      );
+    } on DioError catch (e) {
+      print('error from change status of product');
+      print(e.response.data);
+    }
+  }
+
   Future getData() {
     Show().show(productID: orderId).then((onValue) {
-      print('Product ID : ' + orderId.toString());
+      print('order ID : ' + orderId.toString());
       print('onValue : ' + onValue.toString());
       var x = jsonDecode(onValue.toString());
       var y = x['product'];
+      var availability = x['product']['availability'];
 
       setState(() {
+        this.productStatus = availability['status'];
+        this.productMeta = availability['meta'];
+        this.productId = y['id'];
         this.name = y['name'];
         this.price = y['price'];
         this.rate = y['rate'].toString();
@@ -421,6 +474,135 @@ class _ItemDetailState extends State<ItemDetail> {
                                 ),
                               ),
                             ),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                                  border: Border.all(color: productStatus == 'ready' ? Colors.cyan : Colors.orange)
+                              ),
+                              child: Text('${
+                                  productStatus == 'ready' ?
+                                  '${AppLocalizations.of(context).translate('available')}' :
+                                  productStatus == 'unavailable' ?
+                                  '${AppLocalizations.of(context).translate('notAvailable')}' :
+                                  '${AppLocalizations.of(context).translate('onDemand')}'
+                              }'),
+                            ),
+                            Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+                            productMeta.isEmpty ?
+                            Container() :
+                            Text('$productMeta', style: TextStyle(color: Colors.orange),),
+                            SizedBox(
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    InkWell(
+                                      onTap: () {
+                                        avalaible = true;
+                                        notAvalaible = false;
+                                        onDemand = false;
+                                        setState(() {});
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 10),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                                          border: Border.all(color: Colors.cyan),
+                                          color: avalaible ? Colors.green : Colors.transparent,
+                                        ),
+                                        child: Text('${AppLocalizations.of(context).translate('available')}'),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        avalaible = false;
+                                        notAvalaible = true;
+                                        onDemand = false;
+                                        setState(() {});
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 10),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                                          border: Border.all(color: Colors.cyan),
+                                          color: notAvalaible ? Colors.green : Colors.transparent,
+
+                                        ),
+                                        child: Text('${AppLocalizations.of(context).translate('notAvailable')}'),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        avalaible = false;
+                                        notAvalaible = false;
+                                        onDemand = true;
+                                        setState(() {});
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 10),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                                          border: Border.all(color: Colors.cyan),
+                                          color: onDemand ? Colors.green : Colors.transparent,
+                                        ),
+                                        child: Text('${AppLocalizations.of(context).translate('onDemand')}'),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: updateStatus,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(25),
+                                          ),
+                                          color: Color.fromRGBO(29, 174, 209, 1),
+                                        ),
+                                        padding: EdgeInsets.symmetric(horizontal: 10),
+                                        child: Center(
+                                          child: Text(
+                                            AppLocalizations.of(context).translate('editStatus'),
+                                            style: TextStyle(color: mainColor, fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            onDemand ?
+                            Padding(
+                              padding: EdgeInsets.only(left: 30, top: 15),
+                              child: TextFormField(
+                                controller: onDemandController,
+                                validator: (value) {
+                                  if (value.length < 10) {
+                                    return 'description must be at least 10 charcters';
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  border: new OutlineInputBorder(
+                                    borderRadius: new BorderRadius.circular(10.0),
+                                    borderSide: new BorderSide(
+                                      color: Colors.black,
+                                      width: 0.2,
+                                    ),
+                                  ),
+                                  hintText: AppLocalizations.of(context).translate('productDescription'),
+                                  hintStyle: TextStyle(color: Colors.black54, fontSize: 15),
+                                ),
+                                maxLines: 3,
+                              ),
+                            ) : Container(),
+
+                            Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                             RatingChip(rating: double.parse(this.rate)),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 20),

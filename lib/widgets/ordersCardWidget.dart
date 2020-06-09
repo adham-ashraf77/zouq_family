@@ -137,8 +137,8 @@ class OrdersCard extends StatelessWidget {
                                       ? Container()
                                       : InkWell(
                                     onTap: type == 1 ? rejectFunction : () {
-                                      if (type == 2) whatsAppOpen(phone: order.phoneNumber);
-                                    },
+                                      if (type == 2) _makePhoneCall('tel:${order.phoneNumber}');
+                                                },
                                     child: Container(
                                       height: MediaQuery
                                           .of(context)

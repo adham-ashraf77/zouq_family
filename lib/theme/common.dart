@@ -24,21 +24,12 @@ Color confirmedBgColor = Color(0xFFF6EDE7);
 /// Text Styles
 ///////////////////////////////////////////////////////////
 
-TextStyle headers =
-    TextStyle(color: textColor, fontWeight: FontWeight.w700, fontSize: 45);
-TextStyle headers1 =
-    TextStyle(color: textColor, fontWeight: FontWeight.w400, fontSize: 35);
-TextStyle headers1bold =
-    TextStyle(color: textColor, fontWeight: FontWeight.w700, fontSize: 35);
-TextStyle headers2 =
-    TextStyle(color: textColor, fontWeight: FontWeight.w300, fontSize: 30);
-TextStyle headers3 =
-    TextStyle(color: textColor, fontWeight: FontWeight.w300, fontSize: 25);
-TextStyle headers4 = TextStyle(
-    color: textColor,
-    fontWeight: FontWeight.bold,
-    fontSize: 20,
-    fontFamily: "Dubai");
+TextStyle headers = TextStyle(color: textColor, fontWeight: FontWeight.w700, fontSize: 45);
+TextStyle headers1 = TextStyle(color: textColor, fontWeight: FontWeight.w400, fontSize: 40, fontFamily: 'insan');
+TextStyle headers1bold = TextStyle(color: textColor, fontWeight: FontWeight.w700, fontSize: 35);
+TextStyle headers2 = TextStyle(color: textColor, fontWeight: FontWeight.w300, fontSize: 30);
+TextStyle headers3 = TextStyle(color: textColor, fontWeight: FontWeight.w300, fontSize: 25);
+TextStyle headers4 = TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 20, fontFamily: "cairo");
 
 TextStyle accentColorHeader = TextStyle(
   color: accent,
@@ -76,23 +67,23 @@ TextStyle priceText1 = TextStyle(
 TextStyle moreTextStyle = TextStyle(
     color: Color(0xFF4D4D4D),
     fontSize: 20,
-    fontFamily: 'Dubai',
+    fontFamily: 'cairo',
     fontWeight: FontWeight.w700);
 TextStyle moreTextStyle1 = TextStyle(
     color: Color(0xFF4D4D4D),
     fontSize: 18,
-    fontFamily: 'Dubai',
+    fontFamily: 'cairo',
     fontWeight: FontWeight.w700);
 TextStyle moreSmallTextStyle = TextStyle(
     color: Color(0xFF929292),
     fontSize: 15,
-    fontFamily: 'Dubai',
+    fontFamily: 'cairo',
     fontWeight: FontWeight.w700);
 
 TextStyle hintTextStyle = TextStyle(
     color: Color(0xFF636363),
     fontSize: 18.0,
-    fontFamily: 'Dubai',
+    fontFamily: 'cairo',
     fontWeight: FontWeight.w500);
 
 ///////////////////////////////////////////////////////////
@@ -100,7 +91,7 @@ TextStyle hintTextStyle = TextStyle(
 ///////////////////////////////////////////////////////////
 
 ThemeData appTheme = ThemeData(
-    appBarTheme: appBarTheme, brightness: appBrightness, fontFamily: "Dubai");
+    appBarTheme: appBarTheme, brightness: appBrightness, fontFamily: "cairo");
 
 Brightness appBrightness = Brightness.light;
 

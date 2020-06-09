@@ -11,14 +11,17 @@ class Delete {
   Future<dynamic> delete({@required String productID}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
-    Response response = await Dio()
-        .delete('$_url$_delete$productID',
-            options: Options(
-              headers: {HttpHeaders.authorizationHeader: "Bearer $token"},
-            ))
-        .catchError((onError) {
-      print('delete_1' + onError.toString());
-    });
+    Response response;
+    try {
+      response = await Dio().delete('$_url$_delete$productID',
+          options: Options(
+            headers: {HttpHeaders.authorizationHeader: "Bearer $token"},
+          ));
+    } on DioError catch (e) {
+      print(e.response.data);
+      print(e.response.data['message']);
+      return e.response.data['message'];
+    }
     print('delete ' + response.toString());
     return response;
   }

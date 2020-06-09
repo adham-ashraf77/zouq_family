@@ -26,21 +26,65 @@ class Registeration {
     int city,
   }) async {
     String fileName = image.path.split('/').last;
-    _formData = FormData.fromMap({
-      "name": "$shopName",
-      "manager_name": "$shopOwnerName",
-      "identity_number": "$pIN",
-      "password": "$password",
-      "email": "$email",
-      "phone": "$phone",
-      "is_delivery_available": is_delivery_available ? 1 : 0,
-      "image": await MultipartFile.fromFile(image.path, filename: fileName),
-      "categories": categories,
-      "city": city,
-    });
+    if (shopOwnerName == null || shopOwnerName.isEmpty && pIN == null || pIN.isEmpty) {
+      _formData = FormData.fromMap({
+        "name": "$shopName",
+        "password": "$password",
+        "email": "$email",
+        "phone": "$phone",
+        "is_delivery_available": is_delivery_available ? 1 : 0,
+        "image": await MultipartFile.fromFile(image.path, filename: fileName),
+        "categories": categories,
+        "city": city,
+      });
+    } else if (shopOwnerName == null || shopOwnerName.isEmpty) {
+      _formData = FormData.fromMap({
+        "name": "$shopName",
+        "identity_number": int.parse(pIN),
+        "password": "$password",
+        "email": "$email",
+        "phone": "$phone",
+        "is_delivery_available": is_delivery_available ? 1 : 0,
+        "image": await MultipartFile.fromFile(image.path, filename: fileName),
+        "categories": categories,
+        "city": city,
+      });
+    } else if (pIN == null || pIN.isEmpty) {
+      _formData = FormData.fromMap({
+        "name": "$shopName",
+        "manager_name": "$shopOwnerName",
+        "password": "$password",
+        "email": "$email",
+        "phone": "$phone",
+        "is_delivery_available": is_delivery_available ? 1 : 0,
+        "image": await MultipartFile.fromFile(image.path, filename: fileName),
+        "categories": categories,
+        "city": city,
+      });
+    } else {
+      print(pIN);
+      print(pIN.length);
+      if (pIN.length == 11) {
+        pIN = pIN.substring(0, 10);
+        print(pIN);
+        print(pIN.length);
+      }
+      _formData = FormData.fromMap({
+        "name": "$shopName",
+        "manager_name": "$shopOwnerName",
+        "identity_number": int.parse(pIN),
+        "password": "$password",
+        "email": "$email",
+        "phone": "$phone",
+        "is_delivery_available": is_delivery_available ? 1 : 0,
+        "image": await MultipartFile.fromFile(image.path, filename: fileName),
+        "categories": categories,
+        "city": city,
+      });
+    }
+
     try {
-      Response response =
-          await Dio().post("$_url$_registeraAndSendConfirm", data: _formData);
+      Response response = await Dio().post("$_url$_registeraAndSendConfirm", data: _formData);
       print(response.data);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         return "success";

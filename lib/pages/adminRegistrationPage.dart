@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:path/path.dart' as p;
 import 'package:zouqadmin/models/categories.dart';
 import 'package:zouqadmin/models/cities.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
+import 'package:zouqadmin/pages/terms.dart';
 import 'package:zouqadmin/services/getData.dart';
 import 'package:zouqadmin/services/registeration.dart';
 import 'package:zouqadmin/theme/common.dart';
@@ -42,6 +44,8 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   String _password;
   String _email;
   String _phone;
+  String _agreeAlert = "";
+  String _percantAlert = "";
   bool _is_delivery_available;
   File _image;
   List<int> _categories = [];
@@ -52,6 +56,9 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   List<Cities> _allCity = [];
   List<String> _showCity = [];
   bool _isLooding = false;
+
+  bool _agree = false;
+  bool percant = false;
 
   Future getImage() async {
     setState(() {
@@ -80,6 +87,24 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   }
 
   validation() {
+    if (percant == false) {
+      setState(() {
+        _percantAlert = AppLocalizations.of(context).translate('percantEror');
+      });
+    } else {
+      setState(() {
+        _percantAlert = "";
+      });
+    }
+    if (_agree == false) {
+      setState(() {
+        _agreeAlert = AppLocalizations.of(context).translate('termsError');
+      });
+    } else {
+      setState(() {
+        _agreeAlert = "";
+      });
+    }
     if (_image == null) {
       setState(() {
         _imageAlert = "please select image";
@@ -112,10 +137,14 @@ class _AdminRegistrationState extends State<AdminRegistration> {
       if (_image != null) {
         if (selectedDeliveryService != null) {
           if (_city != null) {
-            setState(() {
-              _isLooding = true;
-            });
-            registration();
+            if (_agreeAlert.isEmpty) {
+              if (_percantAlert.isEmpty) {
+                setState(() {
+                  _isLooding = true;
+                });
+                registration();
+              }
+            }
           }
         }
       }
@@ -129,114 +158,98 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 
     if (_image != null) {
       if (_shopName != null) {
-        if (_shopOwnerName != null) {
-          if (_pIN != null) {
-            if (_phone != null || int.parse(_phone) == 9) {
-              if (_email != null) {
-                if (_password != null) {
-                  if (selectedDeliveryService != null) {
-                    if (_categories.isNotEmpty) {
-                      if (_city != null) {
-                        String response1 = await Registeration().registration(
-                            shopName: _shopName,
-                            shopOwnerName: _shopOwnerName,
-                            pIN: _pIN,
-                            email: _email,
-                            password: _password,
-                            phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
-                            image: _image,
-                            city: idCity,
-                            is_delivery_available: selectedDeliveryService == DeliveryService.doesDelivery ? true : false,
-                            categories: _categories);
-                        setState(() {
-                          _isLooding = false;
-                        });
+        if (_phone != null || int.parse(_phone) == 9) {
+          if (_email != null) {
+            if (_password != null) {
+              if (selectedDeliveryService != null) {
+                if (_categories.isNotEmpty) {
+                  if (_city != null) {
+                    String response1 = await Registeration().registration(
+                        shopName: _shopName,
+                        shopOwnerName: _shopOwnerName,
+                        pIN: _pIN,
+                        email: _email,
+                        password: _password,
+                        phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
+                        image: _image,
+                        city: idCity,
+                        is_delivery_available: selectedDeliveryService == DeliveryService.doesDelivery ? true : false,
+                        categories: _categories);
+                    setState(() {
+                      _isLooding = false;
+                    });
 
-                        if (response1 != "success") {
-                          if (response1 == "phoneError")
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) => DialogWorning(
-                                      mss: AppLocalizations.of(context).translate('phoneDuplicatedError'),
-                                    ));
-                          else if (response1 == "emailError")
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) => DialogWorning(
-                                      mss: AppLocalizations.of(context).translate('emailDuplicatedError'),
-                                    ));
-                          else
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) => DialogWorning(
-                                      mss: response1,
-                                    ));
-                        } else {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => VerificationcodePage(
-                                        phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
-                                        flag: 1,
-                                      )));
-                        }
-                      } else {
+                    if (response1 != "success") {
+                      if (response1 == "phoneError")
                         showDialog(
                             context: context,
                             builder: (BuildContext context) => DialogWorning(
-                                  mss: AppLocalizations.of(context).translate('chooseCity'),
+                                  mss: AppLocalizations.of(context).translate('phoneDuplicatedError'),
                                 ));
-                      }
+                      else if (response1 == "emailError")
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => DialogWorning(
+                                  mss: AppLocalizations.of(context).translate('emailDuplicatedError'),
+                                ));
+                      else
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => DialogWorning(
+                                  mss: response1,
+                                ));
                     } else {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) => DialogWorning(
-                                mss: AppLocalizations.of(context).translate('categoryError'),
-                              ));
-                      setState(() {
-                        _isLooding = false;
-                      });
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => VerificationcodePage(
+                                    phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
+                                    flag: 1,
+                                  )));
                     }
                   } else {
                     showDialog(
                         context: context,
                         builder: (BuildContext context) => DialogWorning(
-                              mss: AppLocalizations.of(context).translate('deliveryServiceError'),
+                              mss: AppLocalizations.of(context).translate('chooseCity'),
                             ));
                   }
                 } else {
                   showDialog(
                       context: context,
                       builder: (BuildContext context) => DialogWorning(
-                            mss: AppLocalizations.of(context).translate('passwordError'),
+                            mss: AppLocalizations.of(context).translate('categoryError'),
                           ));
+                  setState(() {
+                    _isLooding = false;
+                  });
                 }
               } else {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) => DialogWorning(
-                          mss: AppLocalizations.of(context).translate('emailError'),
+                          mss: AppLocalizations.of(context).translate('deliveryServiceError'),
                         ));
               }
             } else {
               showDialog(
                   context: context,
                   builder: (BuildContext context) => DialogWorning(
-                        mss: AppLocalizations.of(context).translate('phoneError'),
+                        mss: AppLocalizations.of(context).translate('passwordError'),
                       ));
             }
           } else {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => DialogWorning(
-                      mss: AppLocalizations.of(context).translate('pINError'),
+                      mss: AppLocalizations.of(context).translate('emailError'),
                     ));
           }
         } else {
           showDialog(
               context: context,
               builder: (BuildContext context) => DialogWorning(
-                    mss: AppLocalizations.of(context).translate('shopOwnerNameError'),
+                    mss: AppLocalizations.of(context).translate('phoneError'),
                   ));
         }
       } else {
@@ -393,10 +406,12 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                           _shopOwnerName = value;
                         },
                         validator: (value) {
-                          if (value
-                              .trim()
-                              .length == 0) {
-                            return '${AppLocalizations.of(context).translate('shopOwnerNameError')}';
+                          if (_shopOwnerName != null) {
+                            if (value
+                                .trim()
+                                .length == 0) {
+                              return '${AppLocalizations.of(context).translate('shopOwnerNameError')}';
+                            }
                           }
                           return null;
                         },
@@ -420,8 +435,14 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                           _pIN = value;
                         },
                         validator: (value) {
-                          if (value.trim().length == 0) {
-                            return '${AppLocalizations.of(context).translate('pINError')}';
+                          if (_pIN != null) {
+                            if (value
+                                .trim()
+                                .length == 0 || value
+                                .trim()
+                                .length < 10) {
+                              return '${AppLocalizations.of(context).translate('pINError')}';
+                            }
                           }
                           return null;
                         },
@@ -696,6 +717,120 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                 style: TextStyle(color: Colors.red, fontSize: 12),
                 textAlign: TextAlign.start,
               ),
+
+              Padding(
+                padding: EdgeInsets.only(left: 25.0, top: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _agree = !_agree;
+                          });
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: _agree ? accent : Color(0xFF636363),
+                              ),
+                              borderRadius: BorderRadius.circular(50)),
+                          child: CircleAvatar(
+                            child: Icon(
+                              FontAwesomeIcons.check,
+                              color: Colors.white,
+                              size: 9.0,
+                            ),
+                            radius: 10.0,
+                            backgroundColor: _agree ? accent : Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        Response response = await Dio().get('http://api.dhuqapp.com/api/content/page/terms-and-conditions');
+                        var data = response.data;
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => TermsAndConditionsPage(
+                            data: data,
+                          ),
+                        ));
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('termsAgree'),
+                        style: paragarph4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                child: Text(
+                  "$_agreeAlert",
+                  style: TextStyle(color: Colors.red, fontSize: 12),
+                  textAlign: TextAlign.start,
+                ),
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(left: 25.0, top: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            percant = !percant;
+                          });
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: percant ? accent : Color(0xFF636363),
+                              ),
+                              borderRadius: BorderRadius.circular(50)),
+                          child: CircleAvatar(
+                            child: Icon(
+                              FontAwesomeIcons.check,
+                              color: Colors.white,
+                              size: 9.0,
+                            ),
+                            radius: 10.0,
+                            backgroundColor: percant ? accent : Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    InkWell(
+                      child: Text(
+                        AppLocalizations.of(context).translate('percantAgree'),
+                        style: paragarph4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                child: Text(
+                  "$_percantAlert",
+                  style: TextStyle(color: Colors.red, fontSize: 12),
+                  textAlign: TextAlign.start,
+                ),
+              ),
+
               ListTile(
                 title: _isLooding
                     ? Center(

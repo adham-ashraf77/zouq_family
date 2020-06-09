@@ -30,7 +30,10 @@ class AddProduct {
     List<File> videos = List<File>();
     List<MultipartFile> theVideo = List();
     print('111');
-    if (video != null) {
+    if (video != null && video.path != null && video.path.isEmpty == false) {
+      print('path');
+      print(video.path);
+      print('path');
       videos = [video];
       videos.forEach((video) async {
         theVideo.add(MultipartFile.fromFileSync("${video.path}"));
@@ -55,7 +58,10 @@ class AddProduct {
         print('before API call: listOfPhotos=> ${element.filename}');
       });
       print('At API call: price=> $price');
-      print('At API call: video=> ${theVideo[0].filename}');
+      if (theVideo == null || theVideo.isEmpty == true)
+        print('empty video');
+      else
+        print('At API call: video=> ${theVideo[0].filename}');
       if (video == null || video.path.isEmpty == true) {
         formData = FormData.fromMap({
           "name": "$name",
