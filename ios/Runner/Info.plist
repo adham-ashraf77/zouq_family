@@ -29,9 +29,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>upload profile and products pictures</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>market and customer location</string>
+	<string>To detect market loaction , and market location is used to sort markets according to location in user application</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>market and customer location</string>
+	<string>To detect market loaction , and market location is used to sort markets according to location in user application</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>market and customer location</string>
 	<key>NSPhotoLibraryUsageDescription</key>
