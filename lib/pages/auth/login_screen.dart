@@ -30,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   final passwordTextFieldController = TextEditingController();
   String _countryCode = '966';
   bool isLoading = true;
+  bool signinLoading = false;
   SharedPreferences prefs;
   final _formKey = GlobalKey<FormState>();
   void _onCountryChange(CountryCode countryCode) {
@@ -107,14 +108,16 @@ class _LoginPageState extends State<LoginPage> {
                     height: 20,
                     child: CircularProgressIndicator(
                       backgroundColor: Colors.grey[400],
-                      valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey[300]),
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(Colors.grey[300]),
                       strokeWidth: 2,
                     ),
                   ),
                   Text(
                     AppLocalizations.of(context).translate('loading'),
                     textDirection: TextDirection.ltr,
-                    style: paragarph4.copyWith(color: Colors.grey[400], height: 2),
+                    style:
+                        paragarph4.copyWith(color: Colors.grey[400], height: 2),
                   )
                 ],
               ),
@@ -164,7 +167,10 @@ class _LoginPageState extends State<LoginPage> {
                     //       image: DecorationImage(image: AssetImage(appLogo))),
                     // ),
                     SizedBox(
-                      height: MediaQuery.of(context).orientation == Orientation.portrait ? 50 : 20,
+                      height: MediaQuery.of(context).orientation ==
+                              Orientation.portrait
+                          ? 50
+                          : 20,
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width - 50,
@@ -178,15 +184,16 @@ class _LoginPageState extends State<LoginPage> {
                               maxLength: 9,
                               controller: phoneNumberTextFieldController,
                               validator: (value) {
-                                if (value
-                                    .trim()
-                                    .length != 9) {
-                                  return AppLocalizations.of(context).translate('phoneError');
+                                if (value.trim().length != 9) {
+                                  return AppLocalizations.of(context)
+                                      .translate('phoneError');
                                 }
                                 return null;
                               },
                               decoration: InputDecoration(
-                                  counterText: "", hintText: AppLocalizations.of(context).translate('telephone')),
+                                  counterText: "",
+                                  hintText: AppLocalizations.of(context)
+                                      .translate('telephone')),
                             ),
                           ),
                           SizedBox(
@@ -225,15 +232,16 @@ class _LoginPageState extends State<LoginPage> {
                       width: MediaQuery.of(context).size.width - 50,
                       child: TextFormField(
                         validator: (value) {
-                          if (value
-                              .trim()
-                              .length < 6) {
-                            return AppLocalizations.of(context).translate('shortPassword');
+                          if (value.trim().length < 6) {
+                            return AppLocalizations.of(context)
+                                .translate('shortPassword');
                           }
                           return null;
                         },
                         controller: passwordTextFieldController,
-                        decoration: InputDecoration(hintText: AppLocalizations.of(context).translate('password')),
+                        decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context)
+                                .translate('password')),
                         obscureText: true,
                       ),
                     ),
@@ -247,77 +255,117 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: 25,
                     ),
-                    AppButton(
-                      text: AppLocalizations.of(context).translate('sign in'),
-                      onClick: () {
-                        if (_formKey.currentState.validate()) {
-                          Login()
-                              .login(
-                                  password: passwordTextFieldController.text,
-                                  phone: (this._countryCode + //  TODO uncomment this
-                                          phoneNumberTextFieldController.text)
-                                      .replaceAll("+", ''))
-                              .then((onValue) {
-                            if (onValue != 'success')
-                              if (onValue.toString().contains('authentication failure')) {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        DialogWorning(
-                                          mss: AppLocalizations.of(context).translate('loginError'),
-                                        ));
-                              } else if (onValue.toString().contains("your account is not activated yet by the admins") ||
-                                  onValue.toString().contains("not-active-by-admins")) {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        DialogWorning(
-                                          mss: AppLocalizations.of(context).translate('notActiveAccount'),
-                                        ));
-                              } else if (onValue.toString().contains("this isn't an family"))
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        DialogWorning(
-                                          mss: AppLocalizations.of(context).translate('loginFailed'),
-                                      ));
-                            else if (onValue.toString().contains("disabled-account"))
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) => DialogWorning(
-                                        mss: AppLocalizations.of(context).translate('accountDisable'),
-                                      ));
-                            else {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) => DialogWorning(
-                                        mss: onValue.toString(),
-                                      ));
-                            }
-                            else
-                              getSharedPrefs().then((onValue) {
-                                if (onValue != 'failure')
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => Home(),
-                                        settings: RouteSettings(
-                                          arguments: onValue,
-                                        ),
-                                      ));
-                                else {
-                                  print('Err' + onValue.toString());
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          DialogWorning(
-                                            mss: "error from sharedprefs", //onValue.toString(),
-                                          ));
+                    Container(
+                      child: signinLoading
+                          ? Align(
+                              alignment: Alignment.center,
+                              child: CircularProgressIndicator(
+                                backgroundColor: Colors.grey,
+                              ),
+                            )
+                          : AppButton(
+                              text: AppLocalizations.of(context)
+                                  .translate('sign in'),
+                              onClick: () {
+                                setState(() {
+                                  signinLoading = true;
+                                });
+                                if (_formKey.currentState.validate()) {
+                                  Login()
+                                      .login(
+                                          password:
+                                              passwordTextFieldController.text,
+                                          phone: (this
+                                                      ._countryCode + //  TODO uncomment this
+                                                  phoneNumberTextFieldController
+                                                      .text)
+                                              .replaceAll("+", ''))
+                                      .then((onValue) {
+                                    if (onValue != 'success') if (onValue
+                                        .toString()
+                                        .contains('authentication failure')) {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              DialogWorning(
+                                                mss: AppLocalizations.of(
+                                                        context)
+                                                    .translate('loginError'),
+                                              ));
+                                    } else if (onValue.toString().contains(
+                                            "your account is not activated yet by the admins") ||
+                                        onValue
+                                            .toString()
+                                            .contains("not-active-by-admins")) {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              DialogWorning(
+                                                mss:
+                                                    AppLocalizations.of(context)
+                                                        .translate(
+                                                            'notActiveAccount'),
+                                              ));
+                                    } else if (onValue
+                                        .toString()
+                                        .contains("this isn't an family"))
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              DialogWorning(
+                                                mss: AppLocalizations.of(
+                                                        context)
+                                                    .translate('loginFailed'),
+                                              ));
+                                    else if (onValue
+                                        .toString()
+                                        .contains("disabled-account"))
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              DialogWorning(
+                                                mss:
+                                                    AppLocalizations.of(context)
+                                                        .translate(
+                                                            'accountDisable'),
+                                              ));
+                                    else {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              DialogWorning(
+                                                mss: onValue.toString(),
+                                              ));
+                                    }
+                                    else
+                                      getSharedPrefs().then((onValue) {
+                                        if (onValue != 'failure')
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => Home(),
+                                                settings: RouteSettings(
+                                                  arguments: onValue,
+                                                ),
+                                              ));
+                                        else {
+                                          print('Err' + onValue.toString());
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  DialogWorning(
+                                                    mss:
+                                                        "error from sharedprefs", //onValue.toString(),
+                                                  ));
+                                        }
+                                      });
+                                  });
                                 }
-                              });
-                          });
-                        }
-                      },
+                                setState(() {
+                                  signinLoading = false;
+                                });
+                              },
+                            ),
                     ),
                     SizedBox(
                       height: 20,
@@ -347,7 +395,10 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         InkWell(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => AdminRegistration()));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AdminRegistration()));
                           },
                           child: Text(
                             AppLocalizations.of(context).translate('signUpNow'),
