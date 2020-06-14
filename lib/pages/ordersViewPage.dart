@@ -76,10 +76,10 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
             longitude = jsonDecode(onValue.toString())['order']['longitude'];
             // print('X = ' + latitude + ' = ' + longitude);
             List x = jsonDecode(onValue.toString())['order']['products'];
+            order.product.clear();
             for (int i = 0; i < x.length; i++) {
               setState(() {
-                rate =
-                    jsonDecode(onValue.toString())['order']['rate'].toString();
+                rate = jsonDecode(onValue.toString())['order']['rate'].toString();
                 order.product.add(Product(
                   name: x[i]['name'],
                   price: x[i]['price'],
