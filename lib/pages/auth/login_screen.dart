@@ -276,7 +276,7 @@ class _LoginPageState extends State<LoginPage> {
                                           password:
                                               passwordTextFieldController.text,
                                           phone: (this
-                                                      ._countryCode + //  TODO uncomment this
+                                                      ._countryCode +
                                                   phoneNumberTextFieldController
                                                       .text)
                                               .replaceAll("+", ''))
