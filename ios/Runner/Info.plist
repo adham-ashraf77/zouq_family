@@ -29,11 +29,11 @@
 	<key>NSCameraUsageDescription</key>
 	<string>upload profile and products pictures</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>we use your location to make your market appear to you nearest customer</string>
+	<string>we use your location to make your market appear to the nearest customer</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>we use your location to make your market appear to you nearest customer</string>
+	<string>we use your location to make your market appear to the nearest customer</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>market and customer location</string>
+	<string>we use your location to make your market appear to the nearest customer</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>upload profile and products pictures</string>
 	<key>UIBackgroundModes</key>
