@@ -156,21 +156,23 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                       border: Border.all(
                         color: type == 1
                             ? Color(0xFFF39D67)
-                            : type == 2 ? Color(0xFFF39D67) : type == 3 ? Color(0xFF48CF84) : Colors.blue,
+                            : type == 2
+                                ? Color(0xFFF39D67)
+                                : type == 3 ? Color(0xFF48CF84) : Colors.blue,
                       ),
                       borderRadius: BorderRadius.circular(10)),
-                  width: 80,
+                  width: 100,
                   height: 30,
                   child: Center(
                       child: Text(
                     type == 1
                         ? AppLocalizations.of(context).translate('newOrder')
                         : type == 2
-                        ? AppLocalizations.of(context)
-                        .translate('confirmedOrder')
-                        : type == 3 && order.status == 'done'
-                        ? AppLocalizations.of(context)
-                        .translate('completedOrder')
+                            ? AppLocalizations.of(context)
+                                .translate('confirmedOrder')
+                            : type == 3 && order.status == 'done'
+                                ? AppLocalizations.of(context)
+                                    .translate('completedOrder')
                         : type == 3 && order.status == 'canceled' || order.status == "rejected"
                         ? AppLocalizations.of(context)
                         .translate('cancelOrder')

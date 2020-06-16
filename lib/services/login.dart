@@ -24,8 +24,9 @@ class Login {
         prefs.setString("token", response.data['token']);
         prefs.setString("image", response.data['image']);
         prefs.setString("email", response.data['email']);
-        Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+       
         try {
+           Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
           await Dio().post('$_url/api/family/set-location',
               data: {
                 "latitude": "${position.latitude}",
@@ -35,6 +36,9 @@ class Login {
         } on DioError catch (e) {
           print('error in get position');
           print(e.response.data);
+        }
+        catch(e){
+          print("no location");
         }
         return "success";
       } else {
