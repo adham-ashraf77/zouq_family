@@ -42,7 +42,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   String _shopOwnerName;
   String _pIN;
   String _password;
-  String _email;
+  //String _email;
   String _phone;
   String _agreeAlert = "";
   String _percantAlert = "";
@@ -159,8 +159,8 @@ class _AdminRegistrationState extends State<AdminRegistration> {
     if (_image != null) {
       if (_shopName != null) {
         if (_phone != null || int.parse(_phone) == 9) {
-          if (_email != null) {
-            if (_password != null) {
+//          if (_email != null) {
+          if (_password != null) {
               if (selectedDeliveryService != null) {
                 if (_categories.isNotEmpty) {
                   if (_city != null) {
@@ -168,7 +168,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                         shopName: _shopName,
                         shopOwnerName: _shopOwnerName,
                         pIN: _pIN,
-                        email: _email,
+                        //email: _email,
                         password: _password,
                         phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
                         image: _image,
@@ -228,23 +228,25 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) => DialogWorning(
-                          mss: AppLocalizations.of(context).translate('deliveryServiceError'),
-                        ));
+                      mss: AppLocalizations.of(context).translate('deliveryServiceError'),
+                    ));
               }
             } else {
               showDialog(
                   context: context,
-                  builder: (BuildContext context) => DialogWorning(
+                  builder: (BuildContext context) =>
+                      DialogWorning(
                         mss: AppLocalizations.of(context).translate('passwordError'),
                       ));
             }
-          } else {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) => DialogWorning(
-                      mss: AppLocalizations.of(context).translate('emailError'),
-                    ));
-          }
+          //         }
+//          else {
+//            showDialog(
+//                context: context,
+//                builder: (BuildContext context) => DialogWorning(
+//                      mss: AppLocalizations.of(context).translate('emailError'),
+//                    ));
+//          }
         } else {
           showDialog(
               context: context,
@@ -503,31 +505,31 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                   ),
                 ),
               ),
-              ListTile(
-                title: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                            hintText:
-                                AppLocalizations.of(context).translate('email'),
-                            hintStyle:
-                                hintTextStyle), //TODO email verification logic
-                        onSaved: (value) {
-                          _email = value;
-                        },
-                        validator: (value) {
-                          if (value.isEmpty || !value.contains('@')) {
-                            return AppLocalizations.of(context)
-                                .translate('emailError');
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+//              ListTile(
+//                title: Row(
+//                  children: <Widget>[
+//                    Expanded(
+//                      child: TextFormField(
+//                        decoration: InputDecoration(
+//                            hintText:
+//                                AppLocalizations.of(context).translate('email'),
+//                            hintStyle:
+//                                hintTextStyle), //TODO email verification logic
+//                        onSaved: (value) {
+//                          _email = value;
+//                        },
+//                        validator: (value) {
+//                          if (value.isEmpty || !value.contains('@')) {
+//                            return AppLocalizations.of(context)
+//                                .translate('emailError');
+//                          }
+//                          return null;
+//                        },
+//                      ),
+//                    ),
+//                  ],
+//                ),
+//              ),
               ListTile(
                 title: Row(
                   children: <Widget>[

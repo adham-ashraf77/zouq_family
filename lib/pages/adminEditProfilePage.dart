@@ -233,79 +233,87 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
                 ListTile(
                   title: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectedDeliveryService = DeliveryService.doesDelivery;
-                              isdeliveryAvailable = 1;
-                            });
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  color:
-                                  selectedDeliveryService == DeliveryService.doesDelivery ? accent : Color(0xFF636363),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Row(
+                            children: <Widget>[
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedDeliveryService = DeliveryService.doesDelivery;
+                                    isdeliveryAvailable = 1;
+                                  });
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: selectedDeliveryService == DeliveryService.doesDelivery
+                                            ? accent
+                                            : Color(0xFF636363),
+                                      ),
+                                      borderRadius: BorderRadius.circular(50)),
+                                  child: CircleAvatar(
+                                    child: Icon(
+                                      FontAwesomeIcons.check,
+                                      color: Colors.white,
+                                      size: 20.0,
+                                    ),
+                                    radius: 15.0,
+                                    backgroundColor:
+                                        selectedDeliveryService == DeliveryService.doesDelivery ? accent : Colors.white,
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.circular(50)),
-                            child: CircleAvatar(
-                              child: Icon(
-                                FontAwesomeIcons.check,
-                                color: Colors.white,
-                                size: 20.0,
                               ),
-                              radius: 15.0,
-                              backgroundColor:
-                              selectedDeliveryService == DeliveryService.doesDelivery ? accent : Colors.white,
-                            ),
+                              SizedBox(
+                                width: 10.0,
+                              ),
+                              Text(
+                                AppLocalizations.of(context).translate('delivery'),
+                                style: productName1,
+                              ),
+                              SizedBox(
+                                width: 20.0,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedDeliveryService = DeliveryService.noDelivery;
+                                    isdeliveryAvailable = 0;
+                                  });
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: selectedDeliveryService == DeliveryService.noDelivery
+                                            ? accent
+                                            : Color(0xFF636363),
+                                      ),
+                                      borderRadius: BorderRadius.circular(50)),
+                                  child: CircleAvatar(
+                                    child: Icon(
+                                      FontAwesomeIcons.check,
+                                      color: Colors.white,
+                                    ),
+                                    radius: 15.0,
+                                    backgroundColor:
+                                        selectedDeliveryService == DeliveryService.noDelivery ? accent : Colors.white,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10.0,
+                              ),
+                              Text(
+                                AppLocalizations.of(context).translate('noDelivery'),
+                                style: productName1,
+                              ),
+                            ],
                           ),
                         ),
-                        SizedBox(
-                          width: 10.0,
-                        ),
-                        Text(
-                          AppLocalizations.of(context).translate('delivery'),
-                          style: productName1,
-                        ),
-                        SizedBox(
-                          width: 20.0,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectedDeliveryService = DeliveryService.noDelivery;
-                              isdeliveryAvailable = 0;
-                            });
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  color:
-                                  selectedDeliveryService == DeliveryService.noDelivery ? accent : Color(0xFF636363),
-                                ),
-                                borderRadius: BorderRadius.circular(50)),
-                            child: CircleAvatar(
-                              child: Icon(
-                                FontAwesomeIcons.check,
-                                color: Colors.white,
-                              ),
-                              radius: 15.0,
-                              backgroundColor:
-                              selectedDeliveryService == DeliveryService.noDelivery ? accent : Colors.white,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10.0,
-                        ),
-                        Text(
-                          AppLocalizations.of(context).translate('noDelivery'),
-                          style: productName1,
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
                 ),
 //            DropdownButton(
 //              isExpanded: true,
