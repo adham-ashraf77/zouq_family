@@ -58,8 +58,8 @@ Future <File> getImage(ImageSource src) async {
         CropAspectRatioPreset.ratio16x9
       ],
       androidUiSettings: AndroidUiSettings(
-          toolbarColor: Colors.purple,
-          activeControlsWidgetColor: Colors.purple,
+          toolbarColor: Colors.blue,
+          activeControlsWidgetColor: Colors.blue,
           toolbarWidgetColor: Colors.white,
           initAspectRatio: CropAspectRatioPreset.original,
           lockAspectRatio: false),
