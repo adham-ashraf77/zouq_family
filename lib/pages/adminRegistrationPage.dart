@@ -69,7 +69,6 @@ class _AdminRegistrationState extends State<AdminRegistration> {
         type: FileType.custom,
         allowedExtensions: ['jpg', 'png', 'jpeg'],
       );
-
       setState(() {
         fileName = p.basename(file.path);
         _image = file;
@@ -407,20 +406,18 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                         onSaved: (value) {
                           _shopOwnerName = value;
                         },
-                        validator: (value) {
-                          if (_shopOwnerName != null) {
-                            if (value
-                                .trim()
-                                .length == 0) {
-                              return '${AppLocalizations.of(context).translate('shopOwnerNameError')}';
-                            }
-                          }
-                          return null;
-                        },
+//                        validator: (value) {
+//                          if (_shopOwnerName != null) {
+//                            if (value
+//                                .trim()
+//                                .length == 0) {
+//                              return '${AppLocalizations.of(context).translate('shopOwnerNameError')}';
+//                            }
+//                          }
+//                          return null;
+//                        },
                         decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context)
-                                .translate('shopOwnerName'),
-                            hintStyle: hintTextStyle),
+                            hintText: AppLocalizations.of(context).translate('shopOwnerName'), hintStyle: hintTextStyle),
                       ),
                     ),
                   ],
@@ -436,18 +433,18 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                         onSaved: (value) {
                           _pIN = value;
                         },
-                        validator: (value) {
-                          if (_pIN != null) {
-                            if (value
-                                .trim()
-                                .length == 0 || value
-                                .trim()
-                                .length < 10) {
-                              return '${AppLocalizations.of(context).translate('pINError')}';
-                            }
-                          }
-                          return null;
-                        },
+//                        validator: (value) {
+//                          if (_pIN != null) {
+//                            if (value
+//                                .trim()
+//                                .length == 0 || value
+//                                .trim()
+//                                .length < 10) {
+//                              return '${AppLocalizations.of(context).translate('pINError')}';
+//                            }
+//                          }
+//                          return null;
+//                        },
                         decoration: InputDecoration(
                             hintText: AppLocalizations.of(context)
                                 .translate('PIN'),
