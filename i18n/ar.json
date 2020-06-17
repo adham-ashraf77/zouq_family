@@ -121,5 +121,8 @@
   "notAvailable": "غير متوفر",
   "onDemand": "حسب الطلب",
   "withdrawSuccess": "تم طلب السحب بنجاح",
-  "deleteProductFailed": "لا يمكن حذف هذا المنتج الان لأن هناك طلب عليه لم بكتمل"
+  "deleteProductFailed": "لا يمكن حذف هذا المنتج الان لأن هناك طلب عليه لم بكتمل",
+  "imaPickerDialogTitle":"اختار من:",
+  "camera":"الكاميرا",
+  "gallery":"معرض الصور"
 }
