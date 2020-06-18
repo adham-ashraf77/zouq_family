@@ -15,6 +15,7 @@ import 'package:zouqadmin/widgets/roundedAppBar.dart';
 import '../../I10n/app_localizations.dart';
 import '../../home.dart';
 import '../adminRegistrationPage.dart';
+import '../auth/verificationcode_screen.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({this.title});
@@ -318,22 +319,27 @@ class _LoginPageState extends State<LoginPage> {
                                                     .translate('loginFailed'),
                                               ));
                                     else if (onValue
-                                        .toString()
-                                        .contains("disabled-account"))
+                                        .toString().contains("disabled-account"))
                                       showDialog(
                                           context: context,
-                                          builder: (BuildContext context) =>
-                                              DialogWorning(
-                                                mss:
-                                                    AppLocalizations.of(context)
-                                                        .translate(
-                                                            'accountDisable'),
+                                          builder: (BuildContext context) => DialogWorning(
+                                                mss: AppLocalizations.of(context).translate('accountDisable'),
                                               ));
-                                    else {
+                                    else if (onValue
+                                        .toString()
+                                        .contains("your account is not activated by the confirmation code yet")) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => VerificationcodePage(
+                                                    phone:
+                                                        "${(_countryCode.replaceAll("+", "")).trim()}${phoneNumberTextFieldController.text}",
+                                                    flag: 1,
+                                                  )));
+                                    } else {
                                       showDialog(
                                           context: context,
-                                          builder: (BuildContext context) =>
-                                              DialogWorning(
+                                          builder: (BuildContext context) => DialogWorning(
                                                 mss: onValue.toString(),
                                               ));
                                     }
