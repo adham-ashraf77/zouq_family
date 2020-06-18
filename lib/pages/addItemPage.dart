@@ -545,10 +545,15 @@ class _AddItemPageState extends State<AddItemPage> {
                   onChanged: (String newValue) {
                     setState(() {
                       _dropdownValue = newValue;
-                      categoryID = catTags
-                          .indexOf(newValue);
-                      print('Cat ID' + categoryID.toString());
-                    });
+                            categories.forEach((element) {
+                              if (element.text_ar == newValue) {
+                                categoryID = element.id;
+                              }
+                            });
+//                      categoryID = catTags
+//                          .indexOf(newValue);
+                            print('Cat ID' + categoryID.toString());
+                          });
                   },
                   items: catTags
                       .map<DropdownMenuItem<String>>((String value) {
