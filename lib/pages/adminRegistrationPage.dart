@@ -14,6 +14,7 @@ import 'package:zouqadmin/pages/terms.dart';
 import 'package:zouqadmin/services/getData.dart';
 import 'package:zouqadmin/services/registeration.dart';
 import 'package:zouqadmin/theme/common.dart';
+import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/filterChipWidget.dart';
 
 import '../I10n/app_localizations.dart';
@@ -60,29 +61,27 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   bool _agree = false;
   bool percant = false;
 
-  Future getImage() async {
+  Future getImage(BuildContext context) async {
     setState(() {
       _loodingImage = true;
     });
-    try {
-      var file = await FilePicker.getFile(
-        type: FileType.custom,
-        allowedExtensions: ['jpg', 'png', 'jpeg'],
-      );
-      setState(() {
-        fileName = p.basename(file.path);
-        _image = file;
-      });
-      setState(() {
-        _loodingImage = false;
-      });
-    } catch (Exception) {
-      print('Except ' + Exception.toString());
-      setState(() {
-        _image = null;
-        _loodingImage = false;
-      });
-    }
+    // try {
+    var file = await selectImg(context);
+    setState(() {
+      fileName = p.basename(file.path);
+      _image = file;
+    });
+    setState(() {
+      _loodingImage = false;
+    });
+
+    // } catch (Exception) {
+    //   print('Except ' + Exception.toString());
+    //   setState(() {
+    //     _image = null;
+    //     _loodingImage = false;
+    //   });
+    // }
   }
 
   validation() {
@@ -160,84 +159,94 @@ class _AdminRegistrationState extends State<AdminRegistration> {
         if (_phone != null || int.parse(_phone) == 9) {
 //          if (_email != null) {
           if (_password != null) {
-              if (selectedDeliveryService != null) {
-                if (_categories.isNotEmpty) {
-                  if (_city != null) {
-                    String response1 = await Registeration().registration(
-                        shopName: _shopName,
-                        shopOwnerName: _shopOwnerName,
-                        pIN: _pIN,
-                        //email: _email,
-                        password: _password,
-                        phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
-                        image: _image,
-                        city: idCity,
-                        is_delivery_available: selectedDeliveryService == DeliveryService.doesDelivery ? true : false,
-                        categories: _categories);
-                    setState(() {
-                      _isLooding = false;
-                    });
+            if (selectedDeliveryService != null) {
+              if (_categories.isNotEmpty) {
+                if (_city != null) {
+                  String response1 = await Registeration().registration(
+                      shopName: _shopName,
+                      shopOwnerName: _shopOwnerName,
+                      pIN: _pIN,
+                      //email: _email,
+                      password: _password,
+                      phone:
+                          "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
+                      image: _image,
+                      city: idCity,
+                      is_delivery_available: selectedDeliveryService ==
+                              DeliveryService.doesDelivery
+                          ? true
+                          : false,
+                      categories: _categories);
+                  setState(() {
+                    _isLooding = false;
+                  });
 
-                    if (response1 != "success") {
-                      if (response1 == "phoneError")
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) => DialogWorning(
-                                  mss: AppLocalizations.of(context).translate('phoneDuplicatedError'),
-                                ));
-                      else if (response1 == "emailError")
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) => DialogWorning(
-                                  mss: AppLocalizations.of(context).translate('emailDuplicatedError'),
-                                ));
-                      else
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) => DialogWorning(
-                                  mss: response1,
-                                ));
-                    } else {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => VerificationcodePage(
-                                    phone: "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
-                                    flag: 1,
-                                  )));
-                    }
+                  if (response1 != "success") {
+                    if (response1 == "phoneError")
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => DialogWorning(
+                                mss: AppLocalizations.of(context)
+                                    .translate('phoneDuplicatedError'),
+                              ));
+                    else if (response1 == "emailError")
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => DialogWorning(
+                                mss: AppLocalizations.of(context)
+                                    .translate('emailDuplicatedError'),
+                              ));
+                    else
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => DialogWorning(
+                                mss: response1,
+                              ));
                   } else {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) => DialogWorning(
-                              mss: AppLocalizations.of(context).translate('chooseCity'),
-                            ));
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => VerificationcodePage(
+                                  phone:
+                                      "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
+                                  flag: 1,
+                                )));
                   }
                 } else {
                   showDialog(
                       context: context,
                       builder: (BuildContext context) => DialogWorning(
-                            mss: AppLocalizations.of(context).translate('categoryError'),
+                            mss: AppLocalizations.of(context)
+                                .translate('chooseCity'),
                           ));
-                  setState(() {
-                    _isLooding = false;
-                  });
                 }
               } else {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) => DialogWorning(
-                      mss: AppLocalizations.of(context).translate('deliveryServiceError'),
-                    ));
+                          mss: AppLocalizations.of(context)
+                              .translate('categoryError'),
+                        ));
+                setState(() {
+                  _isLooding = false;
+                });
               }
             } else {
               showDialog(
                   context: context,
-                  builder: (BuildContext context) =>
-                      DialogWorning(
-                        mss: AppLocalizations.of(context).translate('passwordError'),
+                  builder: (BuildContext context) => DialogWorning(
+                        mss: AppLocalizations.of(context)
+                            .translate('deliveryServiceError'),
                       ));
             }
+          } else {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) => DialogWorning(
+                      mss: AppLocalizations.of(context)
+                          .translate('passwordError'),
+                    ));
+          }
           //         }
 //          else {
 //            showDialog(
@@ -347,7 +356,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                       height: 100,
                       child: InkWell(
                         onTap: () {
-                          getImage();
+                          getImage(context);
                         },
                         child: CircleAvatar(
                           backgroundColor: Colors.grey[200],
@@ -417,7 +426,9 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 //                          return null;
 //                        },
                         decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context).translate('shopOwnerName'), hintStyle: hintTextStyle),
+                            hintText: AppLocalizations.of(context)
+                                .translate('shopOwnerName'),
+                            hintStyle: hintTextStyle),
                       ),
                     ),
                   ],
@@ -446,8 +457,8 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 //                          return null;
 //                        },
                         decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context)
-                                .translate('PIN'),
+                            hintText:
+                                AppLocalizations.of(context).translate('PIN'),
                             hintStyle: hintTextStyle),
                       ),
                     ),
@@ -471,7 +482,8 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                             _phone = value;
                           },
                           validator: (value) {
-                            if (value.trim().length == 0 || value.trim().length != 9) {
+                            if (value.trim().length == 0 ||
+                                value.trim().length != 9) {
                               print(value.trim().length);
                               return AppLocalizations.of(context)
                                   .translate('phoneError');
@@ -565,14 +577,15 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              selectedDeliveryService = DeliveryService.doesDelivery;
+                              selectedDeliveryService =
+                                  DeliveryService.doesDelivery;
                             });
                           },
                           child: Container(
                             decoration: BoxDecoration(
                                 border: Border.all(
-                                  color:
-                                      selectedDeliveryService == DeliveryService.doesDelivery
+                                  color: selectedDeliveryService ==
+                                          DeliveryService.doesDelivery
                                       ? accent
                                       : Color(0xFF636363),
                                 ),
@@ -585,7 +598,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                               ),
                               radius: 10.0,
                               backgroundColor: selectedDeliveryService ==
-                                  DeliveryService.doesDelivery
+                                      DeliveryService.doesDelivery
                                   ? accent
                                   : Colors.white,
                             ),
@@ -604,14 +617,15 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              selectedDeliveryService = DeliveryService.noDelivery;
+                              selectedDeliveryService =
+                                  DeliveryService.noDelivery;
                             });
                           },
                           child: Container(
                             decoration: BoxDecoration(
                                 border: Border.all(
                                   color: selectedDeliveryService ==
-                                      DeliveryService.noDelivery
+                                          DeliveryService.noDelivery
                                       ? accent
                                       : Color(0xFF636363),
                                 ),
@@ -624,7 +638,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                               ),
                               radius: 10.0,
                               backgroundColor: selectedDeliveryService ==
-                                  DeliveryService.noDelivery
+                                      DeliveryService.noDelivery
                                   ? accent
                                   : Colors.white,
                             ),
@@ -666,8 +680,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                           onSelect: (clicked) {
                             if (clicked == true) {
                               addCategories(_tags[index].id);
-                            }
-                            else {
+                            } else {
                               _categories.remove(_tags[index].id);
                               _categories.forEach((element) {
                                 print(element);
@@ -723,7 +736,8 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 10),
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
@@ -753,7 +767,8 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                     ),
                     InkWell(
                       onTap: () async {
-                        Response response = await Dio().get('http://api.dhuqapp.com/api/content/page/terms-and-conditions');
+                        Response response = await Dio().get(
+                            'http://api.dhuqapp.com/api/content/page/terms-and-conditions');
                         var data = response.data;
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => TermsAndConditionsPage(
@@ -784,7 +799,8 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 10),
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
