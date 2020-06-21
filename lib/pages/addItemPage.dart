@@ -197,51 +197,71 @@ class _AddItemPageState extends State<AddItemPage> {
     });
   }
 
-  addProduct() {
-    if (_formKey.currentState.validate()) {
-      if (_dropdownValue != null) {
-        if (listOfImages.length == 0) {
+  bool isConnected = true;
+
+  checkConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        isConnected = true;
+        print('true');
+      }
+    } on SocketException catch (_) {
+      isConnected = false;
+      print('false');
+    }
+    setState(() {});
+  }
+
+  addProduct() async {
+    await checkConnection();
+    if (isConnected) {
+      if (_formKey.currentState.validate()) {
+        if (_dropdownValue != null) {
+          if (listOfImages.length == 0) {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) => DialogWorning(
+                      mss: AppLocalizations.of(context).translate('addPhotoLengthError'),
+                    ));
+          } else {
+            //TODO uploading
+            print('hi from else');
+            print('before API call: catID=> ${categoryID + 1}');
+            print('before API call: desc=> ${descTextFieldController.text}');
+            print('before API call: name=> ${nameTextFieldController.text}');
+            listOfImages.forEach((element) {
+              print('before API call: listOfPhotos=> ${element.path}');
+            });
+            print('before API call: price=> ${priceTextFieldController.text}');
+            //print('before API call: video=> ${productVideo.path}');
+            showDialog(
+                context: context,
+                builder: (BuildContext context) => LoadingDialog(
+                      mss: AppLocalizations.of(context).translate('addLoading'),
+                    ));
+            AddProduct()
+                .addProduct(
+                    catID: categoryID + 1,
+                    desc: descTextFieldController.text,
+                    name: nameTextFieldController.text,
+                    listOfPhotos: listOfImages,
+                    price: priceTextFieldController.text,
+                    video: productVideo == null ? File('') : productVideo,
+                    context: context)
+                .then((value) {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => Home(),
+              ));
+            });
+          }
+        } else {
           showDialog(
               context: context,
               builder: (BuildContext context) => DialogWorning(
-                mss: AppLocalizations.of(context).translate('addPhotoLengthError'),
+                    mss: AppLocalizations.of(context).translate('chooseCategoryLengthError'),
                   ));
-        } else {
-          //TODO uploading
-          print('hi from else');
-          print('before API call: catID=> ${categoryID + 1}');
-          print('before API call: desc=> ${descTextFieldController.text}');
-          print('before API call: name=> ${nameTextFieldController.text}');
-          listOfImages.forEach((element) {
-            print('before API call: listOfPhotos=> ${element.path}');
-          });
-          print('before API call: price=> ${priceTextFieldController.text}');
-          //print('before API call: video=> ${productVideo.path}');
-          showDialog(
-              context: context,
-              builder: (BuildContext context) =>
-                  LoadingDialog(
-                    mss: AppLocalizations.of(context).translate('addLoading'),
-                  ));
-          AddProduct().addProduct(
-              catID: categoryID + 1,
-                  desc: descTextFieldController.text,
-                  name: nameTextFieldController.text,
-                  listOfPhotos: listOfImages,
-                  price: priceTextFieldController.text,
-                  video: productVideo == null ? File('') : productVideo,
-                  context: context).then((value) {
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => Home(),)
-            );
-          });
         }
-      } else {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) => DialogWorning(
-              mss: AppLocalizations.of(context).translate('chooseCategoryLengthError'),
-                ));
       }
     }
     // // if (_formKey.currentState.validate()) {
@@ -297,6 +317,7 @@ class _AddItemPageState extends State<AddItemPage> {
   @override
   void initState() {
     super.initState();
+    checkConnection();
     getCategories();
   }
 
@@ -309,7 +330,20 @@ class _AddItemPageState extends State<AddItemPage> {
             style: headers1),
         centerTitle: true,
       ),
-      body: isLoading ?
+      body:
+      isConnected ?
+      Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(Icons.signal_wifi_off, size: 50,),
+            Padding(padding: EdgeInsets.only(top: 30)),
+            Text('الرجاء الاتصال بالانترنت'),
+          ],
+        ),
+      ) :
+      isLoading ?
       Center(
         child: CircularProgressIndicator(),
       ) :

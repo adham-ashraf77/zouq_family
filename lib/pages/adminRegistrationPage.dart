@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -61,6 +60,8 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   bool _agree = false;
   bool percant = false;
 
+  TextEditingController name = TextEditingController();
+
   Future getImage(BuildContext context) async {
     setState(() {
       _loodingImage = true;
@@ -84,63 +85,82 @@ class _AdminRegistrationState extends State<AdminRegistration> {
     // }
   }
 
-  validation() {
-    if (percant == false) {
-      setState(() {
-        _percantAlert = AppLocalizations.of(context).translate('percantEror');
-      });
-    } else {
-      setState(() {
-        _percantAlert = "";
-      });
+  bool isConnected = true;
+
+  checkConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        isConnected = true;
+        print('true');
+      }
+    } on SocketException catch (_) {
+      isConnected = false;
+      print('false');
     }
-    if (_agree == false) {
-      setState(() {
-        _agreeAlert = AppLocalizations.of(context).translate('termsError');
-      });
-    } else {
-      setState(() {
-        _agreeAlert = "";
-      });
-    }
-    if (_image == null) {
-      setState(() {
-        _imageAlert = "please select image";
-      });
-    } else {
-      setState(() {
-        _imageAlert = '';
-      });
-    }
-    if (selectedDeliveryService == null) {
-      setState(() {
-        _deliveryAlert = "Please select one";
-      });
-    } else {
-      setState(() {
-        _deliveryAlert = '';
-      });
-    }
-    if (_city == null) {
-      setState(() {
-        _cityAlert = "Please select city";
-      });
-    } else {
-      setState(() {
-        _cityAlert = '';
-      });
-    }
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      if (_image != null) {
-        if (selectedDeliveryService != null) {
-          if (_city != null) {
-            if (_agreeAlert.isEmpty) {
-              if (_percantAlert.isEmpty) {
-                setState(() {
-                  _isLooding = true;
-                });
-                registration();
+    setState(() {});
+  }
+
+  validation() async {
+    await checkConnection();
+    if (isConnected) {
+      if (percant == false) {
+        setState(() {
+          _percantAlert = AppLocalizations.of(context).translate('percantEror');
+        });
+      } else {
+        setState(() {
+          _percantAlert = "";
+        });
+      }
+      if (_agree == false) {
+        setState(() {
+          _agreeAlert = AppLocalizations.of(context).translate('termsError');
+        });
+      } else {
+        setState(() {
+          _agreeAlert = "";
+        });
+      }
+      if (_image == null) {
+        setState(() {
+          _imageAlert = "please select image";
+        });
+      } else {
+        setState(() {
+          _imageAlert = '';
+        });
+      }
+      if (selectedDeliveryService == null) {
+        setState(() {
+          _deliveryAlert = "Please select one";
+        });
+      } else {
+        setState(() {
+          _deliveryAlert = '';
+        });
+      }
+      if (_city == null) {
+        setState(() {
+          _cityAlert = "Please select city";
+        });
+      } else {
+        setState(() {
+          _cityAlert = '';
+        });
+      }
+      if (_formKey.currentState.validate()) {
+        _formKey.currentState.save();
+        if (_image != null) {
+          if (selectedDeliveryService != null) {
+            if (_city != null) {
+              if (_agreeAlert.isEmpty) {
+                if (_percantAlert.isEmpty) {
+                  setState(() {
+                    _isLooding = true;
+                  });
+                  registration();
+                }
               }
             }
           }
@@ -287,6 +307,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 
   @override
   void initState() {
+    checkConnection();
     setState(() {
       _isLooding = true;
     });
@@ -341,18 +362,19 @@ class _AdminRegistrationState extends State<AdminRegistration> {
         centerTitle: true,
       ),
       body: SafeArea(
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Center(
-                    child: Container(
-                      width: 100,
+        child: isConnected
+            ? Form(
+                key: _formKey,
+                child: ListView(
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  children: <Widget>[
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Center(
+                          child: Container(
+                            width: 100,
                       height: 100,
                       child: InkWell(
                         onTap: () {
@@ -389,11 +411,14 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                   children: <Widget>[
                     Expanded(
                       child: TextFormField(
+                        controller: name,
                         onSaved: (value) {
                           _shopName = value;
                         },
                         validator: (value) {
-                          if (value.trim().length == 0) {
+                          if (value
+                              .trim()
+                              .length == 0) {
                             return '${AppLocalizations.of(context).translate('shopNameError')}';
                           }
                           return null;
@@ -458,7 +483,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 //                        },
                         decoration: InputDecoration(
                             hintText:
-                                AppLocalizations.of(context).translate('PIN'),
+                            AppLocalizations.of(context).translate('PIN'),
                             hintStyle: hintTextStyle),
                       ),
                     ),
@@ -585,7 +610,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                             decoration: BoxDecoration(
                                 border: Border.all(
                                   color: selectedDeliveryService ==
-                                          DeliveryService.doesDelivery
+                                      DeliveryService.doesDelivery
                                       ? accent
                                       : Color(0xFF636363),
                                 ),
@@ -598,7 +623,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                               ),
                               radius: 10.0,
                               backgroundColor: selectedDeliveryService ==
-                                      DeliveryService.doesDelivery
+                                  DeliveryService.doesDelivery
                                   ? accent
                                   : Colors.white,
                             ),
@@ -625,7 +650,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                             decoration: BoxDecoration(
                                 border: Border.all(
                                   color: selectedDeliveryService ==
-                                          DeliveryService.noDelivery
+                                      DeliveryService.noDelivery
                                       ? accent
                                       : Color(0xFF636363),
                                 ),
@@ -638,7 +663,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                               ),
                               radius: 10.0,
                               backgroundColor: selectedDeliveryService ==
-                                      DeliveryService.noDelivery
+                                  DeliveryService.noDelivery
                                   ? accent
                                   : Colors.white,
                             ),
@@ -849,14 +874,14 @@ class _AdminRegistrationState extends State<AdminRegistration> {
               ListTile(
                 title: _isLooding
                     ? Center(
-                        child: CircularProgressIndicator(),
-                      )
+                  child: CircularProgressIndicator(),
+                )
                     : AppButton(
-                        text: AppLocalizations.of(context).translate('signUp'),
-                        onClick: () {
-                          //TODO admin profile editing code
-                          validation();
-                        }),
+                    text: AppLocalizations.of(context).translate('signUp'),
+                    onClick: () {
+                      //TODO admin profile editing code
+                      validation();
+                    }),
               ),
               //TODO remove row testing alert dialogs
 //              Row(
@@ -893,6 +918,17 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 //                      }),
 //                ],
 //              )
+            ],
+          ),
+        ) :
+        Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(Icons.signal_wifi_off, size: 50,),
+              Padding(padding: EdgeInsets.only(top: 30)),
+              Text('الرجاء الاتصال بالانترنت'),
             ],
           ),
         ),
