@@ -62,7 +62,15 @@ class AddProduct {
         print('empty video');
       else
         print('At API call: video=> ${theVideo[0].filename}');
-      if (video == null || video.path.isEmpty == true) {
+      if (video == null || video.path.isEmpty == true && desc.isEmpty || desc == '') {
+        formData = FormData.fromMap({
+          "name": "$name",
+          //"description": "$desc",
+          "price": "$price",
+          "images": something,
+          "category_id": catID.toString(),
+        });
+      } else if (video == null || video.path.isEmpty == true && desc.isNotEmpty || desc != '') {
         formData = FormData.fromMap({
           "name": "$name",
           "description": "$desc",

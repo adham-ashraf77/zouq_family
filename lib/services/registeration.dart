@@ -26,7 +26,53 @@ class Registeration {
     int city,
   }) async {
     String fileName = image.path.split('/').last;
-    if (shopOwnerName == null || shopOwnerName.isEmpty && pIN == null || pIN.isEmpty) {
+    if (shopOwnerName == null ||
+        shopOwnerName.isEmpty && pIN == null ||
+        pIN.isEmpty && image == null ||
+        image.path.isEmpty ||
+        image.existsSync() == false) {
+      _formData = FormData.fromMap({
+        "name": "$shopName",
+        "password": "$password",
+        //"email": "$email",
+        "phone": "$phone",
+        "is_delivery_available": is_delivery_available ? 1 : 0,
+        //"image": await MultipartFile.fromFile(image.path, filename: fileName),
+        "categories": categories,
+        "city": city,
+      });
+    } else if (shopOwnerName == null ||
+        shopOwnerName.isEmpty && image == null ||
+        image.path.isEmpty ||
+        image.existsSync() == false) {
+      _formData = FormData.fromMap({
+        "name": "$shopName",
+        "identity_number": int.parse(pIN),
+        "password": "$password",
+        //"email": "$email",
+        "phone": "$phone",
+        "is_delivery_available": is_delivery_available ? 1 : 0,
+        // "image": await MultipartFile.fromFile(image.path, filename: fileName),
+        "categories": categories,
+        "city": city,
+      });
+    } else if (pIN == null || pIN.isEmpty && image == null || image.path.isEmpty || image.existsSync() == false) {
+      _formData = FormData.fromMap({
+        "name": "$shopName",
+        "manager_name": "$shopOwnerName",
+        "password": "$password",
+        //"email": "$email",
+        "phone": "$phone",
+        "is_delivery_available": is_delivery_available ? 1 : 0,
+        //"image": await MultipartFile.fromFile(image.path, filename: fileName),
+        "categories": categories,
+        "city": city,
+      });
+    } else if (pIN == null ||
+        pIN.isEmpty && shopOwnerName == null ||
+        shopOwnerName.isEmpty && image != null ||
+        image.path.isNotEmpty ||
+        image.existsSync() == true) {
       _formData = FormData.fromMap({
         "name": "$shopName",
         "password": "$password",
@@ -37,7 +83,10 @@ class Registeration {
         "categories": categories,
         "city": city,
       });
-    } else if (shopOwnerName == null || shopOwnerName.isEmpty) {
+    } else if (shopOwnerName == null ||
+        shopOwnerName.isEmpty && image != null ||
+        image.path.isNotEmpty ||
+        image.existsSync() == true) {
       _formData = FormData.fromMap({
         "name": "$shopName",
         "identity_number": int.parse(pIN),
@@ -49,7 +98,7 @@ class Registeration {
         "categories": categories,
         "city": city,
       });
-    } else if (pIN == null || pIN.isEmpty) {
+    } else if (pIN == null || pIN.isEmpty && image != null || image.path.isNotEmpty || image.existsSync() == true) {
       _formData = FormData.fromMap({
         "name": "$shopName",
         "manager_name": "$shopOwnerName",

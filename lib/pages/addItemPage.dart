@@ -243,7 +243,9 @@ class _AddItemPageState extends State<AddItemPage> {
             AddProduct()
                 .addProduct(
                     catID: categoryID + 1,
-                    desc: descTextFieldController.text,
+                    desc: descTextFieldController.text.isEmpty == true || descTextFieldController.text == ''
+                        ? ''
+                        : descTextFieldController.text,
                     name: nameTextFieldController.text,
                     listOfPhotos: listOfImages,
                     price: priceTextFieldController.text,
@@ -331,7 +333,7 @@ class _AddItemPageState extends State<AddItemPage> {
         centerTitle: true,
       ),
       body:
-      isConnected ?
+      !isConnected ?
       Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -602,12 +604,6 @@ class _AddItemPageState extends State<AddItemPage> {
                 padding: EdgeInsets.only(left: 30, top: 15),
                 child: TextFormField(
                   controller: descTextFieldController,
-                  validator: (value) {
-                    if (value.length < 10) {
-                      return 'description must be at least 10 charcters';
-                    }
-                    return null;
-                  },
                   decoration: InputDecoration(
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(10.0),

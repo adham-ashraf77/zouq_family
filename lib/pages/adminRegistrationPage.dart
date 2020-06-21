@@ -122,15 +122,15 @@ class _AdminRegistrationState extends State<AdminRegistration> {
           _agreeAlert = "";
         });
       }
-      if (_image == null) {
-        setState(() {
-          _imageAlert = "please select image";
-        });
-      } else {
-        setState(() {
-          _imageAlert = '';
-        });
-      }
+//      if (_image == null) {
+//        setState(() {
+//          _imageAlert = "please select image";
+//        });
+//      } else {
+//        setState(() {
+//          _imageAlert = '';
+//        });
+//      }
       if (selectedDeliveryService == null) {
         setState(() {
           _deliveryAlert = "Please select one";
@@ -151,20 +151,20 @@ class _AdminRegistrationState extends State<AdminRegistration> {
       }
       if (_formKey.currentState.validate()) {
         _formKey.currentState.save();
-        if (_image != null) {
-          if (selectedDeliveryService != null) {
-            if (_city != null) {
-              if (_agreeAlert.isEmpty) {
-                if (_percantAlert.isEmpty) {
-                  setState(() {
-                    _isLooding = true;
-                  });
-                  registration();
-                }
+        //if (_image != null) {
+        if (selectedDeliveryService != null) {
+          if (_city != null) {
+            if (_agreeAlert.isEmpty) {
+              if (_percantAlert.isEmpty) {
+                setState(() {
+                  _isLooding = true;
+                });
+                registration();
               }
             }
           }
         }
+        // }
       }
     }
   }
@@ -174,7 +174,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
     Cities city = _allCity.firstWhere((c) => c.text == _city);
     idCity = city.id;
 
-    if (_image != null) {
+    //if (_image != null) {
       if (_shopName != null) {
         if (_phone != null || int.parse(_phone) == 9) {
 //          if (_email != null) {
@@ -189,11 +189,11 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                       //email: _email,
                       password: _password,
                       phone:
-                          "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
-                      image: _image,
+                      "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
+                      image: _image == null ? File('') : _image,
                       city: idCity,
                       is_delivery_available: selectedDeliveryService ==
-                              DeliveryService.doesDelivery
+                          DeliveryService.doesDelivery
                           ? true
                           : false,
                       categories: _categories);
@@ -278,24 +278,26 @@ class _AdminRegistrationState extends State<AdminRegistration> {
         } else {
           showDialog(
               context: context,
-              builder: (BuildContext context) => DialogWorning(
+              builder: (BuildContext context) =>
+                  DialogWorning(
                     mss: AppLocalizations.of(context).translate('phoneError'),
                   ));
         }
       } else {
         showDialog(
             context: context,
-            builder: (BuildContext context) => DialogWorning(
+            builder: (BuildContext context) =>
+                DialogWorning(
                   mss: AppLocalizations.of(context).translate('nameError'),
                 ));
       }
-    } else {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) => DialogWorning(
-                mss: AppLocalizations.of(context).translate('imageError'),
-              ));
-    }
+//    } else {
+//      showDialog(
+//          context: context,
+//          builder: (BuildContext context) => DialogWorning(
+//                mss: AppLocalizations.of(context).translate('imageError'),
+//              ));
+//    }
   }
 
   void _onCountryChange(CountryCode countryCode) {
