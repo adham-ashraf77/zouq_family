@@ -59,6 +59,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 
   bool _agree = false;
   bool percant = false;
+  bool isConnected = true;
 
   TextEditingController name = TextEditingController();
 
@@ -84,8 +85,6 @@ class _AdminRegistrationState extends State<AdminRegistration> {
     //   });
     // }
   }
-
-  bool isConnected = true;
 
   checkConnection() async {
     try {
@@ -220,8 +219,8 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) => DialogWorning(
-                                mss: response1,
-                              ));
+                            mss: "msg from server: ${response1}",
+                            ));
                   } else {
                     Navigator.pushReplacement(
                         context,

@@ -139,7 +139,7 @@ class Registeration {
         return "success";
       } else {
         print('not a 200 requesy ${response.data}');
-        return "something is wrong";
+        return "${response.data}";
       }
     } on DioError catch (e) {
       if (e.response.data["errors"]['phone'] != null) {
@@ -148,7 +148,8 @@ class Registeration {
         return "emailError";
       }
       print(e.response);
-      return e.response.data['message'];
+      return e.response.data;
+      //return e.response.data['message'];
     }
   }
 
