@@ -44,7 +44,7 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
     ));
   }
 
-  void whatsAppOpen({String phone}) async {
+  void whatsAppOpen({String phone, BuildContext context}) async {
     final snackBar = SnackBar(content: Text('please install whatsapp'));
     var whatsappUrl = "whatsapp://send?phone=$phone&text=hello";
     await canLaunch(whatsappUrl) ? launch(whatsappUrl) : Scaffold.of(context).showSnackBar(snackBar);
@@ -110,291 +110,284 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.all(3.0), // borde width
-                  decoration: new BoxDecoration(
-                    color: Colors.grey[200], // border color
-                    shape: BoxShape.circle,
-                  ),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.grey[200],
-                    backgroundImage:
-                        NetworkImage('${order.imageUrl.toString()}'),
-                    radius: 50,
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  order.name.toString(),
-                  style: paragarph1.copyWith(
-                      fontWeight: FontWeight.w500, color: Color(0xFF535353)),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  decoration: new BoxDecoration(
-                      color: type == 1
-                          ? Color(0xFFF39D67).withOpacity(0.2)
-                          : type == 2
-                              ? Color(0xFFF39D67)
-                              : type == 3 && order.status == 'done'
-                                  ? Color(0xFF48CF84)
-                                  : type == 3 &&
-                                              order.status ==
-                                                  'c'
-                                                      'anceled' ||
-                                          order.status == "rejected"
-                                      ? Colors.red
-                                      : Colors.blue, // border color
-                      border: Border.all(
-                        color: type == 1
-                            ? Color(0xFFF39D67)
-                            : type == 2
+          child: Builder(
+            builder: (context) {
+              return Container(
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.all(3.0), // borde width
+                      decoration: new BoxDecoration(
+                        color: Colors.grey[200], // border color
+                        shape: BoxShape.circle,
+                      ),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.grey[200],
+                        backgroundImage: NetworkImage('${order.imageUrl.toString()}'),
+                        radius: 50,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      order.name.toString(),
+                      style: paragarph1.copyWith(fontWeight: FontWeight.w500, color: Color(0xFF535353)),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Container(
+                      decoration: new BoxDecoration(
+                          color: type == 1
+                              ? Color(0xFFF39D67).withOpacity(0.2)
+                              : type == 2
+                                  ? Color(0xFFF39D67)
+                                  : type == 3 && order.status == 'done'
+                                      ? Color(0xFF48CF84)
+                                      : type == 3 &&
+                                                  order.status ==
+                                                      'c'
+                                                          'anceled' ||
+                                              order.status == "rejected"
+                                          ? Colors.red
+                                          : Colors.blue, // border color
+                          border: Border.all(
+                            color: type == 1
                                 ? Color(0xFFF39D67)
-                                : type == 3 ? Color(0xFF48CF84) : Colors.blue,
-                      ),
-                      borderRadius: BorderRadius.circular(10)),
-                  width: 100,
-                  height: 30,
-                  child: Center(
-                      child: Text(
-                    type == 1
-                        ? AppLocalizations.of(context).translate('newOrder')
-                        : type == 2
-                            ? AppLocalizations.of(context)
-                                .translate('confirmedOrder')
-                            : type == 3 && order.status == 'done'
-                                ? AppLocalizations.of(context)
-                                    .translate('completedOrder')
-                        : type == 3 && order.status == 'canceled' || order.status == "rejected"
-                        ? AppLocalizations.of(context)
-                        .translate('cancelOrder')
-                        : '',
-                    textDirection: TextDirection.rtl,
-                    style: TextStyle(
-                        color: type == 1
-                            ? Color(0xFFE08248)
+                                : type == 2 ? Color(0xFFF39D67) : type == 3 ? Color(0xFF48CF84) : Colors.blue,
+                          ),
+                          borderRadius: BorderRadius.circular(10)),
+                      width: 100,
+                      height: 30,
+                      child: Center(
+                          child: Text(
+                        type == 1
+                            ? AppLocalizations.of(context).translate('newOrder')
                             : type == 2
-                                ? Colors.white
-                                : type == 3 ? Colors.white : Colors.blue,
-                        fontSize: 16),
-                  )),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal:10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                ? AppLocalizations.of(context).translate('confirmedOrder')
+                                : type == 3 && order.status == 'done'
+                                    ? AppLocalizations.of(context).translate('completedOrder')
+                                    : type == 3 && order.status == 'canceled' || order.status == "rejected"
+                                        ? AppLocalizations.of(context).translate('cancelOrder')
+                                        : '',
+                        textDirection: TextDirection.rtl,
+                        style: TextStyle(
+                            color: type == 1
+                                ? Color(0xFFE08248)
+                                : type == 2 ? Colors.white : type == 3 ? Colors.white : Colors.blue,
+                            fontSize: 16),
+                      )),
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Text(
-                            '${order.id.toString()}',
-                            style: TextStyle(color: Colors.grey),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                '${order.id.toString()}',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              Text(
+                                AppLocalizations.of(context).translate('orderNum'),
+                                style: paragarph2.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            AppLocalizations.of(context).translate('orderNum'),
-                            style: paragarph2.copyWith(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w400,
-                            ),
+                          Divider(
+                            height: 2,
+                            color: Colors.grey[300],
                           ),
-                        ],
-                      ),
-                      Divider(
-                        height: 2,
-                        color: Colors.grey[300],
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            '${order.time.toString()}' +
-                                '  ' +
-                                '${order.date.toString()}',
-                            style: TextStyle(color: Colors.grey),
+                          SizedBox(
+                            height: 20,
                           ),
-                          Text(
-                            AppLocalizations.of(context).translate('orderTime'),
-                            style: paragarph2.copyWith(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w400,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                '${order.time.toString()}' + '  ' + '${order.date.toString()}',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              Text(
+                                AppLocalizations.of(context).translate('orderTime'),
+                                style: paragarph2.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      Divider(
-                        height: 2,
-                        color: Colors.grey[300],
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      type == 2 || type == 3
-                          ? InkWell(
-                        onTap: () {
-                          if (type == 2) whatsAppOpen(phone: order.phoneNumber);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Container(
-                                  width: 35,
-                                  height: 35,
-                                  child: Image.asset(
-                                    'assets/images/whatsicon.png',
+                          Divider(
+                            height: 2,
+                            color: Colors.grey[300],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          type == 2 || type == 3
+                              ? InkWell(
+                                  onTap: () {
+                                    if (type == 2) whatsAppOpen(phone: order.phoneNumber, context: context);
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Row(
+                                        children: <Widget>[
+                                          Container(
+                                            width: 35,
+                                            height: 35,
+                                            child: Image.asset(
+                                              'assets/images/whatsicon.png',
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            '${order.phoneNumber.toString()}',
+                                            style: TextStyle(color: Colors.grey),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                        'محادثة whatsapp',
+                                        textDirection: TextDirection.rtl,
+                                        style: paragarph2.copyWith(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w100,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  '${order.phoneNumber.toString()}',
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              'محادثة whatsapp',
-                              textDirection: TextDirection.rtl,
-                              style: paragarph2.copyWith(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w100,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                          : SizedBox(),
-                      type == 2 || type == 3
-                          ? Divider(
-                              height: 2,
-                              color: Colors.grey[300],
-                            )
-                          : SizedBox(),
-                      SizedBox(
-                        height: type == 2 || type == 3 ? 20 : 0,
+                                )
+                              : SizedBox(),
+                          type == 2 || type == 3
+                              ? Divider(
+                                  height: 2,
+                                  color: Colors.grey[300],
+                                )
+                              : SizedBox(),
+                          SizedBox(
+                            height: type == 2 || type == 3 ? 20 : 0,
+                          ),
+                          /////
+                          type == 2 || type == 3
+                              ? InkWell(
+                                  onTap: () => _makePhoneCall('tel:${order.phoneNumber}'),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Row(
+                                        children: <Widget>[
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          FaIcon(
+                                            FontAwesomeIcons.mobile,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            '${order.phoneNumber.toString()}',
+                                            style: TextStyle(color: Colors.grey),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                        AppLocalizations.of(context).translate('telephone'),
+                                        textDirection: TextDirection.rtl,
+                                        style: paragarph2.copyWith(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w100,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : SizedBox(),
+                          type == 2 || type == 3
+                              ? Divider(
+                                  height: 2,
+                                  color: Colors.grey[300],
+                                )
+                              : SizedBox(),
+                          SizedBox(
+                            height: type == 2 || type == 3 ? 20 : 0,
+                          ),
+                        ],
                       ),
-                      /////
-                      type == 2 || type == 3
-                          ? InkWell(
-                        onTap: () => _makePhoneCall('tel:${order.phoneNumber}'),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                FaIcon(FontAwesomeIcons.mobile,),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  '${order.phoneNumber.toString()}',
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              AppLocalizations.of(context)
-                                  .translate('telephone'),
-                              textDirection: TextDirection.rtl,
-                              style: paragarph2.copyWith(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w100,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                          : SizedBox(),
-                      type == 2 || type == 3
-                          ? Divider(
-                              height: 2,
-                              color: Colors.grey[300],
-                            )
-                          : SizedBox(),
-                      SizedBox(
-                        height: type == 2 || type == 3 ? 20 : 0,
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                type == 3
-                    ? SizedBox()
-                    : Text(
-                        AppLocalizations.of(context).translate('location'),
-                        style: paragarph2.copyWith(color: Colors.blue),
-                      ),
-                SizedBox(
-                  height: type == 3 ? 0 : 20,
-                ),
-                type == 2 || type == 1
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Container(
-                            color: Colors.grey[200],
-                            height: 100,
-                            width: MediaQuery.of(context).size.width,
-                            child: Image.network(
-                                'https://www.mediafire.com/convkey/b31a/c318q2te6lqziqzzg.jpg')),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    type == 3
+                        ? SizedBox()
+                        : Text(
+                            AppLocalizations.of(context).translate('location'),
+                            style: paragarph2.copyWith(color: Colors.blue),
+                          ),
+                    SizedBox(
+                      height: type == 3 ? 0 : 20,
+                    ),
+                    type == 2 || type == 1
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                                color: Colors.grey[200],
+                                height: 100,
+                                width: MediaQuery.of(context).size.width,
+                                child: Image.network('https://www.mediafire.com/convkey/b31a/c318q2te6lqziqzzg.jpg')),
 
-                        ///TODO this url must be replaced with `link` variable
-                      )
-                    : Container(
-                        height: 100 * order.comments.length.toDouble(),
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: order.comments.length,
-                          itemBuilder: (context, i) {
-                            return CommentDesign(comment: order.comments[i]);
-                          },
-                        ),
-                      ),
-                SizedBox(
-                  height: 20,
+                            ///TODO this url must be replaced with `link` variable
+                          )
+                        : Container(
+                            height: 100 * order.comments.length.toDouble(),
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: order.comments.length,
+                              itemBuilder: (context, i) {
+                                return CommentDesign(comment: order.comments[i]);
+                              },
+                            ),
+                          ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'الطلبات (${order.product.length.toString()} منتجات)',
+                      style: paragarph2.copyWith(color: Colors.blue),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    ListView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      primary: false,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: order.product.length,
+                      itemBuilder: (context, i) {
+                        return OrderViewPageCard(
+                          prouct: order.product[i],
+                        );
+                      },
+                    )
+                  ],
                 ),
-                Text(
-                  'الطلبات (${order.product.length.toString()} منتجات)',
-                  style: paragarph2.copyWith(color: Colors.blue),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                ListView.builder(
-                  padding: EdgeInsets.symmetric(horizontal:5),
-                  primary: false,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: order.product.length,
-                  itemBuilder: (context, i) {
-                    return OrderViewPageCard(
-                      prouct: order.product[i],
-                    );
-                  },
-                )
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),
