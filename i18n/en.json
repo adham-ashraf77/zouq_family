@@ -121,7 +121,8 @@
   "onDemand": "on demands request",
   "withdrawSuccess": "withdraw request success",
   "deleteProductFailed": "you can`t delete this product because there is un finished order contain that product",
-  "imaPickerDialogTitle":"Choose from:",
-  "camera":"Camera",
-  "gallery":"Gallery"
+  "imaPickerDialogTitle": "Choose from:",
+  "camera": "Camera",
+  "gallery": "Gallery",
+  "nameError": "please enter your name"
 }

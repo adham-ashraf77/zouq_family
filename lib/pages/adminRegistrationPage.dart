@@ -11,6 +11,7 @@ import 'package:zouqadmin/models/cities.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
 import 'package:zouqadmin/pages/terms.dart';
 import 'package:zouqadmin/services/getData.dart';
+import 'package:zouqadmin/services/registeration.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/filterChipWidget.dart';
@@ -18,6 +19,7 @@ import 'package:zouqadmin/widgets/filterChipWidget.dart';
 import '../I10n/app_localizations.dart';
 import '../theme/common.dart';
 import '../widgets/AppButton.dart';
+import 'auth/verificationcode_screen.dart';
 
 enum DeliveryService { doesDelivery, noDelivery }
 
@@ -28,23 +30,15 @@ class AdminRegistration extends StatefulWidget {
 
 class _AdminRegistrationState extends State<AdminRegistration> {
   DeliveryService selectedDeliveryService;
-  String dropdownValue = 'one';
   String fileName = '';
   String fileType = '';
   final _formKey = GlobalKey<FormState>();
-  String _imageAlert = '';
-  String _deliveryAlert = '';
-  String _cityAlert = '';
   bool _loodingImage = false;
-  String _shopName;
   String _shopOwnerName;
   String _pIN;
   String _password;
   //String _email;
   String _phone;
-  String _agreeAlert = "";
-  String _percantAlert = "";
-  bool _is_delivery_available;
   File _image;
   List<int> _categories = [];
   String _city;
@@ -57,7 +51,6 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 
   bool _agree = false;
   bool percant = false;
-  bool isConnected = true;
 
   TextEditingController name = TextEditingController();
 
@@ -84,6 +77,8 @@ class _AdminRegistrationState extends State<AdminRegistration> {
     // }
   }
 
+  bool isConnected = true;
+
   checkConnection() async {
     try {
       final result = await InternetAddress.lookup('google.com');
@@ -100,73 +95,11 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 
   validation() async {
     await checkConnection();
-    if (isConnected) {
-      if (percant == false) {
-        setState(() {
-          _percantAlert = AppLocalizations.of(context).translate('percantEror');
-        });
-      } else {
-        setState(() {
-          _percantAlert = "";
-        });
-      }
-      if (_agree == false) {
-        setState(() {
-          _agreeAlert = AppLocalizations.of(context).translate('termsError');
-        });
-      } else {
-        setState(() {
-          _agreeAlert = "";
-        });
-      }
-//      if (_image == null) {
-//        setState(() {
-//          _imageAlert = "please select image";
-//        });
-//      } else {
-//        setState(() {
-//          _imageAlert = '';
-//        });
-//      }
-      if (selectedDeliveryService == null) {
-        setState(() {
-          _deliveryAlert = "Please select one";
-        });
-      } else {
-        setState(() {
-          _deliveryAlert = '';
-        });
-      }
-      if (_city == null) {
-        setState(() {
-          _cityAlert = "Please select city";
-        });
-      } else {
-        setState(() {
-          _cityAlert = '';
-        });
-      }
-      if (_formKey.currentState.validate()) {
-        _formKey.currentState.save();
-        //if (_image != null) {
-        if (selectedDeliveryService != null) {
-          if (_city != null) {
-            if (_agreeAlert.isEmpty) {
-              if (_percantAlert.isEmpty) {
-                setState(() {
-                  _isLooding = true;
-                });
-                registration();
-              }
-            }
-          }
-        }
-        // }
-      }
+    if (isConnected) if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      registration();
     }
   }
-
-  String wtf = '';
 
   registration() async {
     int idCity;
@@ -174,66 +107,68 @@ class _AdminRegistrationState extends State<AdminRegistration> {
     idCity = city.id;
 
     //if (_image != null) {
-    if (_shopName != null) {
+    if (name.text != null && name.text != '' && name.text.isNotEmpty) {
       if (_phone != null || int.parse(_phone) == 9) {
 //          if (_email != null) {
-          if (_password != null) {
-            if (selectedDeliveryService != null) {
-              if (_categories.isNotEmpty) {
-                if (_city != null) {
-                  wtf = 'success';
-                  setState(() {});
-//                  String response1 = await Registeration().registration(
-//                      shopName: _shopName,
-//                      shopOwnerName: _shopOwnerName,
-//                      pIN: _pIN,
-//                      //email: _email,
-//                      password: _password,
-//                      phone:
-//                      "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
-//                      image: _image == null ? File('') : _image,
-//                      city: idCity,
-//                      is_delivery_available: selectedDeliveryService ==
-//                          DeliveryService.doesDelivery
-//                          ? true
-//                          : false,
-//                      categories: _categories);
-//                  setState(() {
-//                    _isLooding = false;
-//                  });
-//
-//                  if (response1 != "success") {
-//                    if (response1 == "phoneError")
-//                      showDialog(
-//                          context: context,
-//                          builder: (BuildContext context) => DialogWorning(
-//                                mss: AppLocalizations.of(context)
-//                                    .translate('phoneDuplicatedError'),
-//                              ));
-//                    else if (response1 == "emailError")
-//                      showDialog(
-//                          context: context,
-//                          builder: (BuildContext context) => DialogWorning(
-//                                mss: AppLocalizations.of(context)
-//                                    .translate('emailDuplicatedError'),
-//                              ));
-//                    else
-//                      showDialog(
-//                          context: context,
-//                          builder: (BuildContext context) => DialogWorning(
-//                            mss: "msg from server: ${response1}",
-//                            ));
-//                  } else {
-//                    Navigator.pushReplacement(
-//                        context,
-//                        MaterialPageRoute(
-//                            builder: (context) => VerificationcodePage(
-//                                  phone:
-//                                      "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
-//                                  flag: 1,
-//                                )));
-//                  }
+        if (_password != null) {
+          if (selectedDeliveryService != null) {
+            if (_categories.isNotEmpty) {
+              if (_city != null) {
+                String response1 = await Registeration().registration(
+                    shopName: name.text,
+                    shopOwnerName: _shopOwnerName,
+                    pIN: _pIN,
+                    //email: _email,
+                    password: _password,
+                    phone:
+                    "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
+                    image: _image == null ? File('') : _image,
+                    city: idCity,
+                    is_delivery_available: selectedDeliveryService ==
+                        DeliveryService.doesDelivery
+                        ? true
+                        : false,
+                    categories: _categories);
+                setState(() {
+                  _isLooding = false;
+                });
+
+                if (response1 != "success") {
+                  if (response1 == "phoneError")
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            DialogWorning(
+                              mss: AppLocalizations.of(context)
+                                  .translate('phoneDuplicatedError'),
+                            ));
+                  else if (response1 == "emailError")
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            DialogWorning(
+                              mss: AppLocalizations.of(context)
+                                  .translate('emailDuplicatedError'),
+                            ));
+                  else
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            DialogWorning(
+                              mss: response1,
+                            ));
                 } else {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              VerificationcodePage(
+                                phone:
+                                "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
+                                flag: 1,
+                              )));
+                }
+              } else {
                   showDialog(
                       context: context,
                       builder: (BuildContext context) => DialogWorning(
@@ -266,9 +201,9 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                 builder: (BuildContext context) => DialogWorning(
                       mss: AppLocalizations.of(context)
                           .translate('passwordError'),
-                    ));
-          }
-          //         }
+                ));
+        }
+        //         }
 //          else {
 //            showDialog(
 //                context: context,
@@ -276,14 +211,15 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 //                      mss: AppLocalizations.of(context).translate('emailError'),
 //                    ));
 //          }
-        } else {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) =>
-                  DialogWorning(
-                    mss: AppLocalizations.of(context).translate('phoneError'),
-                  ));
-        }
+      }
+      else {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) =>
+                DialogWorning(
+                  mss: AppLocalizations.of(context).translate('phoneError'),
+                ));
+      }
       } else {
         showDialog(
             context: context,
@@ -368,83 +304,63 @@ class _AdminRegistrationState extends State<AdminRegistration> {
         child: isConnected
             ? Form(
           key: _formKey,
-          child: Stack(
+          child: ListView(
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             children: <Widget>[
-              ListView(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Center(
-                        child: Container(
-                          width: 100,
-                          height: 100,
-                          child: InkWell(
-                            onTap: () {
-                              getImage(context);
-                            },
-                            child: CircleAvatar(
-                              backgroundColor: Colors.grey[200],
-                              backgroundImage: _image == null
-                                  ? new ExactAssetImage(profileImg)
-                                  : FileImage(_image),
-                              radius: 50,
-                            ),
-                          ),
+                  Center(
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      child: InkWell(
+                        onTap: () {
+                          getImage(context);
+                        },
+                        child: CircleAvatar(
+                          backgroundColor: Colors.grey[200],
+                          backgroundImage: _image == null
+                              ? new ExactAssetImage(profileImg)
+                              : FileImage(_image),
+                          radius: 50,
                         ),
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      _loodingImage ? CircularProgressIndicator() : Container(),
-                    ],
-                  ),
-                  Center(
-                    child: Text(
-                      "$_imageAlert",
-                      style: TextStyle(color: Colors.red, fontSize: 12),
-                      textAlign: TextAlign.start,
                     ),
                   ),
                   SizedBox(
-                    height: 10.0,
+                    width: 10,
                   ),
-                  ListTile(
-                    title: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: TextFormField(
-                            controller: name,
-                            onSaved: (value) {
-                              _shopName = value;
-                            },
-                            validator: (value) {
-                              if (value
-                                  .trim()
-                                  .length == 0) {
-                                return '${AppLocalizations.of(context).translate('shopNameError')}';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                                hintText: AppLocalizations.of(context)
-                                    .translate('shopName'),
-                                hintStyle: hintTextStyle),
-                          ),
-                        ),
-                      ],
+                  _loodingImage ? CircularProgressIndicator() : Container(),
+                ],
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              ListTile(
+                title: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextField(
+                        controller: name,
+                        decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context)
+                                .translate('shopName'),
+                            hintStyle: hintTextStyle),
+                      ),
                     ),
-                  ),
-                  ListTile(
-                    title: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: TextFormField(
-                            onSaved: (value) {
-                              _shopOwnerName = value;
-                            },
+                  ],
+                ),
+              ),
+              ListTile(
+                title: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextFormField(
+                        onSaved: (value) {
+                          _shopOwnerName = value;
+                        },
 //                        validator: (value) {
 //                          if (_shopOwnerName != null) {
 //                            if (value
@@ -455,25 +371,25 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 //                          }
 //                          return null;
 //                        },
-                            decoration: InputDecoration(
-                                hintText: AppLocalizations.of(context)
-                                    .translate('shopOwnerName'),
-                                hintStyle: hintTextStyle),
-                          ),
-                        ),
-                      ],
+                        decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context)
+                                .translate('shopOwnerName'),
+                            hintStyle: hintTextStyle),
+                      ),
                     ),
-                  ),
-                  ListTile(
-                    title: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            maxLength: 10,
-                            onSaved: (value) {
-                              _pIN = value;
-                            },
+                  ],
+                ),
+              ),
+              ListTile(
+                title: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        maxLength: 10,
+                        onSaved: (value) {
+                          _pIN = value;
+                        },
 //                        validator: (value) {
 //                          if (_pIN != null) {
 //                            if (value
@@ -486,70 +402,70 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 //                          }
 //                          return null;
 //                        },
-                            decoration: InputDecoration(
-                                hintText:
-                                AppLocalizations.of(context).translate('PIN'),
-                                hintStyle: hintTextStyle),
-                          ),
-                        ),
-                      ],
+                        decoration: InputDecoration(
+                            hintText:
+                            AppLocalizations.of(context).translate('PIN'),
+                            hintStyle: hintTextStyle),
+                      ),
                     ),
-                  ),
-                  ListTile(
-                    title: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            child: TextFormField(
-                              maxLength: 9,
-                              decoration: InputDecoration(
-                                  counterText: "",
-                                  border: InputBorder.none,
-                                  hintText: AppLocalizations.of(context)
-                                      .translate('telephone'),
-                                  hintStyle: hintTextStyle),
-                              onSaved: (value) {
-                                _phone = value;
-                              },
-                              validator: (value) {
-                                if (value
+                  ],
+                ),
+              ),
+              ListTile(
+                title: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        child: TextFormField(
+                          maxLength: 9,
+                          decoration: InputDecoration(
+                              counterText: "",
+                              border: InputBorder.none,
+                              hintText: AppLocalizations.of(context)
+                                  .translate('telephone'),
+                              hintStyle: hintTextStyle),
+                          onSaved: (value) {
+                            _phone = value;
+                          },
+                          validator: (value) {
+                            if (value
+                                .trim()
+                                .length == 0 ||
+                                value
                                     .trim()
-                                    .length == 0 ||
-                                    value
-                                        .trim()
-                                        .length != 9) {
-                                  print(value
-                                      .trim()
-                                      .length);
-                                  return AppLocalizations.of(context)
-                                      .translate('phoneError');
-                                }
-                                return null;
-                              },
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(color: iconsFaded, width: 1),
-                              ),
-                            ),
+                                    .length != 9) {
+                              print(value
+                                  .trim()
+                                  .length);
+                              return AppLocalizations.of(context)
+                                  .translate('phoneError');
+                            }
+                            return null;
+                          },
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(color: iconsFaded, width: 1),
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                    trailing: Container(
-                      height: 55,
-                      child: CountryCodePicker(
-                        onChanged: _onCountryChange,
-                        initialSelection: 'SA',
-                        favorite: ['+966', 'SA'],
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(color: iconsFaded, width: 1),
-                        ),
-                      ),
+                  ],
+                ),
+                trailing: Container(
+                  height: 55,
+                  child: CountryCodePicker(
+                    onChanged: _onCountryChange,
+                    initialSelection: 'SA',
+                    favorite: ['+966', 'SA'],
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: iconsFaded, width: 1),
                     ),
                   ),
+                ),
+              ),
 //              ListTile(
 //                title: Row(
 //                  children: <Widget>[
@@ -575,340 +491,310 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 //                  ],
 //                ),
 //              ),
-                  ListTile(
-                    title: Row(
+              ListTile(
+                title: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextFormField(
+                        obscureText: true,
+                        decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context)
+                                .translate('password'),
+                            hintStyle: hintTextStyle),
+                        onSaved: (value) {
+                          _password = value;
+                        },
+                        validator: (value) {
+                          if (value
+                              .trim()
+                              .length == 0) {
+                            return AppLocalizations.of(context)
+                                .translate('passwordError');
+                          }
+                          if (value
+                              .trim()
+                              .length < 6) {
+                            return AppLocalizations.of(context)
+                                .translate('shortPassword');
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ListTile(
+                title: SizedBox(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Row(
                       children: <Widget>[
-                        Expanded(
-                          child: TextFormField(
-                            obscureText: true,
-                            decoration: InputDecoration(
-                                hintText: AppLocalizations.of(context)
-                                    .translate('password'),
-                                hintStyle: hintTextStyle),
-                            onSaved: (value) {
-                              _password = value;
-                            },
-                            validator: (value) {
-                              if (value
-                                  .trim()
-                                  .length == 0) {
-                                return AppLocalizations.of(context)
-                                    .translate('passwordError');
-                              }
-                              if (value
-                                  .trim()
-                                  .length < 6) {
-                                return AppLocalizations.of(context)
-                                    .translate('shortPassword');
-                              }
-                            },
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedDeliveryService =
+                                  DeliveryService.doesDelivery;
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: selectedDeliveryService ==
+                                      DeliveryService.doesDelivery
+                                      ? accent
+                                      : Color(0xFF636363),
+                                ),
+                                borderRadius: BorderRadius.circular(50)),
+                            child: CircleAvatar(
+                              child: Icon(
+                                FontAwesomeIcons.check,
+                                color: Colors.white,
+                                size: 9.0,
+                              ),
+                              radius: 10.0,
+                              backgroundColor: selectedDeliveryService ==
+                                  DeliveryService.doesDelivery
+                                  ? accent
+                                  : Colors.white,
+                            ),
                           ),
+                        ),
+                        SizedBox(
+                          width: 10.0,
+                        ),
+                        Text(
+                          AppLocalizations.of(context).translate('delivery'),
+                          style: productName1,
+                        ),
+                        SizedBox(
+                          width: 20.0,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedDeliveryService =
+                                  DeliveryService.noDelivery;
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: selectedDeliveryService ==
+                                      DeliveryService.noDelivery
+                                      ? accent
+                                      : Color(0xFF636363),
+                                ),
+                                borderRadius: BorderRadius.circular(50)),
+                            child: CircleAvatar(
+                              child: Icon(
+                                FontAwesomeIcons.check,
+                                color: Colors.white,
+                                size: 9,
+                              ),
+                              radius: 10.0,
+                              backgroundColor: selectedDeliveryService ==
+                                  DeliveryService.noDelivery
+                                  ? accent
+                                  : Colors.white,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10.0,
+                        ),
+                        Text(
+                          AppLocalizations.of(context).translate('noDelivery'),
+                          style: productName1,
                         ),
                       ],
                     ),
                   ),
-                  ListTile(
-                    title: SizedBox(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width,
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Row(
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectedDeliveryService =
-                                      DeliveryService.doesDelivery;
-                                });
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: selectedDeliveryService ==
-                                          DeliveryService.doesDelivery
-                                          ? accent
-                                          : Color(0xFF636363),
-                                    ),
-                                    borderRadius: BorderRadius.circular(50)),
-                                child: CircleAvatar(
-                                  child: Icon(
-                                    FontAwesomeIcons.check,
-                                    color: Colors.white,
-                                    size: 9.0,
-                                  ),
-                                  radius: 10.0,
-                                  backgroundColor: selectedDeliveryService ==
-                                      DeliveryService.doesDelivery
-                                      ? accent
-                                      : Colors.white,
-                                ),
+                ),
+              ),
+              //TODO revise code and add retrive selected item index logic
+              Container(
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.1,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _tags.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: FilterChipWidget(
+                          chipName: _tags[index].text,
+                          isSelected: selected[index],
+                          onSelect: (clicked) {
+                            if (clicked == true) {
+                              addCategories(_tags[index].id);
+                            } else {
+                              _categories.remove(_tags[index].id);
+                              _categories.forEach((element) {
+                                print(element);
+                              });
+                              print('----------------------');
+                            }
+                            setState(() {
+                              selected[index] = clicked;
+                            });
+                          },
+                        ),
+                      );
+                    }),
+              ),
+              //TODO fill dropdown button with data from api
+              DropdownButton<String>(
+                value: _city,
+                icon: Icon(
+                  Icons.arrow_drop_down,
+                  color: Color.fromRGBO(29, 174, 209, 1),
+                  size: 35,
+                ),
+                elevation: 10,
+                hint: Text(
+                  AppLocalizations.of(context).translate('chooseCity'),
+                ),
+                underline: Container(
+                  height: 1,
+                  color: Colors.grey,
+                ),
+                isExpanded: true,
+                onChanged: (String newValue) {
+                  setState(() {
+                    _city = newValue;
+                  });
+                },
+                items: _showCity.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(left: 25.0, top: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 10),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _agree = !_agree;
+                          });
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: _agree ? accent : Color(0xFF636363),
                               ),
+                              borderRadius: BorderRadius.circular(50)),
+                          child: CircleAvatar(
+                            child: Icon(
+                              FontAwesomeIcons.check,
+                              color: Colors.white,
+                              size: 9.0,
                             ),
-                            SizedBox(
-                              width: 10.0,
-                            ),
-                            Text(
-                              AppLocalizations.of(context).translate('delivery'),
-                              style: productName1,
-                            ),
-                            SizedBox(
-                              width: 20.0,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectedDeliveryService =
-                                      DeliveryService.noDelivery;
-                                });
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: selectedDeliveryService ==
-                                          DeliveryService.noDelivery
-                                          ? accent
-                                          : Color(0xFF636363),
-                                    ),
-                                    borderRadius: BorderRadius.circular(50)),
-                                child: CircleAvatar(
-                                  child: Icon(
-                                    FontAwesomeIcons.check,
-                                    color: Colors.white,
-                                    size: 9,
-                                  ),
-                                  radius: 10.0,
-                                  backgroundColor: selectedDeliveryService ==
-                                      DeliveryService.noDelivery
-                                      ? accent
-                                      : Colors.white,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10.0,
-                            ),
-                            Text(
-                              AppLocalizations.of(context).translate('noDelivery'),
-                              style: productName1,
-                            ),
-                          ],
+                            radius: 10.0,
+                            backgroundColor: _agree ? accent : Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 15),
-                    child: Text(
-                      "$_deliveryAlert",
-                      style: TextStyle(color: Colors.red, fontSize: 12),
-                      textAlign: TextAlign.start,
+                    SizedBox(
+                      width: 5,
                     ),
-                  ),
-                  //TODO revise code and add retrive selected item index logic
-                  Container(
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.1,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _tags.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            child: FilterChipWidget(
-                              chipName: _tags[index].text,
-                              isSelected: selected[index],
-                              onSelect: (clicked) {
-                                if (clicked == true) {
-                                  addCategories(_tags[index].id);
-                                } else {
-                                  _categories.remove(_tags[index].id);
-                                  _categories.forEach((element) {
-                                    print(element);
-                                  });
-                                  print('----------------------');
-                                }
-                                setState(() {
-                                  selected[index] = clicked;
-                                });
-                              },
-                            ),
-                          );
-                        }),
-                  ),
-                  //TODO fill dropdown button with data from api
-                  DropdownButton<String>(
-                    value: _city,
-                    icon: Icon(
-                      Icons.arrow_drop_down,
-                      color: Color.fromRGBO(29, 174, 209, 1),
-                      size: 35,
-                    ),
-                    elevation: 10,
-                    hint: Text(
-                      AppLocalizations.of(context).translate('chooseCity'),
-                    ),
-                    underline: Container(
-                      height: 1,
-                      color: Colors.grey,
-                    ),
-                    isExpanded: true,
-                    onChanged: (String newValue) {
-                      setState(() {
-                        _city = newValue;
-                      });
-                    },
-                    items: _showCity.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                  Text(
-                    "$_cityAlert",
-                    style: TextStyle(color: Colors.red, fontSize: 12),
-                    textAlign: TextAlign.start,
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.only(left: 25.0, top: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 10),
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _agree = !_agree;
-                              });
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: _agree ? accent : Color(0xFF636363),
-                                  ),
-                                  borderRadius: BorderRadius.circular(50)),
-                              child: CircleAvatar(
-                                child: Icon(
-                                  FontAwesomeIcons.check,
-                                  color: Colors.white,
-                                  size: 9.0,
-                                ),
-                                radius: 10.0,
-                                backgroundColor: _agree ? accent : Colors.white,
+                    InkWell(
+                      onTap: () async {
+                        Response response = await Dio().get(
+                            'http://api.dhuqapp.com/api/content/page/terms-and-conditions');
+                        var data = response.data;
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              TermsAndConditionsPage(
+                                data: data,
                               ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            Response response = await Dio().get(
-                                'http://api.dhuqapp.com/api/content/page/terms-and-conditions');
-                            var data = response.data;
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  TermsAndConditionsPage(
-                                    data: data,
-                                  ),
-                            ));
-                          },
-                          child: Text(
-                            AppLocalizations.of(context).translate('termsAgree'),
-                            style: paragarph4,
-                          ),
-                        ),
-                      ],
+                        ));
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('termsAgree'),
+                        style: paragarph4,
+                      ),
                     ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    child: Text(
-                      "$_agreeAlert",
-                      style: TextStyle(color: Colors.red, fontSize: 12),
-                      textAlign: TextAlign.start,
-                    ),
-                  ),
+                  ],
+                ),
+              ),
 
-                  Padding(
-                    padding: EdgeInsets.only(left: 25.0, top: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 10),
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                percant = !percant;
-                              });
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: percant ? accent : Color(0xFF636363),
-                                  ),
-                                  borderRadius: BorderRadius.circular(50)),
-                              child: CircleAvatar(
-                                child: Icon(
-                                  FontAwesomeIcons.check,
-                                  color: Colors.white,
-                                  size: 9.0,
-                                ),
-                                radius: 10.0,
-                                backgroundColor: percant ? accent : Colors.white,
+              Padding(
+                padding: EdgeInsets.only(left: 25.0, top: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 10),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            percant = !percant;
+                          });
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: percant ? accent : Color(0xFF636363),
                               ),
+                              borderRadius: BorderRadius.circular(50)),
+                          child: CircleAvatar(
+                            child: Icon(
+                              FontAwesomeIcons.check,
+                              color: Colors.white,
+                              size: 9.0,
                             ),
+                            radius: 10.0,
+                            backgroundColor: percant ? accent : Colors.white,
                           ),
                         ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        InkWell(
-                          child: Text(
-                            AppLocalizations.of(context).translate('percantAgree'),
-                            style: paragarph4,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    child: Text(
-                      "$_percantAlert",
-                      style: TextStyle(color: Colors.red, fontSize: 12),
-                      textAlign: TextAlign.start,
+                    SizedBox(
+                      width: 5,
                     ),
-                  ),
-
-                  ListTile(
-                    title: _isLooding
-                        ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                        : AppButton(
-                        text: AppLocalizations.of(context).translate('signUp'),
-                        onClick: () {
-                          //TODO admin profile editing code
-                          validation();
-                        }),
-                  ),
-                  //TODO remove row testing alert dialogs
+                    InkWell(
+                      child: Text(
+                        AppLocalizations.of(context).translate('percantAgree'),
+                        style: paragarph4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ListTile(
+                title: _isLooding
+                    ? Center(
+                  child: CircularProgressIndicator(),
+                )
+                    : AppButton(
+                    text: AppLocalizations.of(context).translate('signUp'),
+                    onClick: () {
+                      //TODO admin profile editing code
+                      validation();
+                    }),
+              ),
+              //TODO remove row testing alert dialogs
 //              Row(
 //                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 //                crossAxisAlignment: CrossAxisAlignment.center,
@@ -943,9 +829,6 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 //                      }),
 //                ],
 //              )
-                ],
-              ),
-              Text('$wtf', style: TextStyle(color: Colors.red, fontSize: 50),),
             ],
           ),
         ) :
