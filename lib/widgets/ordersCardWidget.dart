@@ -3,7 +3,10 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:zouqadmin/models/order.dart';
 import 'package:zouqadmin/pages/ordersViewPage.dart';
 import 'package:zouqadmin/services/accept_or_reject_order.dart';
+import 'package:zouqadmin/services/end_order.dart';
 import 'package:zouqadmin/theme/common.dart';
+
+import '../home.dart';
 
 class OrdersCard extends StatelessWidget {
   final Order order;
@@ -31,6 +34,13 @@ class OrdersCard extends StatelessWidget {
       final snackBar = SnackBar(content: Text('please install whatsapp'));
       var whatsappUrl = "whatsapp://send?phone=$phone&text=hello";
       await canLaunch(whatsappUrl) ? launch(whatsappUrl) : Scaffold.of(context).showSnackBar(snackBar);
+    }
+
+    endOrder(String orderId) async {
+      await EndOrder().endOrder(orderId);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => Home(),
+      ));
     }
 
     return Padding(
@@ -214,17 +224,36 @@ class OrdersCard extends StatelessWidget {
                                         MediaQuery
                                             .of(context)
                                             .orientation == Orientation.portrait ? 23 : 30,
-                                      )
-                                          : Image.asset(
-                                        'assets/images/whatsicon.png',
-                                        fit: BoxFit.fill,
-                                      ),
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                                          border: Border.all(color: Colors.grey[300])),
-                                    ),
-                                  )
+                                                  )
+                                                : Image.asset(
+                                                    'assets/images/whatsicon.png',
+                                                    fit: BoxFit.fill,
+                                                  ),
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.all(Radius.circular(50)),
+                                                border: Border.all(color: Colors.grey[300])),
+                                          ),
+                                        ),
+                                  type == 2
+                                      ? InkWell(
+                                          onTap: () => endOrder(order.id),
+                                          child: Container(
+                                            height: 40,
+                                            width: 110,
+                                            margin: EdgeInsets.only(right: MediaQuery.of(context).padding.right + 50),
+                                            child: Icon(
+                                              Icons.check,
+                                              color: Colors.white,
+                                              size: 23,
+                                            ),
+                                            decoration: BoxDecoration(
+                                                color: Colors.green[300],
+                                                borderRadius: BorderRadius.all(Radius.circular(50)),
+                                                border: Border.all(color: Colors.grey[300])),
+                                          ),
+                                        )
+                                      : Container()
                                 ],
                               ),
                             ),

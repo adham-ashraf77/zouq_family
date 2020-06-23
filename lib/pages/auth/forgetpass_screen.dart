@@ -82,14 +82,12 @@ class _ForgetpassState extends State<Forgetpass> {
                 Expanded(
                   flex: 7,
                   child: TextFormField(
-                    decoration: InputDecoration(
-                        hintText: AppLocalizations.of(context)
-                            .translate('telephone')),
+                    maxLength: 9,
+                    decoration: InputDecoration(hintText: AppLocalizations.of(context).translate('telephone')),
                     controller: phoneController,
                     validator: (value) {
                       if (value.trim().length < 9) {
-                        return AppLocalizations.of(context)
-                            .translate('phoneError');
+                        return AppLocalizations.of(context).translate('phoneError');
                       }
                       return null;
                     },

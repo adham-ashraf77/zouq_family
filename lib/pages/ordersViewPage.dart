@@ -255,7 +255,9 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                                             width: 10,
                                           ),
                                           Text(
-                                            '${order.phoneNumber.toString()}',
+              order.phoneNumber.toString() == 'hidden'
+                                                ? 'XXXXXXXXXXX'
+                                                : '${order.phoneNumber.toString()}',
                                             style: TextStyle(color: Colors.grey),
                                           ),
                                         ],
@@ -300,7 +302,8 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                                             width: 10,
                                           ),
                                           Text(
-                                            '${order.phoneNumber.toString()}',
+                                            order.phoneNumber.toString() == "hidden" ? "XXXXXXXXX" : '${order.phoneNumber
+                                                .toString()}',
                                             style: TextStyle(color: Colors.grey),
                                           ),
                                         ],

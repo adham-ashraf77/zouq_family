@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -26,10 +28,31 @@ class VerificationcodePage extends StatefulWidget {
 class _VerificationcodePageState extends State<VerificationcodePage> {
   String _phone;
   int flag;
+
   _VerificationcodePageState(this._phone, this.flag);
+
   bool hasError = false;
   String _currentText = "";
   String _codeAlert = "";
+
+  Timer _timer;
+  int _start = 0;
+
+  void startTimer() {
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+      (Timer timer) => setState(
+        () {
+          if (_start < 1) {
+            timer.cancel();
+          } else {
+            _start = _start - 1;
+          }
+        },
+      ),
+    );
+  }
 
   validation() {
     if (_currentText.length < 4) {
@@ -55,8 +78,8 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
       showDialog(
           context: context,
           builder: (BuildContext context) => DialogWorning(
-                mss: AppLocalizations.of(context).translate('otpError'),
-              ));
+            mss: AppLocalizations.of(context).translate('otpError'),
+          ));
     } else {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.clear();
@@ -72,7 +95,7 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
         .resetPassword(phone: _phone, code: code)
         .then((onValue) {
       if (onValue.data['message'] ==
-              'now you can reset the password in 3600 sec' ||
+          'now you can reset the password in 3600 sec' ||
           onValue.statusCode == 200) {
         pushPage(
             context,
@@ -84,15 +107,15 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
             context: context,
             builder: (BuildContext context) => DialogWorning(
               mss: AppLocalizations.of(context).translate('failed'),
-                ));
+            ));
       }
     }).catchError((onError) {
       print('Error : ' + onError.toString());
       showDialog(
           context: context,
           builder: (BuildContext context) => DialogWorning(
-                mss: AppLocalizations.of(context).translate('unknownError'), //onError.toString(),
-              ));
+            mss: AppLocalizations.of(context).translate('unknownError'), //onError.toString(),
+          ));
     });
   }
 
@@ -103,7 +126,7 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
           context: context,
           builder: (BuildContext context) => DialogWorning(
             mss: AppLocalizations.of(context).translate('deleteFailed'),
-              ));
+          ));
     } else {
       print("success");
     }
@@ -138,9 +161,6 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
                 child: Image.asset('assets/images/mobileMsg.png'),
               ),
             ),
-            // SizedBox(
-            //   height: 5,
-            // ),
             Text(AppLocalizations.of(context).translate('enterOTPCode'),
                 style: paragarph2),
             SizedBox(
@@ -189,12 +209,20 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
             AppButton(
               text: AppLocalizations.of(context).translate('check'),
               onClick: () {
-                validation();
+                if (_start == 0) {
+                  _start = 60;
+                  startTimer();
+                  validation();
+                }
               },
             ),
             SizedBox(
               height: 20,
             ),
+
+            Text("برجاء الانتظار لأعاده المحاوله"),
+            Text('$_start' + ' ثانيه '),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -209,11 +237,12 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
                 isLoadingServer == false ?
                 InkWell(
                   onTap: () {
-                    resendCode();
+                    if (_start == 0)
+                      resendCode();
                   },
                   child: Text(
                     AppLocalizations.of(context).translate('resendCode'),
-                    style: paragarph4.copyWith(color: accent),
+                    style: paragarph4.copyWith(color: _start != 0 ? Colors.grey : accent),
                   ),
                 ) : CircularProgressIndicator(),
               ],
