@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:path/path.dart' as p;
+import 'package:path/path.dart' as path;
 import 'package:zouqadmin/models/categories.dart';
 import 'package:zouqadmin/models/cities.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
@@ -61,7 +61,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
     // try {
     var file = await selectImg(context);
     setState(() {
-      fileName = p.basename(file.path);
+      fileName = path.basename(file.path);
       _image = file;
     });
     setState(() {

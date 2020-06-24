@@ -129,7 +129,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AdminProfileEditor(),
+                          builder: (context) => AdminProfileEditor(avatarImageUrl: avatarImageUrl,),
                         ),
                       );
                     },
@@ -138,7 +138,8 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                       color: Color(0xff8c8c8c),
                     ),
                   ),
-                )),
+                )
+            ),
             // Container(
             //   height: MediaQuery.of(context).size.height * 0.15,
             //   decoration: BoxDecoration(

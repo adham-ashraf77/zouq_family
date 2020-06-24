@@ -616,7 +616,7 @@ class _EditItemPageState extends State<EditItemPage> {
                         validator: (value) {
                           if (value.trim().length < 3) {
                             //todo translate
-                            return 'Name must be at least 3 characters';
+                            return 'الاسم يجب ان يكون ثلاث احرف على الاقل';
                           }
                           return null;
                         },
@@ -633,7 +633,7 @@ class _EditItemPageState extends State<EditItemPage> {
                         validator: (value) {
                           if (value.trim().length < 1) {
                             //todo translate
-                            return 'Please put a price';
+                            return 'من فضلك ضع السعر';
                           }
                           return null;
                         },
@@ -683,7 +683,7 @@ class _EditItemPageState extends State<EditItemPage> {
                         controller: descTextFieldController,
                         validator: (value) {
                           if (value.length < 10) {
-                            return 'description must be at least 10 charcters';
+                            return 'الوصف يجب ان يكون على الاقل 10 احرف';
                           }
                           return null;
                         },

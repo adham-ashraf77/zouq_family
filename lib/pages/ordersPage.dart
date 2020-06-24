@@ -156,154 +156,157 @@ class _OrdersPageState extends State<OrdersPage> {
           ),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          SizedBox(
-            height: 10,
-          ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(7),
-            child: Container(
-              color: Colors.white,
-              width: allWidth - 25,
-              height: 40,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _isFocused3 = true;
-                        _isFocused1 = false;
-                        _isFocused2 = false;
-                      });
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: Container(
-                        width: (allWidth - 37) / 3,
-                        height: 35,
-                        color: _isFocused3 ? Colors.blue[300] : Colors.white,
-                        child: Center(
-                          child: Text(AppLocalizations.of(context).translate('oldOrders'),
-                              style: paragarph3.copyWith(
-                                  color: _isFocused3 ? Colors.white : Colors.black,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w100)),
+      body: RefreshIndicator(
+        onRefresh: () => getOrders(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+              height: 10,
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(7),
+              child: Container(
+                color: Colors.white,
+                width: allWidth - 25,
+                height: 40,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _isFocused3 = true;
+                          _isFocused1 = false;
+                          _isFocused2 = false;
+                        });
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child: Container(
+                          width: (allWidth - 37) / 3,
+                          height: 35,
+                          color: _isFocused3 ? Colors.blue[300] : Colors.white,
+                          child: Center(
+                            child: Text(AppLocalizations.of(context).translate('oldOrders'),
+                                style: paragarph3.copyWith(
+                                    color: _isFocused3 ? Colors.white : Colors.black,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w100)),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _isFocused3 = false;
-                        _isFocused1 = false;
-                        _isFocused2 = true;
-                      });
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: Container(
-                        width: (allWidth - 37) / 3,
-                        height: 35,
-                        color: _isFocused2 ? Colors.blue[300] : Colors.white,
-                        child: Center(
-                          child: Text(AppLocalizations.of(context).translate('confirmedOrders'),
-                              style: paragarph3.copyWith(
-                                  color: _isFocused2 ? Colors.white : Colors.black,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w100)),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _isFocused3 = false;
+                          _isFocused1 = false;
+                          _isFocused2 = true;
+                        });
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child: Container(
+                          width: (allWidth - 37) / 3,
+                          height: 35,
+                          color: _isFocused2 ? Colors.blue[300] : Colors.white,
+                          child: Center(
+                            child: Text(AppLocalizations.of(context).translate('confirmedOrders'),
+                                style: paragarph3.copyWith(
+                                    color: _isFocused2 ? Colors.white : Colors.black,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w100)),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _isFocused3 = false;
-                        _isFocused1 = true;
-                        _isFocused2 = false;
-                      });
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: Container(
-                        width: (allWidth - 37) / 3,
-                        height: 35,
-                        color: _isFocused1 ? Colors.blue[300] : Colors.white,
-                        child: Center(
-                          child: Text(AppLocalizations.of(context).translate('newOrders'),
-                              style: paragarph3.copyWith(
-                                  color: _isFocused1 ? Colors.white : Colors.black,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w100)),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _isFocused3 = false;
+                          _isFocused1 = true;
+                          _isFocused2 = false;
+                        });
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child: Container(
+                          width: (allWidth - 37) / 3,
+                          height: 35,
+                          color: _isFocused1 ? Colors.blue[300] : Colors.white,
+                          child: Center(
+                            child: Text(AppLocalizations.of(context).translate('newOrders'),
+                                style: paragarph3.copyWith(
+                                    color: _isFocused1 ? Colors.white : Colors.black,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w100)),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          _isFocused1
-              ? Expanded(
-                  child: ListView.builder(
-                    itemCount: newOrders.length,
-                    itemBuilder: (context, i) {
-                      return Stack(
-                        children: <Widget>[
-                          OrdersCard(
-                              order: newOrders[i],
-                              type: 1,
-                              rejectFunction: () async {
-                                await acceptOrRejectOrder(orderId: newOrders[i].id, orderStatus: "reject");
-                                setState(() {});
-                              },
-                              acceptFunction: () async {
-                                await acceptOrRejectOrder(orderId: newOrders[i].id, orderStatus: "approve");
-                                setState(() {});
-                              }
+            SizedBox(
+              height: 20,
+            ),
+            _isFocused1
+                ? Expanded(
+                    child: ListView.builder(
+                      itemCount: newOrders.length,
+                      itemBuilder: (context, i) {
+                        return Stack(
+                          children: <Widget>[
+                            OrdersCard(
+                                order: newOrders[i],
+                                type: 1,
+                                rejectFunction: () async {
+                                  await acceptOrRejectOrder(orderId: newOrders[i].id, orderStatus: "reject");
+                                  setState(() {});
+                                },
+                                acceptFunction: () async {
+                                  await acceptOrRejectOrder(orderId: newOrders[i].id, orderStatus: "approve");
+                                  setState(() {});
+                                }
 //                                            if (type == 1){
 //
 //
 //                                            };
 //                                            if (type == 2) whatsAppOpen(phone: order.phoneNumber);
 //                                          },
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                )
-              : _isFocused2
-                  ? Expanded(
-                      child: ListView.builder(
-                        itemCount: completeOrders.length,
-                        itemBuilder: (context, i) {
-                          return OrdersCard(
-                            order: completeOrders[i],
-                            type: 2,
-                          );
-                        },
-                      ),
-                    )
-                  : Expanded(
-                      child: ListView.builder(
-                        itemCount: oldOrders.length,
-                        itemBuilder: (context, i) {
-                          return OrdersCard(
-                            order: oldOrders[i],
-                            type: 3,
-                          );
-                        },
-                      ),
+                                ),
+                          ],
+                        );
+                      },
                     ),
-        ],
+                  )
+                : _isFocused2
+                    ? Expanded(
+                        child: ListView.builder(
+                          itemCount: completeOrders.length,
+                          itemBuilder: (context, i) {
+                            return OrdersCard(
+                              order: completeOrders[i],
+                              type: 2,
+                            );
+                          },
+                        ),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                          itemCount: oldOrders.length,
+                          itemBuilder: (context, i) {
+                            return OrdersCard(
+                              order: oldOrders[i],
+                              type: 3,
+                            );
+                          },
+                        ),
+                      ),
+          ],
+        ),
       ),
     );
   }

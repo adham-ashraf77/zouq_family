@@ -530,11 +530,11 @@ class _AddItemPageState extends State<AddItemPage> {
                 child: TextFormField(
                   controller: nameTextFieldController,
                   validator: (value) {
-                    if (value.trim().length < 3) {
-                      //todo translate
-                      return 'Name must be at least 3 characters';
-                    }
-                    return null;
+                    if (value.trim().length <= 3) {
+                                //todo translate
+                                return 'الاسم لابد ان يكون على الاقل 3 احرف';
+                              }
+                              return null;
                   },
                   decoration: InputDecoration(
                     // border: InputBorder.none,
@@ -549,7 +549,7 @@ class _AddItemPageState extends State<AddItemPage> {
                   validator: (value) {
                     if (value.trim().length < 1) {
                       //todo translate
-                      return 'Please put a price';
+                      return 'من فضلك ضع السعر';
                     }
                     return null;
                   },

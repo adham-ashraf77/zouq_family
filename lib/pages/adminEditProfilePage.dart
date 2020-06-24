@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,10 +12,15 @@ import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 
 import '../I10n/app_localizations.dart';
+import 'package:path/path.dart' as path;
 
 enum DeliveryService { doesDelivery, noDelivery }
 
 class AdminProfileEditor extends StatefulWidget {
+  String avatarImageUrl;
+
+  AdminProfileEditor({this.avatarImageUrl});
+
   @override
   _AdminProfileEditorState createState() => _AdminProfileEditorState();
 }
@@ -29,9 +36,11 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
   String desc;
   final _formKey = GlobalKey<FormState>();
   bool isLoading = true;
+
   void _onisdeliveryAvailableChanged(bool newValue) => setState(() {
-        newValue == true ? isdeliveryAvailable = 1 : isdeliveryAvailable = 0;
-      });
+    newValue == true ? isdeliveryAvailable = 1 : isdeliveryAvailable = 0;
+  });
+
   @override
   void dispose() {
     descTextFieldController.dispose();
@@ -69,6 +78,25 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
     });
   }
 
+  String fileName = '';
+  File _image;
+  bool _loodingImage = false;
+
+  Future getImage(BuildContext context) async {
+    // try {
+    setState(() {
+      _loodingImage = true;
+    });
+    var file = await selectImg(context);
+    setState(() {
+      fileName = path.basename(file.path);
+      _image = file;
+    });
+    setState(() {
+      _loodingImage = false;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -95,13 +123,29 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
             child: ListView(
               padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
               children: <Widget>[
-                Container(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.15,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(image: AssetImage(profileImg)),
+                Center(
+                  child: Text("تعديل الصوره", style: moreTextStyle),
+                ),
+                _loodingImage ?
+                CircularProgressIndicator() :
+                InkWell(
+                  onTap: () => getImage(context),
+                  child: SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        radius: 50,
+                        backgroundImage: widget.avatarImageUrl == null
+                            ? AssetImage(profileImg)
+                            :
+                        _image == null ?
+                        NetworkImage('${widget.avatarImageUrl}') :
+                        FileImage(_image),
+                      ),
+                    ),
                   ),
                 ),
 //            SizedBox(
@@ -170,9 +214,9 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
 //                ),
 //              ),
 //            ),
-//            SizedBox(
-//              height: 25.0,
-//            ),
+                SizedBox(
+                  height: 25.0,
+                ),
                 Center(
                   child: Text(
                     AppLocalizations.of(context).translate('changePassword'),
@@ -233,87 +277,87 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
                 ListTile(
                   title: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Row(
-                            children: <Widget>[
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    selectedDeliveryService = DeliveryService.doesDelivery;
-                                    isdeliveryAvailable = 1;
-                                  });
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: selectedDeliveryService == DeliveryService.doesDelivery
-                                            ? accent
-                                            : Color(0xFF636363),
-                                      ),
-                                      borderRadius: BorderRadius.circular(50)),
-                                  child: CircleAvatar(
-                                    child: Icon(
-                                      FontAwesomeIcons.check,
-                                      color: Colors.white,
-                                      size: 20.0,
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Row(
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedDeliveryService = DeliveryService.doesDelivery;
+                                  isdeliveryAvailable = 1;
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: selectedDeliveryService == DeliveryService.doesDelivery
+                                          ? accent
+                                          : Color(0xFF636363),
                                     ),
-                                    radius: 15.0,
-                                    backgroundColor:
-                                        selectedDeliveryService == DeliveryService.doesDelivery ? accent : Colors.white,
+                                    borderRadius: BorderRadius.circular(50)),
+                                child: CircleAvatar(
+                                  child: Icon(
+                                    FontAwesomeIcons.check,
+                                    color: Colors.white,
+                                    size: 20.0,
                                   ),
+                                  radius: 15.0,
+                                  backgroundColor:
+                                  selectedDeliveryService == DeliveryService.doesDelivery ? accent : Colors.white,
                                 ),
                               ),
-                              SizedBox(
-                                width: 10.0,
-                              ),
-                              Text(
-                                AppLocalizations.of(context).translate('delivery'),
-                                style: productName1,
-                              ),
-                              SizedBox(
-                                width: 20.0,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    selectedDeliveryService = DeliveryService.noDelivery;
-                                    isdeliveryAvailable = 0;
-                                  });
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: selectedDeliveryService == DeliveryService.noDelivery
-                                            ? accent
-                                            : Color(0xFF636363),
-                                      ),
-                                      borderRadius: BorderRadius.circular(50)),
-                                  child: CircleAvatar(
-                                    child: Icon(
-                                      FontAwesomeIcons.check,
-                                      color: Colors.white,
+                            ),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            Text(
+                              AppLocalizations.of(context).translate('delivery'),
+                              style: productName1,
+                            ),
+                            SizedBox(
+                              width: 20.0,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedDeliveryService = DeliveryService.noDelivery;
+                                  isdeliveryAvailable = 0;
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: selectedDeliveryService == DeliveryService.noDelivery
+                                          ? accent
+                                          : Color(0xFF636363),
                                     ),
-                                    radius: 15.0,
-                                    backgroundColor:
-                                        selectedDeliveryService == DeliveryService.noDelivery ? accent : Colors.white,
+                                    borderRadius: BorderRadius.circular(50)),
+                                child: CircleAvatar(
+                                  child: Icon(
+                                    FontAwesomeIcons.check,
+                                    color: Colors.white,
                                   ),
+                                  radius: 15.0,
+                                  backgroundColor:
+                                  selectedDeliveryService == DeliveryService.noDelivery ? accent : Colors.white,
                                 ),
                               ),
-                              SizedBox(
-                                width: 10.0,
-                              ),
-                              Text(
-                                AppLocalizations.of(context).translate('noDelivery'),
-                                style: productName1,
-                              ),
-                            ],
-                          ),
+                            ),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            Text(
+                              AppLocalizations.of(context).translate('noDelivery'),
+                              style: productName1,
+                            ),
+                          ],
                         ),
                       ),
                     ),
+                  ),
                 ),
 //            DropdownButton(
 //              isExpanded: true,
@@ -411,9 +455,10 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
                         if (_formKey.currentState.validate()) {
                           UpdateProfile()
                               .updateProfile(
-                            ida: isdeliveryAvailable == 1 ? '1' : '0',
-                            desc: descTextFieldController.text.isNotEmpty == true ? descTextFieldController.text : desc,
-                            newPassword: newPassTextFieldController.text,
+                              ida: isdeliveryAvailable == 1 ? '1' : '0',
+                              desc: descTextFieldController.text.isNotEmpty == true ? descTextFieldController.text : desc,
+                              newPassword: newPassTextFieldController.text,
+                              image: _image
                           )
                               .then((onValue) {
                             print(onValue);
@@ -422,9 +467,9 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
                                 builder: (BuildContext context) =>
                                     DialogWorning(
                                       mss: onValue.toString() == 'success'
-                                            ? AppLocalizations.of(context).translate('success')
-                                            : AppLocalizations.of(context).translate('failed'),
-                                      ));
+                                          ? AppLocalizations.of(context).translate('success')
+                                          : AppLocalizations.of(context).translate('failed'),
+                                    ));
                           });
                         }
                         //TODO admin profile editing code

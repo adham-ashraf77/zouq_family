@@ -155,29 +155,28 @@ class OrdersCard extends StatelessWidget {
                                           .orientation == Orientation.portrait
                                           ? MediaQuery
                                           .of(context)
-                                          .size
-                                          .height * 0.05
-                                          : 50,
-                                      width: MediaQuery
-                                          .of(context)
-                                          .orientation == Orientation.portrait
-                                          ? MediaQuery
-                                          .of(context)
-                                          .size
-                                          .height * 0.05
-                                          : 50,
-                                      child: Icon(
-                                        type == 1 || type == 3 ? Icons.close : Icons.phone,
-                                        color: type == 1 || type == 3 ? rejectedColor : accent,
-                                        size: MediaQuery
-                                            .of(context)
-                                            .orientation == Orientation.portrait ? 23 : 30,
-                                      ),
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                                          border: Border.all(color: Colors.grey[300])),
-                                    ),
+                                          .size.height * 0.05
+                                                : 50,
+                                            width: MediaQuery.of(context).orientation == Orientation.portrait
+                                                ? MediaQuery.of(context).size.height * 0.08
+                                                : 50,
+                                            alignment: Alignment.center,
+                                            child: type == 1 || type == 3
+                                                ? Text(
+                                                    'رفض',
+                                                    style: TextStyle(color: rejectedColor),
+                                                  )
+                                                : Icon(
+                                                    Icons.phone,
+                                                    color: type == 1 || type == 3 ? rejectedColor : accent,
+                                                    size:
+                                                        MediaQuery.of(context).orientation == Orientation.portrait ? 23 : 30,
+                                                  ),
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.all(Radius.circular(50)),
+                                                border: Border.all(color: Colors.grey[300])),
+                                          ),
                                   ),
                                   SizedBox(
                                     width: 13,
@@ -205,7 +204,7 @@ class OrdersCard extends StatelessWidget {
                                           ? MediaQuery
                                           .of(context)
                                           .size
-                                          .height * 0.07
+                                          .height * 0.09
                                           : type == 2
                                           ? MediaQuery
                                           .of(context)
@@ -216,21 +215,17 @@ class OrdersCard extends StatelessWidget {
                                           .size
                                           .height * 0.07 : null)
                                           : (type == 1 ? 70 : type == 2 ? 50 : type == 3 ? 70 : null),
+                                      alignment: Alignment.center,
                                       child: type == 1 || type == 3
-                                          ? Icon(
-                                        Icons.check,
-                                        color: accent,
-                                        size:
-                                        MediaQuery
-                                            .of(context)
-                                            .orientation == Orientation.portrait ? 23 : 30,
-                                                  )
-                                                : Image.asset(
-                                                    'assets/images/whatsicon.png',
-                                                    fit: BoxFit.fill,
-                                                  ),
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
+                                          ? Text(
+                                        "قبول", style: TextStyle(color: Colors.green[600]),
+                                      )
+                                          : Image.asset(
+                                        'assets/images/whatsicon.png',
+                                        fit: BoxFit.fill,
+                                      ),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
                                                 borderRadius: BorderRadius.all(Radius.circular(50)),
                                                 border: Border.all(color: Colors.grey[300])),
                                           ),
@@ -241,11 +236,22 @@ class OrdersCard extends StatelessWidget {
                                           child: Container(
                                             height: 40,
                                             width: 110,
-                                            margin: EdgeInsets.only(right: MediaQuery.of(context).padding.right + 50),
-                                            child: Icon(
-                                              Icons.check,
-                                              color: Colors.white,
-                                              size: 23,
+                                            margin: EdgeInsets.only(right: MediaQuery
+                                                .of(context)
+                                                .padding
+                                                .right + 50),
+                                            child: Row(
+                                              children: <Widget>[
+                                                Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
+                                                Icon(
+                                                  Icons.check,
+                                                  color: Colors.white,
+                                                  size: 23,
+                                                ),
+                                                Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
+                                                Text('جاهز', style:
+                                                TextStyle(color: Colors.white, fontSize: 12),),
+                                              ],
                                             ),
                                             decoration: BoxDecoration(
                                                 color: Colors.green[300],

@@ -246,17 +246,24 @@ class _ItemDetailState extends State<ItemDetail> {
   vedioStart() {
     child.insert(
       0,
-      Stack(
-        children: <Widget>[
-          Container(
-            height: 270,
-            child: FutureBuilder(
-              future: _initializeVideoPlayerFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return InkWell(
-                    onTap: () {
-                      setState(() {
+      videoUrl == null
+          ? Center(
+              child: Text(
+                'لا يوجد فيديو الان',
+                style: TextStyle(fontSize: 30),
+              ),
+            )
+          : Stack(
+              children: <Widget>[
+                Container(
+                  height: 270,
+                  child: FutureBuilder(
+                    future: _initializeVideoPlayerFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return InkWell(
+                          onTap: () {
+                            setState(() {
                         isPlay = !isPlay;
                         _controller.value.isPlaying ? _controller.pause() : _controller.play();
                       });
@@ -410,7 +417,7 @@ class _ItemDetailState extends State<ItemDetail> {
                       ),
                     ),
 
-                    _current == 0 ?
+                    _current == 0 && videoUrl != null ?
                     Container(
                       width: MediaQuery
                           .of(context)
@@ -583,7 +590,7 @@ class _ItemDetailState extends State<ItemDetail> {
                                 controller: onDemandController,
                                 validator: (value) {
                                   if (value.length < 10) {
-                                    return 'description must be at least 10 charcters';
+                                    return 'الوصف يجب ان يكون على الاقل 10 احرف';
                                   }
                                   return null;
                                 },
