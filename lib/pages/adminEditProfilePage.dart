@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:path/path.dart' as path;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
 import 'package:zouqadmin/pages/editPhoneNumberPage.dart';
@@ -12,7 +13,6 @@ import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 
 import '../I10n/app_localizations.dart';
-import 'package:path/path.dart' as path;
 
 enum DeliveryService { doesDelivery, noDelivery }
 
@@ -390,23 +390,23 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
                 ),
                 TextFormField(
                   maxLines: 2,
-                  controller: descTextFieldController,
-                  validator: (value) {
-                    if (desc.isEmpty) {
-                      if (value
-                          .trim()
-                          .length < 20) {
-                        //todo translate
-                        return AppLocalizations.of(context).translate('descValidError');
-                      }
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                    // border: InputBorder.none,
-                    labelText: AppLocalizations.of(context).translate('description'),
+                    controller: descTextFieldController,
+//                  validator: (value) {
+//                    if (desc.isEmpty) {
+//                      if (value
+//                          .trim()
+//                          .length < 20) {
+//                        //todo translate
+//                        return AppLocalizations.of(context).translate('descValidError');
+//                      }
+//                    }
+//                    return null;
+//                  },
+                    decoration: InputDecoration(
+                      // border: InputBorder.none,
+                      labelText: AppLocalizations.of(context).translate('description'),
+                    ),
                   ),
-                ),
                 SizedBox(
                   height: 20,
                 ),
@@ -456,7 +456,9 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
                           UpdateProfile()
                               .updateProfile(
                               ida: isdeliveryAvailable == 1 ? '1' : '0',
-                              desc: descTextFieldController.text.isNotEmpty == true ? descTextFieldController.text : desc,
+                              desc: descTextFieldController.text.isNotEmpty == true ? descTextFieldController.text : desc
+                                  .isEmpty ? "..." :
+                              desc,
                               newPassword: newPassTextFieldController.text,
                               image: _image
                           )
