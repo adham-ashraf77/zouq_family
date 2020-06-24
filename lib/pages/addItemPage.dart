@@ -252,6 +252,8 @@ class _AddItemPageState extends State<AddItemPage> {
                     video: productVideo == null ? File('') : productVideo,
                     context: context)
                 .then((value) {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (context) => Home(),
               ));

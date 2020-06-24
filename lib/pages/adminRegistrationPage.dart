@@ -50,7 +50,9 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   bool _isLooding = false;
 
   bool _agree = false;
+  bool _agreeClicked = true;
   bool percant = false;
+  bool percantClicked = true;
 
   TextEditingController name = TextEditingController();
 
@@ -95,9 +97,19 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 
   validation() async {
     await checkConnection();
-    if (isConnected) if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      registration();
+    if (isConnected) if (_agree == true) {
+      if (percant == true) {
+        if (_formKey.currentState.validate()) {
+          _formKey.currentState.save();
+          registration();
+        }
+      } else {
+        percantClicked = false;
+        setState(() {});
+      }
+    } else {
+      _agreeClicked = false;
+      setState(() {});
     }
   }
 
@@ -694,6 +706,10 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                         onTap: () {
                           setState(() {
                             _agree = !_agree;
+                            if (_agree == true)
+                              _agreeClicked = true;
+                            else
+                              _agreeClicked = false;
                           });
                         },
                         child: Container(
@@ -738,6 +754,9 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                 ),
               ),
 
+              _agreeClicked == false ?
+              Text("الرجاء الموافقه على الشروط و الاحكام", style: TextStyle(color: Colors.red),) : Container(),
+
               Padding(
                 padding: EdgeInsets.only(left: 25.0, top: 10.0),
                 child: Row(
@@ -750,6 +769,10 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                         onTap: () {
                           setState(() {
                             percant = !percant;
+                            if (percant == true)
+                              percantClicked = true;
+                            else
+                              percantClicked = false;
                           });
                         },
                         child: Container(
@@ -782,6 +805,10 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                   ],
                 ),
               ),
+
+              percantClicked == false ?
+              Text("الرجاء الموافقه على نسبه التطبيق", style: TextStyle(color: Colors.red),) : Container(),
+
               ListTile(
                 title: _isLooding
                     ? Center(

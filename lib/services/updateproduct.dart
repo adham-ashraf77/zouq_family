@@ -23,11 +23,15 @@ class UpdateProduct {
       int catID,
       @required String id,
       @required BuildContext context}) async {
+    if (desc == null || desc.isEmpty || desc == '') {
+      desc = '...';
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString("token") ?? "";
     print('token: $token');
     List<MultipartFile> something = List();
-    List<File> videos = [video];
+    List<File> videos = List<File>();
+    if (video != null) videos = [video];
     List<MultipartFile> theVideo = List();
     print('111');
     if (video != null)
@@ -40,17 +44,20 @@ class UpdateProduct {
       print(listOfPhotos.length);
       print(something.length);
     });
-    if (listOfPhotos.length == something.length &&
-        theVideo.length == videos.length) {
+    print('the video');
+    print(theVideo.length);
+    print('video');
+    print(videos.length);
+    if (listOfPhotos.length == something.length && theVideo.length == videos.length) {
       print('hi ^^ ' + video.toString());
       FormData _formData = video != null
           ? FormData.fromMap({
-        "name": "$name",
-        "description": "$desc",
-        "price": "$price",
-        "images": something,
-        "video": theVideo[0],
-        "category_id": catID.toString(),
+              "name": "$name",
+              "description": "$desc",
+              "price": "$price",
+              "images": something,
+              "video": theVideo[0],
+              "category_id": catID.toString(),
       })
           : FormData.fromMap({
         "name": "$name",
@@ -81,6 +88,7 @@ class UpdateProduct {
           return 400;
         }
       } on DioError catch (e) {
+        print('error');
         print('Error ' + e.toString());
         if (e.response == null) {
           showDialog(

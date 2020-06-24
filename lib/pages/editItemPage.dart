@@ -254,6 +254,9 @@ class _EditItemPageState extends State<EditItemPage> {
       _dropdownValue = '${y['category']['text_ar']}';
       print('a7o ? $_dropdownValue');
       categoryID = y['category']['id'];
+
+      ///3ashan 3amo bta3 al backEnd begabha ziada wa7ed already :) ahrab eabne men hna asm3 mene ahraaaaaaaaaaaaaab
+      categoryID--;
 //      int.parse(
 //          y['category']['text_en'].toString().replaceAll('category_', ''));
       setState(() {
@@ -291,13 +294,19 @@ class _EditItemPageState extends State<EditItemPage> {
             print(error);
           }
         }
-        _downloadFile(this.videoUrl, 'video_000').then((onValue) async {
-          productVideo = onValue;
-          await getCurrentVideo();
-          ControllerVideo();
-          print('Video ' + productVideo.toString());
-          if (mounted) setState(() {});
-        });
+        if (this.videoUrl != null && this.videoUrl != '') {
+          _downloadFile(this.videoUrl, 'video_000').then((onValue) async {
+            productVideo = onValue;
+            await getCurrentVideo();
+            ControllerVideo();
+            print('Video ' + productVideo.toString());
+            if (mounted) setState(() {});
+          });
+        } else {
+          setState(() {
+            isLoading = false;
+          });
+        }
       });
     });
   }
@@ -681,12 +690,12 @@ class _EditItemPageState extends State<EditItemPage> {
                       padding: EdgeInsets.only(left: 30, top: 15),
                       child: TextFormField(
                         controller: descTextFieldController,
-                        validator: (value) {
-                          if (value.length < 10) {
-                            return 'الوصف يجب ان يكون على الاقل 10 احرف';
-                          }
-                          return null;
-                        },
+//                        validator: (value) {
+//                          if (value.length < 10) {
+//                            return 'الوصف يجب ان يكون على الاقل 10 احرف';
+//                          }
+//                          return null;
+//                        },
                         decoration: InputDecoration(
                           border: new OutlineInputBorder(
                             borderRadius: new BorderRadius.circular(10.0),

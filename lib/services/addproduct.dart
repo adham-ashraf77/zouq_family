@@ -62,7 +62,8 @@ class AddProduct {
         print('empty video');
       else
         print('At API call: video=> ${theVideo[0].filename}');
-      if (video == null || video.path.isEmpty == true && desc.isEmpty || desc == '') {
+
+      if ((theVideo == null || theVideo.isEmpty == true) && (desc.isEmpty || desc == '')) {
         print('video=null + desc= empty');
         formData = FormData.fromMap({
           "name": "$name",
@@ -71,11 +72,20 @@ class AddProduct {
           "images": something,
           "category_id": catID.toString(),
         });
-      } else if (theVideo == null || theVideo.isEmpty == true && desc.isNotEmpty) {
+      } else if ((theVideo == null || theVideo.isEmpty == true) && desc.isNotEmpty) {
         print('video=null + desc= maliana');
         formData = FormData.fromMap({
           "name": "$name",
           "description": "$desc",
+          "price": "$price",
+          "images": something,
+          "category_id": catID.toString(),
+        });
+      } else if ((theVideo != null || theVideo.isNotEmpty == true) && (desc.isEmpty || desc == '')) {
+        print('video=mliaaaaaan + desc= null');
+        formData = FormData.fromMap({
+          "name": "$name",
+          "video": theVideo[0],
           "price": "$price",
           "images": something,
           "category_id": catID.toString(),
