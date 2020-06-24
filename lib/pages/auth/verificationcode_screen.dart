@@ -237,9 +237,11 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
                 isLoadingServer == false ?
                 InkWell(
                   onTap: () {
-                    if (_start == 0)
-                      resendCode();
-                  },
+                          if (_start == 0) {
+                            resendCode();
+                            startTimer();
+                          }
+                        },
                   child: Text(
                     AppLocalizations.of(context).translate('resendCode'),
                     style: paragarph4.copyWith(color: _start != 0 ? Colors.grey : accent),

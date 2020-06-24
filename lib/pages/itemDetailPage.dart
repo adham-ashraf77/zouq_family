@@ -19,6 +19,7 @@ import 'package:zouqadmin/widgets/rate_card.dart';
 
 import '../I10n/app_localizations.dart';
 import '../home.dart';
+import 'magnify_photos_screen.dart';
 
 class ItemDetail extends StatefulWidget {
   final String orderId;
@@ -397,34 +398,34 @@ class _ItemDetailState extends State<ItemDetail> {
               children: <Widget>[
                 Stack(
                   children: <Widget>[
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: CarouselSlider(
-                        items: child,
-                        height: MediaQuery
-                            .of(context)
-                            .size
-                            .height * 0.5,
-                        autoPlay: false,
-                        aspectRatio: 2.0,
-                        enlargeCenterPage: true,
-                        viewportFraction: 1.0,
-                        onPageChanged: (index) {
-                          setState(() {
-                            _current = index;
-                          });
-                        },
+                    InkWell(
+                      onTap: () {
+                        if (_current != 0)
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => MagnifyPhotoScreen(imgList, name),
+                          ));
+                      },
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: CarouselSlider(
+                          items: child,
+                          height: MediaQuery.of(context).size.height * 0.5,
+                          autoPlay: false,
+                          aspectRatio: 2.0,
+                          enlargeCenterPage: true,
+                          viewportFraction: 1.0,
+                          onPageChanged: (index) {
+                            setState(() {
+                              _current = index;
+                            });
+                          },
+                        ),
                       ),
                     ),
-
-                    _current == 0 && videoUrl != null ?
-                    Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width,
-                      height: MediaQuery
-                          .of(context)
+                    _current == 0 && videoUrl != null
+                        ? Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context)
                           .size
                           .height * 0.3,
                       padding: EdgeInsets.only(left: MediaQuery

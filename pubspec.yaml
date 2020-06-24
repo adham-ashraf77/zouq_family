@@ -53,6 +53,7 @@ dependencies:
   cloud_firestore: ^0.12.5
   flutter_email_sender: ^3.0.1
   email_validator: ^1.0.0
+  photo_view: ^0.9.2
 
 
 

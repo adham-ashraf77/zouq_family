@@ -63,6 +63,7 @@ class AddProduct {
       else
         print('At API call: video=> ${theVideo[0].filename}');
       if (video == null || video.path.isEmpty == true && desc.isEmpty || desc == '') {
+        print('video=null + desc= empty');
         formData = FormData.fromMap({
           "name": "$name",
           //"description": "$desc",
@@ -70,7 +71,8 @@ class AddProduct {
           "images": something,
           "category_id": catID.toString(),
         });
-      } else if (video == null || video.path.isEmpty == true && desc.isNotEmpty || desc != '') {
+      } else if (theVideo == null || theVideo.isEmpty == true && desc.isNotEmpty) {
+        print('video=null + desc= maliana');
         formData = FormData.fromMap({
           "name": "$name",
           "description": "$desc",
@@ -79,6 +81,7 @@ class AddProduct {
           "category_id": catID.toString(),
         });
       } else {
+        print('koloooooooooooooooo');
         formData = FormData.fromMap({
           "name": "$name",
           "description": "$desc",
@@ -106,6 +109,9 @@ class AddProduct {
 //      });
       try {
         // print('--------------------> addItemFile: ${_formData.files}');
+        print('************************************************');
+        print('=====> ${theVideo[0].filename}');
+        print('************************************************');
         if (token.isNotEmpty) {
           print('before response');
           response = await Dio().post("http://api.dhuqapp.com/api/family/products",
