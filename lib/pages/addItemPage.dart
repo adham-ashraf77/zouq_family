@@ -217,7 +217,7 @@ class _AddItemPageState extends State<AddItemPage> {
     await checkConnection();
     if (isConnected) {
       if (_formKey.currentState.validate()) {
-        if (_dropdownValue != null) {
+        if (categoryID != null) {
           if (listOfImages.length == 0) {
             showDialog(
                 context: context,

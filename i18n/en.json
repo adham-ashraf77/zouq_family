@@ -104,7 +104,7 @@
   "loginFailed": "this number is for normal user account that already registered please sign in with different number",
   "accountDisable": "you account is disable please contact the app manager",
   "addPhotoLengthError": "please choose at least one photo",
-  "chooseCategoryLengthError": "please choose at least one photo category",
+  "chooseCategoryLengthError": "please choose the category",
   "otpSuccess": "top code has been sent successfully ",
   "otpError": "you write a wrong otp code please check again",
   "otpExpire": "this is otp is invalid or expired please resend again",

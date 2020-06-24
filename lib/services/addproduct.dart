@@ -109,9 +109,6 @@ class AddProduct {
 //      });
       try {
         // print('--------------------> addItemFile: ${_formData.files}');
-        print('************************************************');
-        print('=====> ${theVideo[0].filename}');
-        print('************************************************');
         if (token.isNotEmpty) {
           print('before response');
           response = await Dio().post("http://api.dhuqapp.com/api/family/products",

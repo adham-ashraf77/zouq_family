@@ -235,22 +235,20 @@ class OrdersCard extends StatelessWidget {
                                           onTap: () => endOrder(order.id),
                                           child: Container(
                                             height: 40,
-                                            width: 110,
-                                            margin: EdgeInsets.only(right: MediaQuery
-                                                .of(context)
-                                                .padding
-                                                .right + 50),
+                                            alignment: Alignment.center,
+                                            padding: EdgeInsets.symmetric(horizontal: 10),
                                             child: Row(
                                               children: <Widget>[
-                                                Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
                                                 Icon(
                                                   Icons.check,
                                                   color: Colors.white,
                                                   size: 23,
                                                 ),
                                                 Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
-                                                Text('جاهز', style:
-                                                TextStyle(color: Colors.white, fontSize: 12),),
+                                                Text(
+                                                  'جاهز',
+                                                  style: TextStyle(color: Colors.white, fontSize: 12),
+                                                ),
                                               ],
                                             ),
                                             decoration: BoxDecoration(

@@ -125,11 +125,18 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
       showDialog(
           context: context,
           builder: (BuildContext context) => DialogWorning(
-            mss: AppLocalizations.of(context).translate('deleteFailed'),
-          ));
+                mss: AppLocalizations.of(context).translate('deleteFailed'),
+              ));
     } else {
       print("success");
     }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _timer.cancel();
   }
 
   @override
@@ -137,8 +144,7 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).translate('verifyCode'),
-            style: headers4),
+        title: Text(AppLocalizations.of(context).translate('verifyCode'), style: headers4),
         centerTitle: true,
         leading: IconButton(
             icon: Icon(
