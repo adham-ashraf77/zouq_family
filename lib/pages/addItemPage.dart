@@ -242,7 +242,7 @@ class _AddItemPageState extends State<AddItemPage> {
                     ));
             AddProduct()
                 .addProduct(
-                    catID: categoryID + 1,
+                    catID: categoryID ,
                     desc: descTextFieldController.text.isEmpty == true || descTextFieldController.text == ''
                         ? ''
                         : descTextFieldController.text,
