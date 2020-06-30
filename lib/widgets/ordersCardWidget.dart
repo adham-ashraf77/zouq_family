@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zouqadmin/models/order.dart';
@@ -21,7 +19,6 @@ class OrdersCard extends StatelessWidget {
   }
 
   OrdersCard({@required this.order, @required this.type, @required this.acceptFunction, @required this.rejectFunction});
-
   Widget build(BuildContext context) {
     final double allWidth = MediaQuery.of(context).size.width;
 
@@ -36,26 +33,11 @@ class OrdersCard extends StatelessWidget {
     openWhatsApp() async {}
 
     void whatsAppOpen({String phone}) async {
-//      final snackBar = SnackBar(content: Text('من فضلك حمل تطبيق whatsapp'));
-//      var whatsappUrl = "whatsapp://send?phone=$phone&text=hello";
-//      await canLaunch(whatsappUrl) ? launch(whatsappUrl) : Scaffold.of(context).showSnackBar(snackBar);
-
-      var whatsAppUrl = "whatsapp://send?phone=+$phone‬";
-      if (Platform.isIOS) {
-        if (await canLaunch('whatsapp://')) {
-          await launch(whatsAppUrl, forceSafariVC: false);
-        } else {
-          await launch(whatsAppUrl, forceSafariVC: true);
-        }
-      } else {
-        await canLaunch(whatsAppUrl)
-            ? launch(whatsAppUrl)
-            : Scaffold.of(context).showSnackBar(
-                SnackBar(
-                  content: new Text("من فضلك حمل تطبيق whatsapp"),
-                ),
-              );
-      }
+      final snackBar = SnackBar(content: Text('من فضلك حمل تطبيق whatsapp'));
+      var whatsappUrl = "https://wa.me/$phone";
+      await canLaunch(whatsappUrl)
+          ? launch(whatsappUrl)
+          : Scaffold.of(context).showSnackBar(snackBar);
     }
 
     endOrder(String orderId) async {
@@ -97,7 +79,9 @@ class OrdersCard extends StatelessWidget {
                         children: <Widget>[
                           type == 2
                               ? Text('${this.order.price.toString()}',
-                              style: paragarph3.copyWith(color: Colors.black54, fontWeight: FontWeight.w300))
+                                  style: paragarph3.copyWith(
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.w300))
                               : SizedBox(),
                           Text(
                             this.order.id.toString(),
@@ -169,7 +153,8 @@ class OrdersCard extends StatelessWidget {
                                       ? Container()
                                       : InkWell(
                                     onTap: type == 1 ? rejectFunction : () {
-                                      if (type == 2) _makePhoneCall('tel:${order.phoneNumber}');
+                                      if (type == 2) _makePhoneCall(
+                                          'tel:${order.phoneNumber}');
                                     },
                                     child: Container(
                                       height: MediaQuery
@@ -177,10 +162,16 @@ class OrdersCard extends StatelessWidget {
                                           .orientation == Orientation.portrait
                                           ? MediaQuery
                                           .of(context)
-                                          .size.height * 0.05
+                                          .size
+                                          .height * 0.05
                                           : 50,
-                                      width: MediaQuery.of(context).orientation == Orientation.portrait
-                                          ? MediaQuery.of(context).size.height * 0.08
+                                      width: MediaQuery
+                                          .of(context)
+                                          .orientation == Orientation.portrait
+                                          ? MediaQuery
+                                          .of(context)
+                                          .size
+                                          .height * 0.08
                                           : 50,
                                       alignment: Alignment.center,
                                       child: type == 1 || type == 3
@@ -190,14 +181,22 @@ class OrdersCard extends StatelessWidget {
                                       )
                                           : Icon(
                                         Icons.phone,
-                                        color: type == 1 || type == 3 ? rejectedColor : accent,
+                                        color: type == 1 || type == 3
+                                            ? rejectedColor
+                                            : accent,
                                         size:
-                                        MediaQuery.of(context).orientation == Orientation.portrait ? 23 : 30,
+                                        MediaQuery
+                                            .of(context)
+                                            .orientation == Orientation.portrait
+                                            ? 23
+                                            : 30,
                                       ),
                                       decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                                          border: Border.all(color: Colors.grey[300])),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(50)),
+                                          border: Border.all(
+                                              color: Colors.grey[300])),
                                     ),
                                   ),
                                   SizedBox(
@@ -240,7 +239,8 @@ class OrdersCard extends StatelessWidget {
                                       alignment: Alignment.center,
                                       child: type == 1 || type == 3
                                           ? Text(
-                                        "قبول", style: TextStyle(color: Colors.green[600]),
+                                        "قبول", style: TextStyle(
+                                          color: Colors.green[600]),
                                       )
                                           : Image.asset(
                                         'assets/images/whatsicon.png',
@@ -248,8 +248,10 @@ class OrdersCard extends StatelessWidget {
                                       ),
                                       decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                                          border: Border.all(color: Colors.grey[300])),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(50)),
+                                          border: Border.all(
+                                              color: Colors.grey[300])),
                                     ),
                                   ),
                                   type == 2
@@ -258,7 +260,8 @@ class OrdersCard extends StatelessWidget {
                                     child: Container(
                                       height: 40,
                                       alignment: Alignment.center,
-                                      padding: EdgeInsets.symmetric(horizontal: 10),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10),
                                       child: Row(
                                         children: <Widget>[
                                           Icon(
@@ -266,17 +269,22 @@ class OrdersCard extends StatelessWidget {
                                             color: Colors.white,
                                             size: 23,
                                           ),
-                                          Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
+                                          Padding(padding: EdgeInsets.symmetric(
+                                              horizontal: 5)),
                                           Text(
                                             'جاهز',
-                                            style: TextStyle(color: Colors.white, fontSize: 12),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12),
                                           ),
                                         ],
                                       ),
                                       decoration: BoxDecoration(
                                           color: Colors.green[300],
-                                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                                          border: Border.all(color: Colors.grey[300])),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(50)),
+                                          border: Border.all(
+                                              color: Colors.grey[300])),
                                     ),
                                   )
                                       : Container()
