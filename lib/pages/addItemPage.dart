@@ -318,6 +318,13 @@ class _AddItemPageState extends State<AddItemPage> {
     });
   }
 
+  bool isNumeric(String s) {
+    if (s == null) {
+      return false;
+    }
+    return double.parse(s, (e) => null) != null;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -547,12 +554,15 @@ class _AddItemPageState extends State<AddItemPage> {
               Padding(
                 padding: EdgeInsets.only(left: 30, top: 10),
                 child: TextFormField(
-                  controller: priceTextFieldController,
-                  validator: (value) {
-                    if (value.trim().length < 1) {
+                  enableInteractiveSelection: false,
+                            controller: priceTextFieldController,
+                            validator: (value) {
+                              if (value.trim().length < 1) {
                                 //todo translate
                                 return 'من فضلك ضع السعر';
-                              } else if (int.parse(value) < 1) {
+                              } else if (isNumeric(value) == false) {
+                                return 'من فضلك ضع السعر بالشكل الصحيح';
+                              } else if (double.parse(value) < 1.0) {
                                 return 'أقل سعر يجب ادخاله هو 1 ريال';
                               }
                               return null;
