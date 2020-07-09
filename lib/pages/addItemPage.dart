@@ -550,10 +550,12 @@ class _AddItemPageState extends State<AddItemPage> {
                   controller: priceTextFieldController,
                   validator: (value) {
                     if (value.trim().length < 1) {
-                      //todo translate
-                      return 'من فضلك ضع السعر';
-                    }
-                    return null;
+                                //todo translate
+                                return 'من فضلك ضع السعر';
+                              } else if (int.parse(value) < 1) {
+                                return 'أقل سعر يجب ادخاله هو 1 ريال';
+                              }
+                              return null;
                   },
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(

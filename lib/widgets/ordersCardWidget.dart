@@ -33,6 +33,7 @@ class OrdersCard extends StatelessWidget {
     openWhatsApp() async {}
 
     void whatsAppOpen({String phone}) async {
+      print(phone);
       final snackBar = SnackBar(content: Text('من فضلك حمل تطبيق whatsapp'));
       var whatsappUrl = "https://wa.me/$phone";
       await canLaunch(whatsappUrl)

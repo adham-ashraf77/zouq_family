@@ -14,9 +14,11 @@ class Order {
   final List<Comment> comments;
   final List<Product> product;
   final String status;
+  final String paymentUsing;
 
   Order(
       {this.id,
+      this.paymentUsing,
       this.status,
       this.comments,
       this.rate,

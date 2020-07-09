@@ -125,5 +125,9 @@
   "imaPickerDialogTitle": "اختار من:",
   "camera": "الكاميرا",
   "gallery": "معرض الصور",
-  "nameError": "من فضلك ادخل الاسم"
+  "nameError": "من فضلك ادخل الاسم",
+  "payment method": "طريقة الدفع او السداد",
+  "cashPayment": "الدفع عند الاستلام",
+  "visaPayment": "الدفع الألكتروني",
+  "walletPayment": "خصم من محفظه العميل"
 }

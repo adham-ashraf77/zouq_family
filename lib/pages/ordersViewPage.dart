@@ -219,7 +219,32 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                                 style: TextStyle(color: Colors.grey),
                               ),
                               Text(
-                                AppLocalizations.of(context).translate('orderTime'),
+                                AppLocalizations.of(context)
+                                    .translate('orderTime'),
+                                style: paragarph2.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Divider(
+                            height: 2,
+                            color: Colors.grey[300],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                '${order.paymentUsing == 'cash' ? "${AppLocalizations.of(context).translate('cashPayment')}" : order.paymentUsing == 'online' ? "${AppLocalizations.of(context).translate('visaPayment')}" : "${AppLocalizations.of(context).translate('walletPayment')}"}',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              Text(
+                                AppLocalizations.of(context)
+                                    .translate('payment method'),
                                 style: paragarph2.copyWith(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w400,
@@ -237,7 +262,10 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                           type == 2 || type == 3
                               ? InkWell(
                                   onTap: () {
-                                    if (type == 2) whatsAppOpen(phone: order.phoneNumber, context: context);
+                                    if (type == 2)
+                                      whatsAppOpen(
+                                          phone: order.phoneNumber,
+                                          context: context);
                                   },
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -318,13 +346,52 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                                       ),
                                     ],
                                   ),
-                                )
+                          )
                               : SizedBox(),
+
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                '${
+                                    order.paymentUsing == 'cash' ?
+                                    "${AppLocalizations.of(context).translate(
+                                        'cashPayment')}" :
+                                    order.paymentUsing == 'online' ?
+                                    "${AppLocalizations.of(context).translate(
+                                        'visaPayment')}" :
+                                    "${AppLocalizations.of(context).translate(
+                                        'walletPayment')}"
+
+
+                                }',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              Text(
+                                AppLocalizations.of(context).translate(
+                                    'payment method'),
+                                style: paragarph2.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Divider(
+                            height: 2,
+                            color: Colors.grey[300],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
                           type == 2 || type == 3
                               ? Divider(
-                                  height: 2,
-                                  color: Colors.grey[300],
-                                )
+                            height: 2,
+                            color: Colors.grey[300],
+                          )
                               : SizedBox(),
                           SizedBox(
                             height: type == 2 || type == 3 ? 20 : 0,

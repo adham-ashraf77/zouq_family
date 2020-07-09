@@ -35,6 +35,9 @@ class _OrdersPageState extends State<OrdersPage> {
 
   getOrders() async {
     PaginateOrders().paginateOrders(status: 'new').then((onValue) {
+      print('**************************************************************');
+      print(onValue);
+      print('**************************************************************');
       newOrders.clear();
       List data = jsonDecode(onValue.toString())['orders'];
       for (int i = 0; i < data.length; i++) {
@@ -50,6 +53,7 @@ class _OrdersPageState extends State<OrdersPage> {
               comments: [],
               product: [],
               price: data[i]['total'],
+              paymentUsing: data[i]['payment_using'].toString(),
             ),
           );
         });

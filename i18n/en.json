@@ -124,5 +124,9 @@
   "imaPickerDialogTitle": "Choose from:",
   "camera": "Camera",
   "gallery": "Gallery",
-  "nameError": "please enter your name"
+  "nameError": "please enter your name",
+  "payment method": "payment method",
+  "cashPayment": "pay by cash",
+  "visaPayment": "pay by visa",
+  "walletPayment": "pat by zouq wallet"
 }
