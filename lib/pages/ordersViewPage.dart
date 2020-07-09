@@ -352,34 +352,6 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                           SizedBox(
                             height: 20,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                '${
-                                    order.paymentUsing == 'cash' ?
-                                    "${AppLocalizations.of(context).translate(
-                                        'cashPayment')}" :
-                                    order.paymentUsing == 'online' ?
-                                    "${AppLocalizations.of(context).translate(
-                                        'visaPayment')}" :
-                                    "${AppLocalizations.of(context).translate(
-                                        'walletPayment')}"
-
-
-                                }',
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                              Text(
-                                AppLocalizations.of(context).translate(
-                                    'payment method'),
-                                style: paragarph2.copyWith(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          ),
                           Divider(
                             height: 2,
                             color: Colors.grey[300],
