@@ -27,34 +27,42 @@ class Login {
         prefs.setString("image", response.data['image']);
         prefs.setString("email", response.data['email']);
         bool haveLocation;
-        GetUser().getUser(token: response.data['token']).then((value) {
+        GetUser().getUser(token: response.data['token']).then((value) async {
           var x = value;
           print('X = ' + x['user'].toString());
-          if (x['user']['latitude'] != null)
+          print(x['user']['latitude']);
+          if (x['user']['latitude'] != null) {
+            print('true *****************************');
             haveLocation = true;
-          else
+          } else {
+            print('false *****************************');
             haveLocation = false;
-        });
-        if (haveLocation == false) {
-          try {
-            Position position = await Geolocator()
-                .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-            await Dio().post('$_url/api/family/set-location',
-                data: {
-                  "latitude": "${position.latitude}",
-                  "longitude": "${position.longitude}",
-                },
-                options: Options(headers: {
-                  HttpHeaders.authorizationHeader:
-                      "Bearer ${response.data['token']}"
-                }));
-          } on DioError catch (e) {
-            print('error in get position');
-            print(e.response.data);
-          } catch (e) {
-            print("no location");
           }
-        }
+          print(haveLocation);
+          if (haveLocation == false) {
+            print('hi from if');
+            try {
+              print('hi from try');
+              Position position = await Geolocator()
+                  .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+              await Dio().post('$_url/api/family/set-location',
+                  data: {
+                    "latitude": "${position.latitude}",
+                    "longitude": "${position.longitude}",
+                  },
+                  options: Options(headers: {
+                    HttpHeaders.authorizationHeader:
+                        "Bearer ${response.data['token']}"
+                  }));
+            } on DioError catch (e) {
+              print('error in get position');
+              print(e.response.data);
+            } catch (e) {
+              print("no location");
+            }
+          }
+        });
+
 
         return "success";
       } else {
