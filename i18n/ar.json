@@ -129,5 +129,7 @@
   "payment method": "طريقة الدفع او السداد",
   "cashPayment": "الدفع عند الاستلام",
   "visaPayment": "الدفع الألكتروني",
-  "walletPayment": "خصم من محفظه العميل"
+  "walletPayment": "خصم من محفظه العميل",
+  "storeLocation": "انقر هنا لتحديد موقع اسرتك حاليا",
+  "locationSuccess": "تم اختيار الموقع الحالى بنجاح"
 }

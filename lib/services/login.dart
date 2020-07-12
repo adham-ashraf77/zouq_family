@@ -4,6 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'getuser.dart';
+
 class Login {
   final String _url = "https://api.dhuqapp.com";
   final String _login = "/api/family/login";
@@ -24,22 +26,36 @@ class Login {
         prefs.setString("token", response.data['token']);
         prefs.setString("image", response.data['image']);
         prefs.setString("email", response.data['email']);
-       
-        try {
-           Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-          await Dio().post('$_url/api/family/set-location',
-              data: {
-                "latitude": "${position.latitude}",
-                "longitude": "${position.longitude}",
-              },
-              options: Options(headers: {HttpHeaders.authorizationHeader: "Bearer ${response.data['token']}"}));
-        } on DioError catch (e) {
-          print('error in get position');
-          print(e.response.data);
+        bool haveLocation;
+        GetUser().getUser(token: response.data['token']).then((value) {
+          var x = value;
+          print('X = ' + x['user'].toString());
+          if (x['user']['latitude'] != null)
+            haveLocation = true;
+          else
+            haveLocation = false;
+        });
+        if (haveLocation == false) {
+          try {
+            Position position = await Geolocator()
+                .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+            await Dio().post('$_url/api/family/set-location',
+                data: {
+                  "latitude": "${position.latitude}",
+                  "longitude": "${position.longitude}",
+                },
+                options: Options(headers: {
+                  HttpHeaders.authorizationHeader:
+                      "Bearer ${response.data['token']}"
+                }));
+          } on DioError catch (e) {
+            print('error in get position');
+            print(e.response.data);
+          } catch (e) {
+            print("no location");
+          }
         }
-        catch(e){
-          print("no location");
-        }
+
         return "success";
       } else {
         print('not a 200 request ${response.data}');

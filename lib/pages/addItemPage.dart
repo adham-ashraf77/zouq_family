@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,7 +29,9 @@ class _AddItemPageState extends State<AddItemPage> {
   VideoPlayerController vbc;
   File productVideo;
   File _image;
+  final picker = ImagePicker();
   File _video;
+
   // List<File> images = [null, null, null, null, null];
   final nameTextFieldController = TextEditingController();
   final priceTextFieldController = TextEditingController();
@@ -42,7 +45,7 @@ class _AddItemPageState extends State<AddItemPage> {
   List<Asset> images = List<Asset>();
   bool photosIsEmpty = false;
 
-  Future<void> loadAssets() async {
+  Future<void> loadAssets(int index) async {
     List<Asset> resultList = List<Asset>();
 //    if(file!=null && file.isNotEmpty)
 //      file.clear();
@@ -62,23 +65,25 @@ class _AddItemPageState extends State<AddItemPage> {
       return file;
     }
 
-    try {
-      resultList = await MultiImagePicker.pickImages(
-        maxImages: 5,
-        enableCamera: true,
-        selectedAssets: images,
-        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
-        materialOptions: MaterialOptions(
-          actionBarColor: "#abcdef",
-          actionBarTitle: "Example App",
-          allViewTitle: "All Photos",
-          useDetailsView: false,
-          selectCircleStrokeColor: "#000000",
-        ),
-      );
-    } on Exception catch (e) {
-      error = e.toString();
-    }
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+//    try {
+////      resultList = await MultiImagePicker.pickImages(
+////        maxImages: 5,
+////        enableCamera: true,
+////        selectedAssets: images,
+////        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+////        materialOptions: MaterialOptions(
+////          actionBarColor: "#abcdef",
+////          actionBarTitle: "Example App",
+////          allViewTitle: "All Photos",
+////          useDetailsView: false,
+////          selectCircleStrokeColor: "#000000",
+////        ),
+////      );
+////    } on Exception catch (e) {
+////      error = e.toString();
+////    }
 
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
@@ -87,27 +92,44 @@ class _AddItemPageState extends State<AddItemPage> {
 
     setState(() {
       photosIsEmpty = false;
-      images = resultList;
+      //images = resultList;
+      _image = File(pickedFile.path);
     });
-    print('hi');
-    print('Here ' + images.length.toString());
-    if (images.length > 0) listOfImages.clear();
-    images.forEach((image) async {
-//      images.first.requestOriginal(quality: 100).then((value){
+    try {
+      print('insert');
+      print(index);
+      if (_image.existsSync())
+        listOfImages[index] = _image;
+    }
+    catch (e) {
+      print(e);
+      print('add');
+      print(index);
+      listOfImages.add(_image);
+    }
+
+
+    print(_image.path);
+    print('fileLength----->${listOfImages.length}');
+
+//    print('hi');
+//    print('Here ' + images.length.toString());
+//    if (images.length > 0) listOfImages.clear();
+//    images.forEach((image) async {
+////      images.first.requestOriginal(quality: 100).then((value){
+////
+////        print('yoooooooooooooo${value.buffer}');
+////      });
+//      File x = await getImageFileFromAssets(
+//          await image.requestOriginal(quality: 100), image.name);
 //
-//        print('yoooooooooooooo${value.buffer}');
+//      setState(() {
+//        listOfImages.add(x);
 //      });
-      File x = await getImageFileFromAssets(
-          await image.requestOriginal(quality: 100), image.name);
+//      print(image.name);
+//      print('fileLength----->${listOfImages.length}');
+//    });
 
-      setState(() {
-        listOfImages.add(x);
-      });
-      print(image.name);
-      print('fileLength----->${listOfImages.length}');
-    });
-
-    print('hi');
     //print('--------->${file.first.path}');
   }
 
@@ -505,7 +527,7 @@ class _AddItemPageState extends State<AddItemPage> {
                       child: InkWell(
                         onTap: () {
                           // pickImageFromGallery(index);
-                          loadAssets();
+                          loadAssets(index);
                         },
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),

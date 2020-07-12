@@ -128,5 +128,7 @@
   "payment method": "payment method",
   "cashPayment": "pay by cash",
   "visaPayment": "pay by visa",
-  "walletPayment": "pat by zouq wallet"
+  "walletPayment": "pat by zouq wallet",
+  "storeLocation": "click here to get the store current location",
+  "locationSuccess": "location has been set successfully"
 }

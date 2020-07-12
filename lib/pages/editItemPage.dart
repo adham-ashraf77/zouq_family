@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
@@ -40,6 +41,7 @@ class _EditItemPageState extends State<EditItemPage> {
   VideoPlayerController vbc;
   File productVideo;
   File _image;
+  final picker = ImagePicker();
   File _video;
 
   // List<File> images = [null, null, null, null, null];
@@ -87,29 +89,32 @@ class _EditItemPageState extends State<EditItemPage> {
 
       final file = File('${(await getTemporaryDirectory()).path}/$name');
       await file.writeAsBytes(
-        byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes),
+        byteData.buffer
+            .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes),
       );
       print('bye');
       return file;
     }
 
-    try {
-      resultList = await MultiImagePicker.pickImages(
-        maxImages: 5,
-        enableCamera: true,
-        selectedAssets: images,
-        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
-        materialOptions: MaterialOptions(
-          actionBarColor: "#abcdef",
-          actionBarTitle: "Example App",
-          allViewTitle: "All Photos",
-          useDetailsView: false,
-          selectCircleStrokeColor: "#000000",
-        ),
-      );
-    } on Exception catch (e) {
-      error = e.toString();
-    }
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+//    try {
+//      resultList = await MultiImagePicker.pickImages(
+//        maxImages: 5,
+//        enableCamera: true,
+//        selectedAssets: images,
+//        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+//        materialOptions: MaterialOptions(
+//          actionBarColor: "#abcdef",
+//          actionBarTitle: "Example App",
+//          allViewTitle: "All Photos",
+//          useDetailsView: false,
+//          selectCircleStrokeColor: "#000000",
+//        ),
+//      );
+//    } on Exception catch (e) {
+//      error = e.toString();
+//    }
 
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
@@ -118,15 +123,28 @@ class _EditItemPageState extends State<EditItemPage> {
 
     setState(() {
       photosIsEmpty = false;
-      images = resultList;
+      _image = File(pickedFile.path);
     });
     print('hi');
     print('Here ' + images.length.toString());
-    File x = await getImageFileFromAssets(await images.last.requestOriginal(quality: 100), images.last.name);
-    setState(() {
-      listOfImages.insert(index, x);
-    });
-    print(images.last.name);
+//    File x = await getImageFileFromAssets(await images.last.requestOriginal(quality: 100), images.last.name);
+
+    try {
+      print('insert');
+      print(index);
+      if (_image != null) {
+        print('is inserted');
+        listOfImages[index] = _image;
+      }
+    } catch (e) {
+      print(e);
+      print('add');
+      print(index);
+      listOfImages.add(_image);
+    }
+
+    setState(() {});
+    if (_image != null) print(_image.path);
     print('fileLength----->${listOfImages.length}');
 
     print('hi');

@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,6 +34,33 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
   String wallet;
   String token;
   var links;
+
+  getLocation() async {
+    try {
+      Position position = await Geolocator()
+          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString('token');
+      await Dio().post('https://api.dhuqapp.com/api/family/set-location',
+          data: {
+            "latitude": "${position.latitude}",
+            "longitude": "${position.longitude}",
+          },
+          options: Options(
+              headers: {HttpHeaders.authorizationHeader: "Bearer $token"}));
+      print('location success');
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text(
+            "${AppLocalizations.of(context).translate('locationSuccess')}"),
+      ));
+    } on DioError catch (e) {
+      print('error in get position');
+      print(e.response.data);
+    } catch (e) {
+      print("no location");
+    }
+  }
+
   @override
   void didChangeDependencies() {
     SharedPreferences.getInstance().then((onValue) {
@@ -205,13 +235,32 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
               ),
               leading: Text(AppLocalizations.of(context).translate('language'),
                   style: moreTextStyle),
-              onTap: () => showCupertinoModalPopup(
-                  context: context, builder: (BuildContext context) => popUp()),
+              onTap: () =>
+                  showCupertinoModalPopup(
+                      context: context,
+                      builder: (BuildContext context) => popUp()),
             ),
             Divider(
               color: iconsFaded,
               indent: 25,
             ),
+
+            ListTile(
+              trailing: Icon(
+                trailingIcon,
+                size: 15.0,
+              ),
+              leading: Text(
+                  AppLocalizations.of(context).translate('storeLocation'),
+                  style: moreTextStyle),
+              onTap: () => getLocation(),
+            ),
+            Divider(
+              color: iconsFaded,
+              indent: 25,
+            ),
+
+
             GestureDetector(
               onTap: () {
 //              Navigator.push(context,
@@ -224,8 +273,8 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ContactPage(
-                                data: data,
-                              )));
+                            data: data,
+                          )));
                 },
                 trailing: Icon(
                   trailingIcon,
@@ -249,8 +298,8 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => EULAPage(
-                              data: data,
-                            )));
+                          data: data,
+                        )));
               },
               trailing: Icon(
                 trailingIcon,
@@ -273,8 +322,8 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => FAQPage(
-                              data: data,
-                            )));
+                          data: data,
+                        )));
               },
               trailing: Icon(
                 trailingIcon,
@@ -294,7 +343,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
               leading: GestureDetector(
                 onTap: () async {
                   SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
+                  await SharedPreferences.getInstance();
                   prefs.clear();
                   Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (context) => LoginPage()));
