@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:zouqadmin/ConstantVarables.dart';
 import 'package:zouqadmin/models/CategoriesTag.dart';
 
 class GetCategories {
@@ -9,12 +10,16 @@ class GetCategories {
   Future<void> getCategories() async {
     categories = [];
     try {
-      Response response = await Dio().get("$_url$_categories");
+      Response response =
+          await Dio().get("${ConstantVarable.baseUrl}$_categories");
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ${response.data}');
         List<dynamic> data = response.data;
         for (int i = 0; i < data.length; i++) {
-          categories.add(CategoriesTag(id: data[i]["id"], text_ar: data[i]["text_ar"], text_en: data[i]["text_en"]));
+          categories.add(CategoriesTag(
+              id: data[i]["id"],
+              text_ar: data[i]["text_ar"],
+              text_en: data[i]["text_en"]));
         }
         print("success");
       } else {

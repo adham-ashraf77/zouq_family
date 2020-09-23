@@ -9,8 +9,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
+import 'package:zouqadmin/home.dart';
 import 'package:zouqadmin/models/CategoriesTag.dart';
+import 'package:zouqadmin/models/TagsModel.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
+import 'package:zouqadmin/services/addproduct.dart';
 import 'package:zouqadmin/services/getCategories.dart';
 import 'package:zouqadmin/services/show.dart';
 import 'package:zouqadmin/services/updateproduct.dart';
@@ -21,8 +24,9 @@ import '../I10n/app_localizations.dart';
 
 class EditItemPage extends StatefulWidget {
   final String id;
+  final List<dynamic> tagsList;
 
-  const EditItemPage({@required this.id});
+  const EditItemPage({@required this.id, this.tagsList});
 
   @override
   _EditItemPageState createState() => _EditItemPageState(id: this.id);
@@ -61,10 +65,27 @@ class _EditItemPageState extends State<EditItemPage> {
   String rate;
   String description;
   String videoUrl;
+  List<int> tagsIdList = List<int>();
   List child;
   VideoPlayerController _controller;
   bool isUploading = false;
   Future<void> _initializeVideoPlayerFuture;
+  List<TagsModel> tagsList = List<TagsModel>();
+  List<TagsModel> tagsSelected = List<TagsModel>();
+  String dropDownTitleTag = "أختار وسم او اكثر";
+  TagsModel selectedTag;
+  getTags() async {
+    await AddProduct().getAllTags();
+    setState(() {
+      tagsList = AddProduct.tags;
+      // tagsList.forEach((element) {
+      //   catTags.add(element.);
+      // });
+      print("//////////////////////");
+      print(tagsList.length);
+      // isLoading = false;
+    });
+  }
 
   Future<File> _downloadFile(String url, String filename) async {
     http.Client client = new http.Client();
@@ -174,6 +195,13 @@ class _EditItemPageState extends State<EditItemPage> {
             builder: (BuildContext context) => LoadingDialog(
                   mss: AppLocalizations.of(context).translate('addLoading'),
                 ));
+        if (tagsSelected.length != 0) {
+          for (int i = 0; i < tagsSelected.length; i++) {
+            print(tagsSelected[i].id);
+            tagsIdList.add(tagsSelected[i].id);
+            print("tags id list is  $tagsIdList");
+          }
+        }
         print('=============================> ${categoryID}');
 
         /// the categoryID+1 cuz in backEnd they make that so array index start from 1 not from 0 and donot ask how or why xD
@@ -181,6 +209,7 @@ class _EditItemPageState extends State<EditItemPage> {
         UpdateProduct()
             .updateProduct(
           catID: categoryID + 1,
+          tagsIdList: tagsIdList,
           desc: descTextFieldController.text,
           name: nameTextFieldController.text,
           listOfPhotos: listOfImages,
@@ -190,18 +219,25 @@ class _EditItemPageState extends State<EditItemPage> {
           id: id,
         )
             .then((value) {
-          Navigator.of(context).pop();
-          value == 200
-              ? showDialog(
-                  context: context,
-                  builder: (BuildContext context) => DialogWorning(
-                        mss: AppLocalizations.of(context).translate('success'),
-                      ))
-              : showDialog(
-                  context: context,
-                  builder: (BuildContext context) => DialogWorning(
-                        mss: AppLocalizations.of(context).translate('failed'),
-                      ));
+          if (value == 200) {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) => DialogWorning(
+                      mss: AppLocalizations.of(context).translate('success'),
+                    ));
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => Home(),
+            ));
+          } else {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) => DialogWorning(
+                      mss: AppLocalizations.of(context).translate('failed'),
+                    ));
+          }
+
 //          Future.delayed(Duration(seconds: 1),(){
 //            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home(),));
 //          });
@@ -210,7 +246,7 @@ class _EditItemPageState extends State<EditItemPage> {
         showDialog(
             context: context,
             builder: (BuildContext context) => DialogWorning(
-              mss: AppLocalizations.of(context).translate('categoryError'),
+                  mss: AppLocalizations.of(context).translate('categoryError'),
                 ));
       }
     }
@@ -302,7 +338,9 @@ class _EditItemPageState extends State<EditItemPage> {
         });
         for (var url in list) {
           try {
-            _downloadFile(url, 'file_' + DateTime.now().millisecondsSinceEpoch.toString()).then((onValue) {
+            _downloadFile(url,
+                    'file_' + DateTime.now().millisecondsSinceEpoch.toString())
+                .then((onValue) {
               setState(() {
                 listOfImages.insert(i, onValue);
               });
@@ -335,10 +373,13 @@ class _EditItemPageState extends State<EditItemPage> {
       File videoFile = productVideo;
       vbc = new VideoPlayerController.file(videoFile)
         ..initialize().then((_) {
-          print('Duration : ' + vbc.value.duration.toString().split(':').toString());
+          print('Duration : ' +
+              vbc.value.duration.toString().split(':').toString());
           var duration = vbc.value.duration.toString().split(':');
           print(duration[0] + ' - ' + duration[1] + ' = ' + duration[2]);
-          if (duration[0].trim() == '0' && duration[1].trim() == '00' && double.parse(duration[2]) < 10.0) {
+          if (duration[0].trim() == '0' &&
+              duration[1].trim() == '00' &&
+              double.parse(duration[2]) < 10.0) {
             print('accepted');
             productVideo = videoFile;
           } else {
@@ -346,7 +387,8 @@ class _EditItemPageState extends State<EditItemPage> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => DialogWorning(
-                  mss: AppLocalizations.of(context).translate('videoLengthError'),
+                      mss: AppLocalizations.of(context)
+                          .translate('videoLengthError'),
                     ));
             productVideo = null;
           }
@@ -373,16 +415,17 @@ class _EditItemPageState extends State<EditItemPage> {
           var duration = vbc.value.duration.toString().split(':');
           print(duration[0] + ' - ' + duration[1] + ' = ' + duration[2]);
           if (duration[0].trim() == '0' &&
-              duration[1].trim() == '00' && double.parse(duration[2]) < 11.0) {
+              duration[1].trim() == '00' &&
+              double.parse(duration[2]) < 11.0) {
             print('accepted');
             productVideo = videoFile;
           } else {
             print('rejected');
             showDialog(
                 context: context,
-                builder: (BuildContext context) =>
-                    DialogWorning(
-                      mss: AppLocalizations.of(context).translate('videoLengthError'),
+                builder: (BuildContext context) => DialogWorning(
+                      mss: AppLocalizations.of(context)
+                          .translate('videoLengthError'),
                     ));
             productVideo = null;
           }
@@ -400,11 +443,17 @@ class _EditItemPageState extends State<EditItemPage> {
 
   @override
   void initState() {
+    for (int i = 0; i < widget.tagsList.length; i++) {
+      tagsSelected.add(TagsModel(
+          id: widget.tagsList[i]["id"], name: widget.tagsList[i]["name"]));
+    }
+
     setState(() {
       isLoading = true;
     });
     getCategories();
     getData();
+    getTags();
     super.initState();
   }
 
@@ -424,14 +473,16 @@ class _EditItemPageState extends State<EditItemPage> {
                     height: 20,
                     child: CircularProgressIndicator(
                       backgroundColor: Colors.grey[400],
-                      valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey[300]),
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(Colors.grey[300]),
                       strokeWidth: 2,
                     ),
                   ),
                   Text(
                     AppLocalizations.of(context).translate('loading'),
                     textDirection: TextDirection.ltr,
-                    style: paragarph4.copyWith(color: Colors.grey[400], height: 2),
+                    style:
+                        paragarph4.copyWith(color: Colors.grey[400], height: 2),
                   )
                 ],
               ),
@@ -468,16 +519,17 @@ class _EditItemPageState extends State<EditItemPage> {
                             width: 160,
                             height: 100,
                             child: Center(
-                                child:
-                                vbc != null ?
-                                vbc.value.initialized ?
-                                VideoPlayer(vbc) :
-                                VideoPlayer(vbc) :
-                                //TODO uncomment the previous files if u want a thumbnail for the video
-                                Image.asset("assets/icons/video.png")),
+                                child: vbc != null
+                                    ? vbc.value.initialized
+                                        ? VideoPlayer(vbc)
+                                        : VideoPlayer(vbc)
+                                    :
+                                    //TODO uncomment the previous files if u want a thumbnail for the video
+                                    Image.asset("assets/icons/video.png")),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Colors.black, width: 0.1),
+                              border:
+                                  Border.all(color: Colors.black, width: 0.1),
                             ),
                           ),
 //                          Container(
@@ -506,12 +558,15 @@ class _EditItemPageState extends State<EditItemPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              AppLocalizations.of(context).translate('optionalVideo'),
+                              AppLocalizations.of(context)
+                                  .translate('optionalVideo'),
                               style: TextStyle(fontSize: 23),
                             ),
                             Text(
-                              AppLocalizations.of(context).translate('tenSecLimit'),
-                              style: TextStyle(color: Colors.grey, fontSize: 13),
+                              AppLocalizations.of(context)
+                                  .translate('tenSecLimit'),
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 13),
                             ),
                           ],
                         )
@@ -524,7 +579,8 @@ class _EditItemPageState extends State<EditItemPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          AppLocalizations.of(context).translate('productImages'),
+                          AppLocalizations.of(context)
+                              .translate('productImages'),
                           style: TextStyle(fontSize: 23),
                         ),
                         Text(
@@ -627,7 +683,8 @@ class _EditItemPageState extends State<EditItemPage> {
                                         ),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(color: Colors.black, width: 0.10),
+                                    border: Border.all(
+                                        color: Colors.black, width: 0.10),
                                   ),
                                 ),
                               ),
@@ -649,7 +706,8 @@ class _EditItemPageState extends State<EditItemPage> {
                         },
                         decoration: InputDecoration(
                           // border: InputBorder.none,
-                          hintText: AppLocalizations.of(context).translate('name'),
+                          hintText:
+                              AppLocalizations.of(context).translate('name'),
                         ),
                       ),
                     ),
@@ -667,7 +725,8 @@ class _EditItemPageState extends State<EditItemPage> {
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           // border: InputBorder.none,
-                          hintText: AppLocalizations.of(context).translate('price'),
+                          hintText:
+                              AppLocalizations.of(context).translate('price'),
                         ),
                       ),
                     ),
@@ -682,7 +741,8 @@ class _EditItemPageState extends State<EditItemPage> {
                         ),
                         elevation: 10,
                         hint: Text(
-                          AppLocalizations.of(context).translate('productCategory'),
+                          AppLocalizations.of(context)
+                              .translate('productCategory'),
                         ),
                         underline: Container(
                           height: 1,
@@ -696,12 +756,117 @@ class _EditItemPageState extends State<EditItemPage> {
                             print('Cat ID' + categoryID.toString());
                           });
                         },
-                        items: catTags.map<DropdownMenuItem<String>>((String value) {
+                        items: catTags
+                            .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
                           );
                         }).toList(),
+                      ),
+                    ),
+                    tagsSelected.length == 0
+                        ? Container()
+                        : Container(
+                            height: 55,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                itemCount: tagsSelected.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          borderRadius:
+                                              BorderRadius.circular(12)),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(right: 8),
+                                            child:
+                                                Text(tagsSelected[index].name),
+                                          ),
+                                          IconButton(
+                                              icon: Icon(
+                                                Icons.cancel,
+                                                color: Color.fromRGBO(
+                                                    29, 174, 209, 1),
+                                              ),
+                                              onPressed: () {
+                                                tagsSelected.removeAt(index);
+                                                setState(() {});
+                                              })
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }),
+                          ),
+                    Container(
+                      width: MediaQuery.of(context).size.width / 1.1,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          // border: Border.all(color: Colors.grey[500]
+                          // ),
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Row(
+                        children: <Widget>[
+                          DropdownButton<TagsModel>(
+                              hint: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 8, right: 8),
+                                child: Text(
+                                  dropDownTitleTag,
+                                ),
+                              ),
+                              underline: Container(),
+                              value: selectedTag,
+                              iconSize: 35,
+                              icon: Padding(
+                                  padding: const EdgeInsets.only(right: 0),
+                                  child: Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Color.fromRGBO(29, 174, 209, 1),
+                                  )),
+                              items: tagsList.map((TagsModel tag) {
+                                return DropdownMenuItem<TagsModel>(
+                                    value: tag,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8, right: 8),
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                1.4,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Text(
+                                              tag.name,
+                                            ),
+                                            Expanded(
+                                              child: Container(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ));
+                              }).toList(),
+                              onChanged: (TagsModel value) {
+                                setState(() {
+                                  print(value.name);
+                                  selectedTag = value;
+                                  print(selectedTag.name);
+                                  tagsSelected.add(value);
+
+                                  print(tagsSelected);
+                                });
+                              })
+                        ],
                       ),
                     ),
                     Padding(
@@ -722,8 +887,10 @@ class _EditItemPageState extends State<EditItemPage> {
                               width: 0.2,
                             ),
                           ),
-                          hintText: AppLocalizations.of(context).translate('productDescription'),
-                          hintStyle: TextStyle(color: Colors.black54, fontSize: 15),
+                          hintText: AppLocalizations.of(context)
+                              .translate('productDescription'),
+                          hintStyle:
+                              TextStyle(color: Colors.black54, fontSize: 15),
                         ),
                         maxLines: 3,
                       ),
@@ -746,7 +913,10 @@ class _EditItemPageState extends State<EditItemPage> {
                           child: Center(
                             child: Text(
                               AppLocalizations.of(context).translate('edit'),
-                              style: TextStyle(color: mainColor, fontSize: 20, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  color: mainColor,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),

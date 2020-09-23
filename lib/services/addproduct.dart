@@ -1,15 +1,18 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zouqadmin/ConstantVarables.dart';
+import 'package:zouqadmin/models/TagsModel.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
+import 'package:http/http.dart' as http;
 
 import '../I10n/app_localizations.dart';
 
 class AddProduct {
-  final String apiUrl = "https://api.dhuqapp.com";
   final String addingProduct = "/api/family/products";
   FormData _formData;
   Response response;
@@ -21,6 +24,7 @@ class AddProduct {
       File video,
       List<File> listOfPhotos,
       int catID,
+      List<int> tagList,
       @required BuildContext context}) async {
     FormData formData;
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -29,6 +33,7 @@ class AddProduct {
     List<MultipartFile> something = List();
     List<File> videos = List<File>();
     List<MultipartFile> theVideo = List();
+
     print('111');
     if (video != null && video.path != null && video.path.isEmpty == false) {
       print('path');
@@ -48,7 +53,8 @@ class AddProduct {
       print('the video length: ${theVideo.length}');
       print('the lenthght of  normal video ${videos.length}');
     });
-    if (listOfPhotos.length == something.length && theVideo.length == videos.length) {
+    if (listOfPhotos.length == something.length &&
+        theVideo.length == videos.length) {
       print('hi from equals if');
       // print('hi ^^ ' + video.toString());
       print('At API call: catID=> $catID');
@@ -63,7 +69,8 @@ class AddProduct {
       else
         print('At API call: video=> ${theVideo[0].filename}');
 
-      if ((theVideo == null || theVideo.isEmpty == true) && (desc.isEmpty || desc == '')) {
+      if ((theVideo == null || theVideo.isEmpty == true) &&
+          (desc.isEmpty || desc == '')) {
         print('video=null + desc= empty');
         formData = FormData.fromMap({
           "name": "$name",
@@ -71,8 +78,10 @@ class AddProduct {
           "price": "$price",
           "images": something,
           "category_id": catID.toString(),
+          "tags": tagList
         });
-      } else if ((theVideo == null || theVideo.isEmpty == true) && desc.isNotEmpty) {
+      } else if ((theVideo == null || theVideo.isEmpty == true) &&
+          desc.isNotEmpty) {
         print('video=null + desc= maliana');
         formData = FormData.fromMap({
           "name": "$name",
@@ -80,8 +89,10 @@ class AddProduct {
           "price": "$price",
           "images": something,
           "category_id": catID.toString(),
+          "tags": tagList
         });
-      } else if ((theVideo != null || theVideo.isNotEmpty == true) && (desc.isEmpty || desc == '')) {
+      } else if ((theVideo != null || theVideo.isNotEmpty == true) &&
+          (desc.isEmpty || desc == '')) {
         print('video=mliaaaaaan + desc= null');
         formData = FormData.fromMap({
           "name": "$name",
@@ -89,6 +100,7 @@ class AddProduct {
           "price": "$price",
           "images": something,
           "category_id": catID.toString(),
+          "tags": tagList
         });
       } else {
         print('koloooooooooooooooo');
@@ -99,6 +111,7 @@ class AddProduct {
           "images": something,
           "video": theVideo[0],
           "category_id": catID.toString(),
+          "tags": tagList
         });
       }
 //      FormData _formData = video != null
@@ -121,7 +134,9 @@ class AddProduct {
         // print('--------------------> addItemFile: ${_formData.files}');
         if (token.isNotEmpty) {
           print('before response');
-          response = await Dio().post("http://api.dhuqapp.com/api/family/products",
+          String url = "${ConstantVarable.baseUrl}$addingProduct";
+          print(' url is : $url');
+          response = await Dio().post("$url",
               data: formData,
               options: Options(
                 headers: {HttpHeaders.authorizationHeader: "Bearer $token"},
@@ -133,15 +148,15 @@ class AddProduct {
           showDialog(
               context: context,
               builder: (BuildContext context) => DialogWorning(
-                mss: AppLocalizations.of(context).translate('success'),
-              ));
+                    mss: AppLocalizations.of(context).translate('success'),
+                  ));
         } else {
           print(response.data);
           showDialog(
               context: context,
               builder: (BuildContext context) => DialogWorning(
-                mss: AppLocalizations.of(context).translate('failed'),
-              ));
+                    mss: AppLocalizations.of(context).translate('failed'),
+                  ));
           return "something is wrong";
         }
       } on DioError catch (e) {
@@ -150,19 +165,45 @@ class AddProduct {
           showDialog(
               context: context,
               builder: (BuildContext context) => DialogWorning(
-                mss: AppLocalizations.of(context).translate('failed'),
-              ));
+                    mss: AppLocalizations.of(context).translate('failed'),
+                  ));
           return AppLocalizations.of(context).translate('failed');
         }
         showDialog(
             context: context,
             builder: (BuildContext context) => DialogWorning(
-              mss: AppLocalizations.of(context).translate('failed'),
-            ));
+                  mss: AppLocalizations.of(context).translate('failed'),
+                ));
         print(e.response.data);
       }
     }
     print('res ' + response.toString());
     return response;
+  }
+
+  static List<TagsModel> tags = [];
+
+  Future<void> getAllTags() async {
+    tags = [];
+    try {
+      Response response = await Dio()
+          .get("${ConstantVarable.baseUrl}/api/content/tags?limit=10");
+      if (response.statusCode >= 200 && response.statusCode <= 299) {
+        print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ${response.data}');
+        List<dynamic> data = response.data;
+        for (int i = 0; i < data.length; i++) {
+          tags.add(TagsModel(
+            id: data[i]["id"],
+            name: data[i]["name"],
+          ));
+        }
+        print("success");
+      } else {
+        print('not a 200 requesy ${response.data}');
+      }
+    } on DioError catch (e) {
+      print('errooooooooooooor');
+      print(e);
+    }
   }
 }

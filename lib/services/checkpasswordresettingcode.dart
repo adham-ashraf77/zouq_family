@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:zouqadmin/ConstantVarables.dart';
 
 class CheckPasswordResettingCode {
   final String _url = "https://api.dhuqapp.com";
@@ -8,10 +9,10 @@ class CheckPasswordResettingCode {
 
   Future<Response> resetPassword(
       {@required String phone, @required String code}) async {
-    print(phone+ ' = ' + code);
+    print(phone + ' = ' + code);
     _formData = FormData.fromMap({"phone": "$phone", "confirm_code": "$code"});
     Response response =
-        await Dio().post('$_url$_reset', data: _formData);
+        await Dio().post('${ConstantVarable.baseUrl}$_reset', data: _formData);
     return response;
   }
 }

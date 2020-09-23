@@ -130,5 +130,6 @@
   "visaPayment": "pay by visa",
   "walletPayment": "pat by zouq wallet",
   "storeLocation": "click here to get the store current location",
-  "locationSuccess": "location has been set successfully"
+  "locationSuccess": "location has been set successfully",
+  "time": "Time per minute"
 }

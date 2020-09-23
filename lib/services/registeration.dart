@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zouqadmin/ConstantVarables.dart';
 
 class Registeration {
-  final String _url = "https://api.dhuqapp.com";
   final String _registeraAndSendConfirm =
       "/api/family/register-and-send-confirm-code";
   final String _resendRegisterConfirmCode =
@@ -56,7 +56,10 @@ class Registeration {
         "categories": categories,
         "city": city,
       });
-    } else if (pIN == null || pIN.isEmpty && image == null || image.path.isEmpty || image.existsSync() == false) {
+    } else if (pIN == null ||
+        pIN.isEmpty && image == null ||
+        image.path.isEmpty ||
+        image.existsSync() == false) {
       _formData = FormData.fromMap({
         "name": "$shopName",
         "manager_name": "$shopOwnerName",
@@ -98,7 +101,10 @@ class Registeration {
         "categories": categories,
         "city": city,
       });
-    } else if (pIN == null || pIN.isEmpty && image != null || image.path.isNotEmpty || image.existsSync() == true) {
+    } else if (pIN == null ||
+        pIN.isEmpty && image != null ||
+        image.path.isNotEmpty ||
+        image.existsSync() == true) {
       _formData = FormData.fromMap({
         "name": "$shopName",
         "manager_name": "$shopOwnerName",
@@ -133,7 +139,9 @@ class Registeration {
     }
 
     try {
-      Response response = await Dio().post("$_url$_registeraAndSendConfirm", data: _formData);
+      Response response = await Dio().post(
+          "${ConstantVarable.baseUrl}$_registeraAndSendConfirm",
+          data: _formData);
       print(response.data);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         return "success";
@@ -156,8 +164,9 @@ class Registeration {
   Future<String> resendConfirmCode(String phone) async {
     _formData = FormData.fromMap({"phone": "$phone"});
     try {
-      Response response =
-          await Dio().post("$_url$_resendRegisterConfirmCode", data: _formData);
+      Response response = await Dio().post(
+          "${ConstantVarable.baseUrl}$_resendRegisterConfirmCode",
+          data: _formData);
       print(response.data);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         return "success";
@@ -179,8 +188,9 @@ class Registeration {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _formData = FormData.fromMap({"phone": "$phone", "confirm_code": "$code"});
     try {
-      Response response =
-          await Dio().post("$_url$_activateRegisteredUser", data: _formData);
+      Response response = await Dio().post(
+          "${ConstantVarable.baseUrl}$_activateRegisteredUser",
+          data: _formData);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
 //        Map data = response.data;
 //        print(data['token']);
@@ -222,7 +232,8 @@ class Registeration {
     } on DioError catch (e) {
       print('naniiiiiiiiiiiiiiiiiiii');
       print(e.response);
-      if (e.response.data["message"] == "there is no inactive user have this phone number") {
+      if (e.response.data["message"] ==
+          "there is no inactive user have this phone number") {
         return "there is no inactive user have this phone number";
       }
       if (e.response == null) return "connection time out";

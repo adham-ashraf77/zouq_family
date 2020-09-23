@@ -3,16 +3,16 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zouqadmin/ConstantVarables.dart';
 
 class Show {
-  final String _url = "https://api.dhuqapp.com";
   final String _show = '/api/family/products/';
 
   Future<dynamic> show({@required String productID}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     Response response = await Dio()
-        .get('$_url$_show$productID',
+        .get('${ConstantVarable.baseUrl}$_show$productID',
             options: Options(
               headers: {HttpHeaders.authorizationHeader: "Bearer $token"},
             ))

@@ -5,6 +5,7 @@ import 'package:zouqadmin/pages/ordersViewPage.dart';
 import 'package:zouqadmin/services/accept_or_reject_order.dart';
 import 'package:zouqadmin/services/end_order.dart';
 import 'package:zouqadmin/theme/common.dart';
+import 'package:zouqadmin/widgets/CounDownTimer.dart';
 
 import '../home.dart';
 
@@ -15,10 +16,15 @@ class OrdersCard extends StatelessWidget {
   Function rejectFunction;
 
   acceptOrder({String orderId, String orderStatus}) {
-    AcceptOrRejectOrder().postOrderStatus(orderId: orderId, orderStatus: orderStatus);
+    AcceptOrRejectOrder()
+        .postOrderStatus(orderId: orderId, orderStatus: orderStatus);
   }
 
-  OrdersCard({@required this.order, @required this.type, @required this.acceptFunction, @required this.rejectFunction});
+  OrdersCard(
+      {@required this.order,
+      @required this.type,
+      @required this.acceptFunction,
+      @required this.rejectFunction});
   Widget build(BuildContext context) {
     final double allWidth = MediaQuery.of(context).size.width;
 
@@ -52,7 +58,8 @@ class OrdersCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 15.0),
       child: GestureDetector(
         onTap: () {
-          Navigator.of(context).pushNamed(OrdersViewPage.routeName, arguments: [order, type]);
+          Navigator.of(context)
+              .pushNamed(OrdersViewPage.routeName, arguments: [order, type]);
         },
         child: Container(
           decoration: BoxDecoration(
@@ -84,9 +91,18 @@ class OrdersCard extends StatelessWidget {
                                       color: Colors.black54,
                                       fontWeight: FontWeight.w300))
                               : SizedBox(),
+                          type == 2
+                              ? this.order.remainingTime != 0
+                                  ? CounDownTimer(
+                                      remainingTime: this.order.remainingTime,
+                                    )
+                                  : Container()
+                              : Container(),
                           Text(
                             this.order.id.toString(),
-                            style: paragarph3.copyWith(color: Colors.black54, fontWeight: FontWeight.w300),
+                            style: paragarph3.copyWith(
+                                color: Colors.black54,
+                                fontWeight: FontWeight.w300),
                           ),
                         ],
                       ),
@@ -94,8 +110,11 @@ class OrdersCard extends StatelessWidget {
                     Text(
                       this.order.name.toString(),
                       textDirection: TextDirection.rtl,
-                      style:
-                      paragarph6.copyWith(fontSize: 25, color: Colors.black, height: 1.8, fontWeight: FontWeight.w200),
+                      style: paragarph6.copyWith(
+                          fontSize: 25,
+                          color: Colors.black,
+                          height: 1.8,
+                          fontWeight: FontWeight.w200),
                     ),
                     SizedBox(
                       height: 0,
@@ -107,25 +126,29 @@ class OrdersCard extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             this.order.time.toString(),
-                            style: paragarph3.copyWith(color: Colors.black54, fontWeight: FontWeight.w100),
+                            style: paragarph3.copyWith(
+                                color: Colors.black54,
+                                fontWeight: FontWeight.w100),
                           ),
                           SizedBox(
                             width: 5,
                           ),
                           Text(
                             this.order.date.toString(),
-                            style: paragarph3.copyWith(color: Colors.black54, fontWeight: FontWeight.w100),
+                            style: paragarph3.copyWith(
+                                color: Colors.black54,
+                                fontWeight: FontWeight.w100),
                           ),
                           SizedBox(
                             width: 9,
                           ),
-
                           Container(
                             height: 19,
                             width: 19,
                             decoration: BoxDecoration(
                               color: accent,
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
                             ),
                           ),
                           SizedBox(
@@ -153,146 +176,166 @@ class OrdersCard extends StatelessWidget {
                                   type == 3
                                       ? Container()
                                       : InkWell(
-                                    onTap: type == 1 ? rejectFunction : () {
-                                      if (type == 2) _makePhoneCall(
-                                          'tel:${order.phoneNumber}');
-                                    },
-                                    child: Container(
-                                      height: MediaQuery
-                                          .of(context)
-                                          .orientation == Orientation.portrait
-                                          ? MediaQuery
-                                          .of(context)
-                                          .size
-                                          .height * 0.05
-                                          : 50,
-                                      width: MediaQuery
-                                          .of(context)
-                                          .orientation == Orientation.portrait
-                                          ? MediaQuery
-                                          .of(context)
-                                          .size
-                                          .height * 0.08
-                                          : 50,
-                                      alignment: Alignment.center,
-                                      child: type == 1 || type == 3
-                                          ? Text(
-                                        'رفض',
-                                        style: TextStyle(color: rejectedColor),
-                                      )
-                                          : Icon(
-                                        Icons.phone,
-                                        color: type == 1 || type == 3
-                                            ? rejectedColor
-                                            : accent,
-                                        size:
-                                        MediaQuery
-                                            .of(context)
-                                            .orientation == Orientation.portrait
-                                            ? 23
-                                            : 30,
-                                      ),
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(50)),
-                                          border: Border.all(
-                                              color: Colors.grey[300])),
-                                    ),
-                                  ),
+                                          onTap: type == 1
+                                              ? rejectFunction
+                                              : () {
+                                                  if (type == 2)
+                                                    _makePhoneCall(
+                                                        'tel:${order.phoneNumber}');
+                                                },
+                                          child: Container(
+                                            height: MediaQuery.of(context)
+                                                        .orientation ==
+                                                    Orientation.portrait
+                                                ? MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.05
+                                                : 50,
+                                            width: MediaQuery.of(context)
+                                                        .orientation ==
+                                                    Orientation.portrait
+                                                ? MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.08
+                                                : 50,
+                                            alignment: Alignment.center,
+                                            child: type == 1 || type == 3
+                                                ? Text(
+                                                    'رفض',
+                                                    style: TextStyle(
+                                                        color: rejectedColor),
+                                                  )
+                                                : Icon(
+                                                    Icons.phone,
+                                                    color:
+                                                        type == 1 || type == 3
+                                                            ? rejectedColor
+                                                            : accent,
+                                                    size: MediaQuery.of(context)
+                                                                .orientation ==
+                                                            Orientation.portrait
+                                                        ? 23
+                                                        : 30,
+                                                  ),
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(50)),
+                                                border: Border.all(
+                                                    color: Colors.grey[300])),
+                                          ),
+                                        ),
                                   SizedBox(
                                     width: 13,
                                   ),
                                   type == 3
                                       ? Container()
                                       : InkWell(
-                                    onTap: type == 1 ? acceptFunction : () {
-                                      if (type == 2) whatsAppOpen(phone: order.phoneNumber);
-                                    }
-                                    ,
-                                    child: Container(
-                                      height: MediaQuery
-                                          .of(context)
-                                          .orientation == Orientation.portrait
-                                          ? MediaQuery
-                                          .of(context)
-                                          .size
-                                          .height * 0.05
-                                          : 50,
-                                      width: MediaQuery
-                                          .of(context)
-                                          .orientation == Orientation.portrait
-                                          ? (type == 1
-                                          ? MediaQuery
-                                          .of(context)
-                                          .size
-                                          .height * 0.09
-                                          : type == 2
-                                          ? MediaQuery
-                                          .of(context)
-                                          .size
-                                          .height * 0.05
-                                          : type == 3 ? MediaQuery
-                                          .of(context)
-                                          .size
-                                          .height * 0.07 : null)
-                                          : (type == 1 ? 70 : type == 2 ? 50 : type == 3 ? 70 : null),
-                                      alignment: Alignment.center,
-                                      child: type == 1 || type == 3
-                                          ? Text(
-                                        "قبول", style: TextStyle(
-                                          color: Colors.green[600]),
-                                      )
-                                          : Image.asset(
-                                        'assets/images/whatsicon.png',
-                                        fit: BoxFit.fill,
-                                      ),
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(50)),
-                                          border: Border.all(
-                                              color: Colors.grey[300])),
-                                    ),
-                                  ),
+                                          onTap: type == 1
+                                              ? acceptFunction
+                                              : () {
+                                                  if (type == 2)
+                                                    whatsAppOpen(
+                                                        phone:
+                                                            order.phoneNumber);
+                                                },
+                                          child: Container(
+                                            height: MediaQuery.of(context)
+                                                        .orientation ==
+                                                    Orientation.portrait
+                                                ? MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.05
+                                                : 50,
+                                            width: MediaQuery.of(context)
+                                                        .orientation ==
+                                                    Orientation.portrait
+                                                ? (type == 1
+                                                    ? MediaQuery.of(context)
+                                                            .size
+                                                            .height *
+                                                        0.09
+                                                    : type == 2
+                                                        ? MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.05
+                                                        : type == 3
+                                                            ? MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height *
+                                                                0.07
+                                                            : null)
+                                                : (type == 1
+                                                    ? 70
+                                                    : type == 2
+                                                        ? 50
+                                                        : type == 3
+                                                            ? 70
+                                                            : null),
+                                            alignment: Alignment.center,
+                                            child: type == 1 || type == 3
+                                                ? Text(
+                                                    "قبول",
+                                                    style: TextStyle(
+                                                        color:
+                                                            Colors.green[600]),
+                                                  )
+                                                : Image.asset(
+                                                    'assets/images/whatsicon.png',
+                                                    fit: BoxFit.fill,
+                                                  ),
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(50)),
+                                                border: Border.all(
+                                                    color: Colors.grey[300])),
+                                          ),
+                                        ),
                                   type == 2
                                       ? InkWell(
-                                    onTap: () => endOrder(order.id),
-                                    child: Container(
-                                      height: 40,
-                                      alignment: Alignment.center,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Icon(
-                                            Icons.check,
-                                            color: Colors.white,
-                                            size: 23,
+                                          onTap: () => endOrder(order.id),
+                                          child: Container(
+                                            height: 40,
+                                            alignment: Alignment.center,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            child: Row(
+                                              children: <Widget>[
+                                                Icon(
+                                                  Icons.check,
+                                                  color: Colors.white,
+                                                  size: 23,
+                                                ),
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 5)),
+                                                Text(
+                                                  'جاهز',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 12),
+                                                ),
+                                              ],
+                                            ),
+                                            decoration: BoxDecoration(
+                                                color: Colors.green[300],
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(50)),
+                                                border: Border.all(
+                                                    color: Colors.grey[300])),
                                           ),
-                                          Padding(padding: EdgeInsets.symmetric(
-                                              horizontal: 5)),
-                                          Text(
-                                            'جاهز',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12),
-                                          ),
-                                        ],
-                                      ),
-                                      decoration: BoxDecoration(
-                                          color: Colors.green[300],
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(50)),
-                                          border: Border.all(
-                                              color: Colors.grey[300])),
-                                    ),
-                                  )
+                                        )
                                       : Container()
                                 ],
                               ),
                             ),
-
                           ],
                         ),
                       ),

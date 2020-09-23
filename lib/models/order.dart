@@ -15,6 +15,7 @@ class Order {
   final List<Product> product;
   final String status;
   final String paymentUsing;
+  final int remainingTime;
 
   Order(
       {this.id,
@@ -29,5 +30,6 @@ class Order {
       this.contents,
       this.imageUrl,
       this.price,
-      this.product});
+      this.product,
+      this.remainingTime});
 }

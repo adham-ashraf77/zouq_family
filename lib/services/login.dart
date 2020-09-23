@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zouqadmin/ConstantVarables.dart';
 
 import 'getuser.dart';
 
 class Login {
-  final String _url = "https://api.dhuqapp.com";
   final String _login = "/api/family/login";
   FormData _formData;
 
@@ -16,7 +16,8 @@ class Login {
     _formData = FormData.fromMap({"password": "$password", "phone": "$phone"});
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      Response response = await Dio().post("$_url$_login", data: _formData);
+      Response response = await Dio()
+          .post("${ConstantVarable.baseUrl}$_login", data: _formData);
 
       /// `print("========= " + response.statusCode.toString() + " =========")`;
       /// `print(response.data)`;
@@ -45,7 +46,8 @@ class Login {
               print('hi from try');
               Position position = await Geolocator()
                   .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-              await Dio().post('$_url/api/family/set-location',
+              await Dio().post(
+                  '${ConstantVarable.baseUrl}/api/family/set-location',
                   data: {
                     "latitude": "${position.latitude}",
                     "longitude": "${position.longitude}",
@@ -62,7 +64,6 @@ class Login {
             }
           }
         });
-
 
         return "success";
       } else {

@@ -4,12 +4,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zouqadmin/ConstantVarables.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
 
 import '../I10n/app_localizations.dart';
 
 class UpdateProduct {
-  final String apiUrl = "https://api.dhuqapp.com";
   final String addingProduct = "/api/family/products";
   FormData _formData;
   Response response;
@@ -18,6 +18,7 @@ class UpdateProduct {
       {String desc,
       String name,
       String price,
+      List<int> tagsIdList,
       File video,
       List<File> listOfPhotos,
       int catID,
@@ -48,8 +49,10 @@ class UpdateProduct {
     print(theVideo.length);
     print('video');
     print(videos.length);
-    if (listOfPhotos.length == something.length && theVideo.length == videos.length) {
+    if (listOfPhotos.length == something.length &&
+        theVideo.length == videos.length) {
       print('hi ^^ ' + video.toString());
+
       FormData _formData = video != null
           ? FormData.fromMap({
               "name": "$name",
@@ -57,27 +60,27 @@ class UpdateProduct {
               "price": "$price",
               "images": something,
               "video": theVideo[0],
+              "tags": tagsIdList,
               "category_id": catID.toString(),
-      })
+            })
           : FormData.fromMap({
-        "name": "$name",
-        "description": "$desc",
-        "price": "$price",
-        "images": something,
-        "category_id": catID.toString(),
-      });
+              "name": "$name",
+              "description": "$desc",
+              "price": "$price",
+              "tags": tagsIdList,
+              "images": something,
+              "category_id": catID.toString(),
+            });
       try {
         // print('--------------------> addItemFile: ${_formData.files}');
         if (token.isNotEmpty) {
           print('before response');
-          response =
-          await Dio().post("http://api.dhuqapp.com/api/family/products/$id",
-              data: _formData,
-              options: Options(
-                headers: {
-                  HttpHeaders.authorizationHeader: "Bearer $token"
-                },
-              ));
+          response = await Dio()
+              .post("${ConstantVarable.baseUrl}/api/family/products/$id",
+                  data: _formData,
+                  options: Options(
+                    headers: {HttpHeaders.authorizationHeader: "Bearer $token"},
+                  ));
           print('after response');
           print(response.data);
         }
@@ -93,18 +96,15 @@ class UpdateProduct {
         if (e.response == null) {
           showDialog(
               context: context,
-              builder: (BuildContext context) =>
-                  DialogWorning(
+              builder: (BuildContext context) => DialogWorning(
                     mss: AppLocalizations.of(context).translate('failed'),
                   ));
           return "connection time out";
         }
         showDialog(
             context: context,
-            builder: (BuildContext context) =>
-                DialogWorning(
-                  mss:
-                  AppLocalizations.of(context).translate('failed'),
+            builder: (BuildContext context) => DialogWorning(
+                  mss: AppLocalizations.of(context).translate('failed'),
                 ));
         print(e.response.data);
       }

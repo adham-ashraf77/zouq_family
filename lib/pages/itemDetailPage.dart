@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
+import 'package:zouqadmin/models/TagsModel.dart';
 import 'package:zouqadmin/models/product_comments&rating.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
 import 'package:zouqadmin/pages/editItemPage.dart';
@@ -46,6 +47,7 @@ class _ItemDetailState extends State<ItemDetail> {
   String rate;
   String price;
   String description;
+  List<dynamic> tagsList;
   int productId;
   bool isLoading = true;
   bool isPlay = false;
@@ -54,7 +56,8 @@ class _ItemDetailState extends State<ItemDetail> {
   bool notAvalaible = false;
   TextEditingController onDemandController = TextEditingController();
   VideoPlayerController _controller;
-  List<ProductsCommentsAndRating> productsCommentsAndRating = List<ProductsCommentsAndRating>();
+  List<ProductsCommentsAndRating> productsCommentsAndRating =
+      List<ProductsCommentsAndRating>();
 
   static List<String> imgList = [
     //   'https://assets.bonappetit.com/photos/597f6564e85ce178131a6475/16:9/w_1200,c_limit/0817-murray-mancini-dried-tomato-pie.jpg',
@@ -66,7 +69,6 @@ class _ItemDetailState extends State<ItemDetail> {
   ];
 
   List child;
-  
 
   static List<T> map<T>(List list, Function handler) {
     List<T> result = [];
@@ -95,7 +97,8 @@ class _ItemDetailState extends State<ItemDetail> {
         showDialog(
             context: context,
             builder: (BuildContext context) => DialogWorning(
-                  mss: AppLocalizations.of(context).translate('deleteProductFailed'),
+                  mss: AppLocalizations.of(context)
+                      .translate('deleteProductFailed'),
                 ));
       } else {
         print('Error ' + onValue.toString());
@@ -115,7 +118,6 @@ class _ItemDetailState extends State<ItemDetail> {
         url,
         forceSafariVC: false,
         forceWebView: false,
-
         headers: <String, String>{'my_header_key': 'my_header_value'},
       );
     } else {
@@ -152,11 +154,14 @@ class _ItemDetailState extends State<ItemDetail> {
             ? formdata = FormData.fromMap({
                 "availability_status": "unavailable",
               })
-            : formdata =
-                FormData.fromMap({"availability_status": "upon-request", "availability_meta": "${onDemandController.text}"});
+            : formdata = FormData.fromMap({
+                "availability_status": "upon-request",
+                "availability_meta": "${onDemandController.text}"
+              });
     try {
       print(productId);
-      await Dio().post('https://api.dhuqapp.com/api/family/products/$productId/availability',
+      await Dio().post(
+          'https://api.dhuqapp.com/api/family/products/$productId/availability',
           data: formdata,
           options: Options(
             headers: {HttpHeaders.authorizationHeader: "Bearer $token"},
@@ -188,6 +193,7 @@ class _ItemDetailState extends State<ItemDetail> {
         this.price = y['price'];
         this.rate = y['rate'].toString();
         this.description = y['description'];
+        this.tagsList = y['tags'];
         this.videoUrl = y['video'];
         List<dynamic> list = y['media'];
         imgList.clear();
@@ -230,7 +236,10 @@ class _ItemDetailState extends State<ItemDetail> {
                 child: Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Color.fromARGB(200, 0, 0, 0), Color.fromARGB(0, 0, 0, 0)],
+                      colors: [
+                        Color.fromARGB(200, 0, 0, 0),
+                        Color.fromARGB(0, 0, 0, 0)
+                      ],
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
                     ),
@@ -265,30 +274,35 @@ class _ItemDetailState extends State<ItemDetail> {
                         return InkWell(
                           onTap: () {
                             setState(() {
-                        isPlay = !isPlay;
-                        _controller.value.isPlaying ? _controller.pause() : _controller.play();
-                      });
+                              isPlay = !isPlay;
+                              _controller.value.isPlaying
+                                  ? _controller.pause()
+                                  : _controller.play();
+                            });
+                          },
+                          child: AspectRatio(
+                            aspectRatio: _controller.value.aspectRatio,
+                            child: VideoPlayer(_controller),
+                          ),
+                        );
+                      } else {
+                        return Container();
+                      }
                     },
-                    child: AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: VideoPlayer(_controller),
-                    ),
-                  );
-                } else {
-                  return Container();
-                }
-              },
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),);
+    );
   }
 
   getComments() async {
-    Response response = await Dio().get("https://api.dhuqapp.com/api/client/products/${widget.orderId}/reviews");
+    Response response = await Dio().get(
+        "https://api.dhuqapp.com/api/client/products/${widget.orderId}/reviews");
     List data = response.data['reviews'];
     data.forEach((element) {
-      productsCommentsAndRating.add(ProductsCommentsAndRating.fromJson(element));
+      productsCommentsAndRating
+          .add(ProductsCommentsAndRating.fromJson(element));
     });
   }
 
@@ -370,14 +384,16 @@ class _ItemDetailState extends State<ItemDetail> {
                     height: 20,
                     child: CircularProgressIndicator(
                       backgroundColor: Colors.grey[400],
-                      valueColor: new AlwaysStoppedAnimation<Color>(Colors.grey[300]),
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(Colors.grey[300]),
                       strokeWidth: 2,
                     ),
                   ),
                   Text(
                     AppLocalizations.of(context).translate('loading'),
                     textDirection: TextDirection.ltr,
-                    style: paragarph4.copyWith(color: Colors.grey[400], height: 2),
+                    style:
+                        paragarph4.copyWith(color: Colors.grey[400], height: 2),
                   )
                 ],
               ),
@@ -402,7 +418,8 @@ class _ItemDetailState extends State<ItemDetail> {
                       onTap: () {
                         if (_current != 0)
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => MagnifyPhotoScreen(imgList, name),
+                            builder: (context) =>
+                                MagnifyPhotoScreen(imgList, name),
                           ));
                       },
                       child: Align(
@@ -425,27 +442,29 @@ class _ItemDetailState extends State<ItemDetail> {
                     _current == 0 && videoUrl != null
                         ? Container(
                             width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context)
-                          .size
-                          .height * 0.3,
-                      padding: EdgeInsets.only(left: MediaQuery
-                          .of(context)
-                          .padding
-                          .left + 30),
-                      alignment: Alignment.center,
-                      child: isPlay
-                          ? Container() : IconButton(
-                        onPressed: () {
-                          setState(() {
-                            isPlay = !isPlay;
-                            _controller.value.isPlaying
-                                ? _controller.pause()
-                                : _controller.play();
-                          });
-                        },
-                        icon: Icon(Icons.play_circle_outline, color: Colors.cyan, size: 60,),
-                      ),
-                    ) : Container(),
+                            height: MediaQuery.of(context).size.height * 0.3,
+                            padding: EdgeInsets.only(
+                                left: MediaQuery.of(context).padding.left + 30),
+                            alignment: Alignment.center,
+                            child: isPlay
+                                ? Container()
+                                : IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        isPlay = !isPlay;
+                                        _controller.value.isPlaying
+                                            ? _controller.pause()
+                                            : _controller.play();
+                                      });
+                                    },
+                                    icon: Icon(
+                                      Icons.play_circle_outline,
+                                      color: Colors.cyan,
+                                      size: 60,
+                                    ),
+                                  ),
+                          )
+                        : Container(),
                   ],
                 ),
                 DraggableScrollableSheet(
@@ -474,9 +493,13 @@ class _ItemDetailState extends State<ItemDetail> {
                                     return Container(
                                       width: 10,
                                       height: 10,
-                                      margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 5.0),
                                       decoration: BoxDecoration(
-                                          shape: BoxShape.circle, color: _current == index ? accent : inputBackgrounds),
+                                          shape: BoxShape.circle,
+                                          color: _current == index
+                                              ? accent
+                                              : inputBackgrounds),
                                     );
                                   },
                                 ),
@@ -485,30 +508,29 @@ class _ItemDetailState extends State<ItemDetail> {
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                                  border: Border.all(color: productStatus == 'ready' ? Colors.cyan : Colors.orange)
-                              ),
-                              child: Text('${
-                                  productStatus == 'ready' ?
-                                  '${AppLocalizations.of(context).translate('available')}' :
-                                  productStatus == 'unavailable' ?
-                                  '${AppLocalizations.of(context).translate('notAvailable')}' :
-                                  '${AppLocalizations.of(context).translate('onDemand')}'
-                              }'),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20)),
+                                  border: Border.all(
+                                      color: productStatus == 'ready'
+                                          ? Colors.cyan
+                                          : Colors.orange)),
+                              child: Text(
+                                  '${productStatus == 'ready' ? '${AppLocalizations.of(context).translate('available')}' : productStatus == 'unavailable' ? '${AppLocalizations.of(context).translate('notAvailable')}' : '${AppLocalizations.of(context).translate('onDemand')}'}'),
                             ),
                             Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-                            productMeta.isEmpty ?
-                            Container() :
-                            Text('$productMeta', style: TextStyle(color: Colors.orange),),
+                            productMeta.isEmpty
+                                ? Container()
+                                : Text(
+                                    '$productMeta',
+                                    style: TextStyle(color: Colors.orange),
+                                  ),
                             SizedBox(
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width,
+                              width: MediaQuery.of(context).size.width,
                               child: FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     InkWell(
                                       onTap: () {
@@ -518,13 +540,19 @@ class _ItemDetailState extends State<ItemDetail> {
                                         setState(() {});
                                       },
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 10),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                                          border: Border.all(color: Colors.cyan),
-                                          color: avalaible ? Colors.green : Colors.transparent,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20)),
+                                          border:
+                                              Border.all(color: Colors.cyan),
+                                          color: avalaible
+                                              ? Colors.green
+                                              : Colors.transparent,
                                         ),
-                                        child: Text('${AppLocalizations.of(context).translate('available')}'),
+                                        child: Text(
+                                            '${AppLocalizations.of(context).translate('available')}'),
                                       ),
                                     ),
                                     InkWell(
@@ -535,14 +563,19 @@ class _ItemDetailState extends State<ItemDetail> {
                                         setState(() {});
                                       },
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 10),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                                          border: Border.all(color: Colors.cyan),
-                                          color: notAvalaible ? Colors.green : Colors.transparent,
-
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20)),
+                                          border:
+                                              Border.all(color: Colors.cyan),
+                                          color: notAvalaible
+                                              ? Colors.green
+                                              : Colors.transparent,
                                         ),
-                                        child: Text('${AppLocalizations.of(context).translate('notAvailable')}'),
+                                        child: Text(
+                                            '${AppLocalizations.of(context).translate('notAvailable')}'),
                                       ),
                                     ),
                                     InkWell(
@@ -553,13 +586,19 @@ class _ItemDetailState extends State<ItemDetail> {
                                         setState(() {});
                                       },
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 10),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                                          border: Border.all(color: Colors.cyan),
-                                          color: onDemand ? Colors.green : Colors.transparent,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20)),
+                                          border:
+                                              Border.all(color: Colors.cyan),
+                                          color: onDemand
+                                              ? Colors.green
+                                              : Colors.transparent,
                                         ),
-                                        child: Text('${AppLocalizations.of(context).translate('onDemand')}'),
+                                        child: Text(
+                                            '${AppLocalizations.of(context).translate('onDemand')}'),
                                       ),
                                     ),
                                     GestureDetector(
@@ -569,13 +608,18 @@ class _ItemDetailState extends State<ItemDetail> {
                                           borderRadius: BorderRadius.all(
                                             Radius.circular(25),
                                           ),
-                                          color: Color.fromRGBO(29, 174, 209, 1),
+                                          color:
+                                              Color.fromRGBO(29, 174, 209, 1),
                                         ),
-                                        padding: EdgeInsets.symmetric(horizontal: 10),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10),
                                         child: Center(
                                           child: Text(
-                                            AppLocalizations.of(context).translate('editStatus'),
-                                            style: TextStyle(color: mainColor, fontWeight: FontWeight.bold),
+                                            AppLocalizations.of(context)
+                                                .translate('editStatus'),
+                                            style: TextStyle(
+                                                color: mainColor,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                         ),
                                       ),
@@ -584,32 +628,36 @@ class _ItemDetailState extends State<ItemDetail> {
                                 ),
                               ),
                             ),
-                            onDemand ?
-                            Padding(
-                              padding: EdgeInsets.only(left: 30, top: 15),
-                              child: TextFormField(
-                                controller: onDemandController,
-                                validator: (value) {
-                                  if (value.length < 10) {
-                                    return 'الوصف يجب ان يكون على الاقل 10 احرف';
-                                  }
-                                  return null;
-                                },
-                                decoration: InputDecoration(
-                                  border: new OutlineInputBorder(
-                                    borderRadius: new BorderRadius.circular(10.0),
-                                    borderSide: new BorderSide(
-                                      color: Colors.black,
-                                      width: 0.2,
+                            onDemand
+                                ? Padding(
+                                    padding: EdgeInsets.only(left: 30, top: 15),
+                                    child: TextFormField(
+                                      controller: onDemandController,
+                                      validator: (value) {
+                                        if (value.length < 10) {
+                                          return 'الوصف يجب ان يكون على الاقل 10 احرف';
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        border: new OutlineInputBorder(
+                                          borderRadius:
+                                              new BorderRadius.circular(10.0),
+                                          borderSide: new BorderSide(
+                                            color: Colors.black,
+                                            width: 0.2,
+                                          ),
+                                        ),
+                                        hintText: AppLocalizations.of(context)
+                                            .translate('productDescription'),
+                                        hintStyle: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15),
+                                      ),
+                                      maxLines: 3,
                                     ),
-                                  ),
-                                  hintText: AppLocalizations.of(context).translate('productDescription'),
-                                  hintStyle: TextStyle(color: Colors.black54, fontSize: 15),
-                                ),
-                                maxLines: 3,
-                              ),
-                            ) : Container(),
-
+                                  )
+                                : Container(),
                             Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                             RatingChip(rating: double.parse(this.rate)),
                             Padding(
@@ -623,6 +671,37 @@ class _ItemDetailState extends State<ItemDetail> {
                                 ),
                               ),
                             ),
+                            tagsList.length != 0
+                                ? Container(
+                                    height: 50,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: tagsList.length,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5),
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 8, right: 8),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                color: Colors.grey[200],
+                                                borderRadius:
+                                                    BorderRadius.circular(12)),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child:
+                                                  Text(tagsList[index]["name"]),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  )
+                                : Container(),
                             Padding(
                               padding: EdgeInsets.only(right: 20),
                               child: Text(
@@ -638,15 +717,19 @@ class _ItemDetailState extends State<ItemDetail> {
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               itemCount: productsCommentsAndRating.length,
-                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
                               itemBuilder: (context, index) {
                                 return RateCard(
                                   image:
-                                  "${productsCommentsAndRating[index].userInfo.photo}",
-                                  name: '${productsCommentsAndRating[index].userInfo.name}',
+                                      "${productsCommentsAndRating[index].userInfo.photo}",
+                                  name:
+                                      '${productsCommentsAndRating[index].userInfo.name}',
                                   desc:
-                                  '${productsCommentsAndRating[index].comment}',
-                                  rate: productsCommentsAndRating[index].rate.toDouble(),
+                                      '${productsCommentsAndRating[index].comment}',
+                                  rate: productsCommentsAndRating[index]
+                                      .rate
+                                      .toDouble(),
                                 );
                               },
                             )
@@ -682,7 +765,12 @@ class _ItemDetailState extends State<ItemDetail> {
                         InkWell(
                           onTap: () {
                             // popPage(context);
-                            pushPage(context, EditItemPage(id: orderId,));
+                            pushPage(
+                                context,
+                                EditItemPage(
+                                  id: orderId,
+                                  tagsList: tagsList,
+                                ));
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -696,7 +784,8 @@ class _ItemDetailState extends State<ItemDetail> {
                             child: Center(
                               child: Text(
                                 AppLocalizations.of(context).translate('edit'),
-                                style: TextStyle(color: mainColor, fontSize: 18),
+                                style:
+                                    TextStyle(color: mainColor, fontSize: 18),
                               ),
                             ),
                           ),
@@ -712,8 +801,10 @@ class _ItemDetailState extends State<ItemDetail> {
                               child: Image.asset("assets/icons/delete.png"),
                             ),
                           ),
-                          decoration:
-                              BoxDecoration(border: Border.all(color: Colors.black, width: 0.1), shape: BoxShape.circle),
+                          decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: Colors.black, width: 0.1),
+                              shape: BoxShape.circle),
                         )
                       ],
                     )
@@ -723,5 +814,4 @@ class _ItemDetailState extends State<ItemDetail> {
             ),
           );
   }
-
 }

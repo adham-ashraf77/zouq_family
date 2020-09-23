@@ -22,6 +22,7 @@ class _OrdersPageState extends State<OrdersPage> {
   List<Order> newOrders = [];
   List<Order> completeOrders = [];
   List<Order> oldOrders = [];
+  final timeTextFieldController = TextEditingController();
 
   @override
   void didChangeDependencies() {
@@ -29,8 +30,11 @@ class _OrdersPageState extends State<OrdersPage> {
     getOrders();
   }
 
-  acceptOrRejectOrder({String orderId, String orderStatus}) {
-    AcceptOrRejectOrder().postOrderStatus(orderId: orderId, orderStatus: orderStatus).then((value) => getOrders());
+  acceptOrRejectOrder({String orderId, String orderStatus, String orderTime}) {
+    AcceptOrRejectOrder()
+        .postOrderStatus(
+            orderId: orderId, orderStatus: orderStatus, orderTime: orderTime)
+        .then((value) => getOrders());
   }
 
   getOrders() async {
@@ -94,18 +98,18 @@ class _OrdersPageState extends State<OrdersPage> {
       for (int i = 0; i < x.length; i++) {
         setState(() {
           completeOrders.add(Order(
-            id: x[i]['id'].toString(),
-            name: x[i]['client']['name'].toString(),
-            date: x[i]['created_at'].toString(),
-            contents: x[i]['products_meta'].toString(),
-            imageUrl: x[i]['client']['image'].toString(),
-            time: "",
-            comments: [],
-            product: [],
-            price: x[i]['total'],
-            rate: 0,
-            phoneNumber: x[i]['client']['phone'],
-          ));
+              id: x[i]['id'].toString(),
+              name: x[i]['client']['name'].toString(),
+              date: x[i]['created_at'].toString(),
+              contents: x[i]['products_meta'].toString(),
+              imageUrl: x[i]['client']['image'].toString(),
+              time: "",
+              comments: [],
+              product: [],
+              price: x[i]['total'],
+              rate: 0,
+              phoneNumber: x[i]['client']['phone'],
+              remainingTime: x[i]['remaining_time']));
         });
       }
       // print('Old Orders  : ' + x.length.toString());
@@ -155,7 +159,8 @@ class _OrdersPageState extends State<OrdersPage> {
             icon: new Image.asset('assets/icons/add.png'),
             onPressed: () {
               //TODO go add product screen
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AddItemPage()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AddItemPage()));
             },
           ),
         ],
@@ -192,9 +197,13 @@ class _OrdersPageState extends State<OrdersPage> {
                           height: 35,
                           color: _isFocused3 ? Colors.blue[300] : Colors.white,
                           child: Center(
-                            child: Text(AppLocalizations.of(context).translate('oldOrders'),
+                            child: Text(
+                                AppLocalizations.of(context)
+                                    .translate('oldOrders'),
                                 style: paragarph3.copyWith(
-                                    color: _isFocused3 ? Colors.white : Colors.black,
+                                    color: _isFocused3
+                                        ? Colors.white
+                                        : Colors.black,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w100)),
                           ),
@@ -208,6 +217,7 @@ class _OrdersPageState extends State<OrdersPage> {
                           _isFocused1 = false;
                           _isFocused2 = true;
                         });
+                        getOrders();
                       },
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(5),
@@ -216,9 +226,13 @@ class _OrdersPageState extends State<OrdersPage> {
                           height: 35,
                           color: _isFocused2 ? Colors.blue[300] : Colors.white,
                           child: Center(
-                            child: Text(AppLocalizations.of(context).translate('confirmedOrders'),
+                            child: Text(
+                                AppLocalizations.of(context)
+                                    .translate('confirmedOrders'),
                                 style: paragarph3.copyWith(
-                                    color: _isFocused2 ? Colors.white : Colors.black,
+                                    color: _isFocused2
+                                        ? Colors.white
+                                        : Colors.black,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w100)),
                           ),
@@ -240,9 +254,13 @@ class _OrdersPageState extends State<OrdersPage> {
                           height: 35,
                           color: _isFocused1 ? Colors.blue[300] : Colors.white,
                           child: Center(
-                            child: Text(AppLocalizations.of(context).translate('newOrders'),
+                            child: Text(
+                                AppLocalizations.of(context)
+                                    .translate('newOrders'),
                                 style: paragarph3.copyWith(
-                                    color: _isFocused1 ? Colors.white : Colors.black,
+                                    color: _isFocused1
+                                        ? Colors.white
+                                        : Colors.black,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w100)),
                           ),
@@ -267,12 +285,132 @@ class _OrdersPageState extends State<OrdersPage> {
                                 order: newOrders[i],
                                 type: 1,
                                 rejectFunction: () async {
-                                  await acceptOrRejectOrder(orderId: newOrders[i].id, orderStatus: "reject");
+                                  await acceptOrRejectOrder(
+                                      orderId: newOrders[i].id,
+                                      orderStatus: "reject");
                                   setState(() {});
                                 },
                                 acceptFunction: () async {
-                                  await acceptOrRejectOrder(orderId: newOrders[i].id, orderStatus: "approve");
-                                  setState(() {});
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          content: Container(
+                                            decoration: BoxDecoration(
+                                                // color: Colors.green,
+                                                borderRadius:
+                                                    BorderRadius.circular(12)),
+                                            height: 150,
+                                            child: Column(
+                                              children: <Widget>[
+                                                Text(
+                                                    "لا يتم القبول الا بعد ادخال وقت اعداد الطلب",
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.red,
+                                                    )),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 30, top: 10),
+                                                  child: TextField(
+                                                    enableInteractiveSelection:
+                                                        false,
+                                                    controller:
+                                                        timeTextFieldController,
+                                                    // validator: (value) {
+                                                    //   if (value.trim().length < 1) {
+                                                    //     //todo translate
+                                                    //     return 'من فضلك ضع السعر';
+                                                    //   }
+                                                    //   return null;
+                                                    // },
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    decoration: InputDecoration(
+                                                      // border: InputBorder.none,
+                                                      hintText: AppLocalizations
+                                                              .of(context)
+                                                          .translate('time'),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          actions: <Widget>[
+                                            InkWell(
+                                              onTap: () async {
+                                                if (timeTextFieldController
+                                                    .text.isNotEmpty) {
+                                                  await acceptOrRejectOrder(
+                                                      orderId: newOrders[i].id,
+                                                      orderStatus: "approve",
+                                                      orderTime:
+                                                          timeTextFieldController
+                                                              .text);
+                                                  setState(() {});
+                                                  Navigator.pop(context);
+                                                } else {
+                                                  print(
+                                                      "time is null : ${timeTextFieldController.text}");
+                                                  Navigator.pop(context);
+                                                }
+                                              },
+                                              child: Container(
+                                                width: 70,
+                                                height: 45,
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  "قبول",
+                                                  style: TextStyle(
+                                                      color: Colors.green[600]),
+                                                ),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                50)),
+                                                    border: Border.all(
+                                                        color:
+                                                            Colors.grey[300])),
+                                              ),
+                                            ),
+                                            InkWell(
+                                              onTap: () async {
+                                                await acceptOrRejectOrder(
+                                                    orderId: newOrders[i].id,
+                                                    orderStatus: "reject");
+                                                setState(() {});
+                                                Navigator.pop(context);
+                                              },
+                                              child: Container(
+                                                height: 45,
+                                                width: 70,
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  'رفض',
+                                                  style: TextStyle(
+                                                      color: rejectedColor),
+                                                ),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                50)),
+                                                    border: Border.all(
+                                                        color:
+                                                            Colors.grey[300])),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      });
+                                  // await acceptOrRejectOrder(
+                                  //     orderId: newOrders[i].id,
+                                  //     orderStatus: "approve");
+                                  // setState(() {});
                                 }
 //                                            if (type == 1){
 //

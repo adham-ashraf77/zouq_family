@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zouqadmin/ConstantVarables.dart';
 
 class Withdraw {
-  final String _url = "https://api.dhuqapp.com";
   final String _withdraw = "/api/family/submit-withdrawal-request";
 
   withdrawMoney({int iban, String bankName, double quantity}) async {
@@ -18,7 +18,7 @@ class Withdraw {
       "bank_name": "$bankName",
     });
     try {
-      _response = await Dio().post("$_url$_withdraw",
+      _response = await Dio().post("${ConstantVarable.baseUrl}$_withdraw",
           data: _formData,
           options: Options(
             headers: {HttpHeaders.authorizationHeader: "Bearer $token"},
