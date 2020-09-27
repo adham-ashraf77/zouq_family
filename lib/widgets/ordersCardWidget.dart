@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zouqadmin/models/order.dart';
+import 'package:zouqadmin/pages/chat/ChatScreen.dart';
 import 'package:zouqadmin/pages/ordersViewPage.dart';
 import 'package:zouqadmin/services/accept_or_reject_order.dart';
 import 'package:zouqadmin/services/end_order.dart';
 import 'package:zouqadmin/theme/common.dart';
+import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/CounDownTimer.dart';
 
 import '../home.dart';
@@ -36,16 +39,6 @@ class OrdersCard extends StatelessWidget {
       }
     }
 
-    openWhatsApp() async {}
-
-    void whatsAppOpen({String phone}) async {
-      print(phone);
-      final snackBar = SnackBar(content: Text('من فضلك حمل تطبيق whatsapp'));
-      var whatsappUrl = "https://wa.me/$phone";
-      await canLaunch(whatsappUrl)
-          ? launch(whatsappUrl)
-          : Scaffold.of(context).showSnackBar(snackBar);
-    }
 
     endOrder(String orderId) async {
       await EndOrder().endOrder(orderId);
@@ -237,9 +230,10 @@ class OrdersCard extends StatelessWidget {
                                               ? acceptFunction
                                               : () {
                                                   if (type == 2)
-                                                    whatsAppOpen(
-                                                        phone:
-                                                            order.phoneNumber);
+                                                    pushPage(context, ChatScreen(
+                                                      id:order.clientId,
+                                                      name:order.name ,
+                                                    ));
                                                 },
                                           child: Container(
                                             height: MediaQuery.of(context)
@@ -285,10 +279,7 @@ class OrdersCard extends StatelessWidget {
                                                         color:
                                                             Colors.green[600]),
                                                   )
-                                                : Image.asset(
-                                                    'assets/images/whatsicon.png',
-                                                    fit: BoxFit.fill,
-                                                  ),
+                                                : FaIcon(FontAwesomeIcons.commentAlt),
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius: BorderRadius.all(
