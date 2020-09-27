@@ -20,6 +20,7 @@ import 'package:zouqadmin/utils/networking.dart';
 import '../I10n/app_localizations.dart';
 import 'appInfo/EULAPage.dart';
 import 'appInfo/FAQPage.dart';
+import 'chat/conversationsLIst.dart';
 import 'contactPage.dart';
 
 class AdminOptionsPage extends StatefulWidget {
@@ -102,7 +103,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
       actions: <Widget>[
         CupertinoActionSheetAction(
           child: new Text('English'),
-          onPressed: ()async {
+          onPressed: () async {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             String token = prefs.getString('token');
             UserLanguage().setLang(token: token, lang: "en");
@@ -112,7 +113,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
         ),
         CupertinoActionSheetAction(
           child: new Text('العربية'),
-          onPressed: ()async {
+          onPressed: () async {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             String token = prefs.getString('token');
             UserLanguage().setLang(token: token, lang: "ar");
@@ -159,7 +160,9 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AdminProfileEditor(avatarImageUrl: avatarImageUrl,),
+                          builder: (context) => AdminProfileEditor(
+                            avatarImageUrl: avatarImageUrl,
+                          ),
                         ),
                       );
                     },
@@ -168,8 +171,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                       color: Color(0xff8c8c8c),
                     ),
                   ),
-                )
-            ),
+                )),
             // Container(
             //   height: MediaQuery.of(context).size.height * 0.15,
             //   decoration: BoxDecoration(
@@ -235,10 +237,35 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
               ),
               leading: Text(AppLocalizations.of(context).translate('language'),
                   style: moreTextStyle),
-              onTap: () =>
-                  showCupertinoModalPopup(
-                      context: context,
-                      builder: (BuildContext context) => popUp()),
+              onTap: () => showCupertinoModalPopup(
+                  context: context, builder: (BuildContext context) => popUp()),
+            ),
+            Divider(
+              color: iconsFaded,
+              indent: 25,
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ConversationsListScreen()));
+              },
+              child: ListTile(
+                trailing: Icon(
+                  trailingIcon,
+                  size: 15.0,
+                ),
+                leading: Text(
+                  AppLocalizations.of(context).translate('conversations'),
+                  style: moreTextStyle,
+                  textAlign: TextAlign.end,
+                ),
+              ),
+            ),
+            Divider(
+              color: iconsFaded,
+              indent: 25,
             ),
             Divider(
               color: iconsFaded,
@@ -260,7 +287,6 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
               indent: 25,
             ),
 
-
             GestureDetector(
               onTap: () {
 //              Navigator.push(context,
@@ -273,8 +299,8 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ContactPage(
-                            data: data,
-                          )));
+                                data: data,
+                              )));
                 },
                 trailing: Icon(
                   trailingIcon,
@@ -298,8 +324,8 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => EULAPage(
-                          data: data,
-                        )));
+                              data: data,
+                            )));
               },
               trailing: Icon(
                 trailingIcon,
@@ -322,8 +348,8 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => FAQPage(
-                          data: data,
-                        )));
+                              data: data,
+                            )));
               },
               trailing: Icon(
                 trailingIcon,
@@ -343,7 +369,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
               leading: GestureDetector(
                 onTap: () async {
                   SharedPreferences prefs =
-                  await SharedPreferences.getInstance();
+                      await SharedPreferences.getInstance();
                   prefs.clear();
                   Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (context) => LoginPage()));

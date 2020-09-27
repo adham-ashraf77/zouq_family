@@ -191,7 +191,9 @@ class Registeration {
       Response response = await Dio().post(
           "${ConstantVarable.baseUrl}$_activateRegisteredUser",
           data: _formData);
+          print(response.data);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
+        
 //        Map data = response.data;
 //        print(data['token']);
 //        Response response2 = await Dio().get("$_url$_currentUser",
@@ -200,7 +202,7 @@ class Registeration {
 //        print(data2);
 //        //TODO save data in SharedPreferences
 //        prefs.setString("token", "${data['token']}");
-//        prefs.setString("id", "${data2['user']['id']}");
+          prefs.setString("id", "${response.data['user']['id']}");
 //        prefs.setString("name", "${data2['user']['name']}");
 //        prefs.setString("email", "${data2['user']['email']}");
 //        prefs.setString("phone", "${data2['user']['phone']}");

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ConstantVarable {
-  static String oldUrl = "https://api.dhuqapp.com";
+  // static String baseUrl = "https://api.dhuqapp.com";
   static String baseUrl = "http://api-testing.dhuqapp.com";
   static String apiImg = "https://www.q8pulse.app/public/";
   static String apiMap = "AIzaSyCZCgOpXKbNdhTHAe4ANYKteYQSIYZYlGA";

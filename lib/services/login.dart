@@ -20,10 +20,12 @@ class Login {
           .post("${ConstantVarable.baseUrl}$_login", data: _formData);
 
       /// `print("========= " + response.statusCode.toString() + " =========")`;
-      /// `print(response.data)`;
+       print(response.data);
+      /// 
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         prefs.setString("password", "$password");
         prefs.setString("phone", "$phone");
+        prefs.setInt("id", response.data['user']['id']);
         prefs.setString("token", response.data['token']);
         prefs.setString("image", response.data['image']);
         prefs.setString("email", response.data['email']);
