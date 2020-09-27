@@ -34,12 +34,12 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
   String avatarImageUrl;
   String wallet;
   String token;
+  int familyId;
   var links;
 
   getLocation() async {
     try {
-      Position position = await Geolocator()
-          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('token');
       await Dio().post('https://api.dhuqapp.com/api/family/set-location',
@@ -72,6 +72,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
         setState(() {
           print('[${wallet.toString()}]');
           name = x['user']['name'];
+          familyId = x['user']['id'];
           avatarImageUrl = x['user']['image'];
           wallet = x['user']['wallet'].toString();
           print('[$wallet]');
@@ -206,7 +207,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => AdminWalletPage(wallet)));
+                        builder: (context) => AdminWalletPage(wallet, familyId)));
               },
               child: ListTile(
                 leading: Text(AppLocalizations.of(context).translate('wallet'),

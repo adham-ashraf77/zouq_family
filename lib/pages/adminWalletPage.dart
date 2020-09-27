@@ -1,5 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:zouqadmin/ConstantVarables.dart';
 import 'package:zouqadmin/services/withdraw.dart';
 import 'package:zouqadmin/theme/common.dart';
 
@@ -7,8 +10,9 @@ import '../I10n/app_localizations.dart';
 
 class AdminWalletPage extends StatefulWidget {
   String walletAmount;
+  int familyId;
 
-  AdminWalletPage(this.walletAmount);
+  AdminWalletPage(this.walletAmount, this.familyId);
 
   @override
   _AdminWalletPageState createState() => _AdminWalletPageState();
@@ -44,11 +48,27 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
     Future.delayed(Duration(seconds: 2), () => Navigator.of(context).pop());
   }
 
+  payCheck() async {
+    await Dio().get("${ConstantVarable.baseUrl}/api/family/wallet-debt/${widget.familyId}/checkout");
+    _launchURL("https://moyasar.com/docs/payments/test-cards");
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("ذوق", style: TextStyle(color: Colors.blue),),
+        title: Text(
+          "ذوق",
+          style: TextStyle(color: Colors.blue),
+        ),
         centerTitle: true,
       ),
       body: GestureDetector(
@@ -190,10 +210,12 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
                           color: accent,
                           child: Text(
+                            double.parse(widget.walletAmount) < 0 ?
+                            "دفع المستحق" :
                             AppLocalizations.of(context).translate('withdraw'),
                             style: TextStyle(color: Colors.white, fontSize: 25.0),
                           ),
-                          onPressed: () => withdraw(context),
+                          onPressed: () => double.parse(widget.walletAmount) < 0 ? payCheck() : withdraw(context),
                         ),
                       ),
                     ],
