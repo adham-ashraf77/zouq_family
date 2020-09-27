@@ -202,7 +202,7 @@ class Registeration {
 //        print(data2);
 //        //TODO save data in SharedPreferences
 //        prefs.setString("token", "${data['token']}");
-          prefs.setString("id", "${response.data['user']['id']}");
+          prefs.setInt("id", response.data['user']['id']);
 //        prefs.setString("name", "${data2['user']['name']}");
 //        prefs.setString("email", "${data2['user']['email']}");
 //        prefs.setString("phone", "${data2['user']['phone']}");
