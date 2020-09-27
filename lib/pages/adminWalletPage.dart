@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -49,8 +48,7 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
   }
 
   payCheck() async {
-    await Dio().get("${ConstantVarable.baseUrl}/api/family/wallet-debt/${widget.familyId}/checkout");
-    _launchURL("https://moyasar.com/docs/payments/test-cards");
+    _launchURL("${ConstantVarable.baseUrl}/api/family/wallet-debt/${widget.familyId}/checkout");
   }
 
   _launchURL(String url) async {
