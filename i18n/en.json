@@ -132,5 +132,7 @@
   "storeLocation": "click here to get the store current location",
   "locationSuccess": "location has been set successfully",
   "time": "Time per minute",
-  "conversations": "Conversations"
+  "conversations": "Conversations",
+  "img": "Image"
+
 }

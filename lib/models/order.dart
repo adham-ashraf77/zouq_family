@@ -11,6 +11,7 @@ class Order {
   final String price;
   final String phoneNumber;
   final double rate;
+  final int clientId;
   final List<Comment> comments;
   final List<Product> product;
   final String status;
@@ -19,6 +20,7 @@ class Order {
 
   Order(
       {this.id,
+      this.clientId,
       this.paymentUsing,
       this.status,
       this.comments,
