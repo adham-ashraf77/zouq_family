@@ -20,9 +20,14 @@ class Conversation {
         name: json["name"],
         created: DateTime.parse(json["created"]),
         lastUpdate: DateTime.parse(json["last_update"]),
-        lastMessage: LastMessage.fromJson(json["last_message"]),
-        members:
-            List<Sender>.from(json["members"].map((x) => Sender.fromJson(x))),
+        lastMessage: LastMessage.fromJson(json["last_message"] ??
+            {
+              "id": 0,
+              "message": "",
+              "created": "2020-09-28 13:50:22",
+              "sender": {"id": 0, "name": "", "avatar": ""}
+            }),
+        members: List<Sender>.from(json["members"].map((x) => Sender.fromJson(x))),
       );
 }
 
