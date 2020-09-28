@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/widgets.dart';
-
 TagsModel tagsModelFromJson(String str) => TagsModel.fromJson(json.decode(str));
 
 String tagsModelToJson(TagsModel data) => json.encode(data.toJson());

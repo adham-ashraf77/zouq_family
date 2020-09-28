@@ -39,7 +39,6 @@ class OrdersCard extends StatelessWidget {
       }
     }
 
-
     endOrder(String orderId) async {
       await EndOrder().endOrder(orderId);
       Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -230,10 +229,12 @@ class OrdersCard extends StatelessWidget {
                                               ? acceptFunction
                                               : () {
                                                   if (type == 2)
-                                                    pushPage(context, ChatScreen(
-                                                      id:order.clientId,
-                                                      name:order.name ,
-                                                    ));
+                                                    pushPage(
+                                                        context,
+                                                        ChatScreen(
+                                                          id: order.clientId,
+                                                          name: order.name,
+                                                        ));
                                                 },
                                           child: Container(
                                             height: MediaQuery.of(context)
@@ -279,7 +280,8 @@ class OrdersCard extends StatelessWidget {
                                                         color:
                                                             Colors.green[600]),
                                                   )
-                                                : FaIcon(FontAwesomeIcons.commentAlt),
+                                                : FaIcon(FontAwesomeIcons
+                                                    .commentAlt),
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius: BorderRadius.all(

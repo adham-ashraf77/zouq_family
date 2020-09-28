@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 import '../ConstantVarables.dart';
 import '../models/chat/chat.dart';
 import '../models/chat/conversations.dart';
@@ -12,6 +11,7 @@ class ChatService {
   final String apiUrl = "${ConstantVarable.baseUrl}/api/chat/rooms/";
   static String startChat = "start?receiver_id=";
   static String messages = "messages";
+  static String attachment = "message-attachment";
   static String rooms = "?status=all";
 
   Future<int> startRoom({int id}) async {
@@ -22,8 +22,8 @@ class ChatService {
       HttpHeaders.authorizationHeader: "Bearer $token",
     };
     Dio dio = new Dio();
-    var res =
-        await dio.post("$apiUrl$startChat$id&receiver_type=user", options: Options(headers: header));
+    var res = await dio.post("$apiUrl$startChat$id&receiver_type=user",
+        options: Options(headers: header));
     roomId = res.data["room_id"];
     return roomId;
   }
@@ -39,8 +39,8 @@ class ChatService {
     print("$apiUrl$rooms");
     var res = await dio.get("$apiUrl$rooms", options: Options(headers: header));
     var data = res.data['rooms'];
-        print("---");
-        print(res.data);
+    print("---");
+    print(res.data);
 
     data.forEach((value) {
       list.add(Conversation.fromJson(value));
@@ -60,7 +60,7 @@ class ChatService {
       HttpHeaders.authorizationHeader: "Bearer $token",
     };
     Dio dio = new Dio();
-    
+
     var res =
         await dio.get("$apiUrl$roomId$link", options: Options(headers: header));
     var data = res.data['messages'];
@@ -70,8 +70,7 @@ class ChatService {
     return msgs;
   }
 
-  Future<Message> sendChatMessage({int roomId, String message}) async {
-    Message msg;
+  Future<int> sendChatMessage({int roomId, String message}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     var header = {
@@ -81,6 +80,21 @@ class ChatService {
     Dio dio = new Dio();
     await dio.post("$apiUrl$roomId/$messages",
         data: data, options: Options(headers: header));
-    return msg;
+    return 201;
+  }
+
+  Future<int> sendImg({int roomId, File img}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    var header = {
+      HttpHeaders.authorizationHeader: "Bearer $token",
+    };
+    FormData formData = new FormData.fromMap({
+      "image": await MultipartFile.fromFile("${img.path}"),
+    });
+    Dio dio = new Dio();
+    await dio.post("$apiUrl$roomId/$attachment",
+        data: formData, options: Options(headers: header));
+    return 201;
   }
 }

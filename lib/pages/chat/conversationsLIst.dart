@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 import '../../I10n/app_localizations.dart';
 import '../../models/chat/conversations.dart';
 import '../../services/chat.dart';
@@ -64,12 +63,25 @@ class _ConversationsListScreenState extends State<ConversationsListScreen> {
                           context,
                           ChatScreen(
                             id: conversations[index].members[userIndex].id,
-                            name: "${conversations[index].members[userIndex].name}",
+                            name:
+                                "${conversations[index].members[userIndex].name}",
                           ));
                     },
                     child: ListTile(
-                      title: Text("${conversations[index].members[userIndex].name}"),
-                      subtitle: Text("${conversations[index].lastMessage.message}"),
+                      title: Text(
+                          "${conversations[index].members[userIndex].name}"),
+                      subtitle: conversations[index].lastMessage.message == null
+                          ? Row(
+                              children: [
+                                Icon(Icons.photo),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(AppLocalizations.of(context)
+                                    .translate('img'))
+                              ],
+                            )
+                          : Text("${conversations[index].lastMessage.message}"),
                       trailing: Container(
                         width: 60,
                         height: 60,

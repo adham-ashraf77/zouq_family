@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_pusher_client/flutter_pusher.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:laravel_echo/laravel_echo.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 import '../../I10n/app_localizations.dart';
 import '../../models/chat/chat.dart';
@@ -37,7 +39,11 @@ class _ChatScreenState extends State<ChatScreen> {
 
   bool isLoading = true;
   bool chatloading = false;
+  bool uploadImgLoading = false;
   bool is_connected = false;
+
+  File _image;
+  final picker = ImagePicker();
 
   @override
   void initState() {
@@ -87,7 +93,6 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   getMessages() async {
-    print(roomid);
     messages = await ChatService().fetchMessages(roomId: roomid);
     isLoading = false;
     if (mounted) {
@@ -108,16 +113,41 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   sendMessage() async {
-    chatloading = true;
-    if (mounted) {
-      setState(() {});
+    if (textEditingController.text.isNotEmpty) {
+      chatloading = true;
+      if (mounted) {
+        setState(() {});
+      }
+      await ChatService()
+          .sendChatMessage(roomId: roomid, message: textEditingController.text);
+      textEditingController.clear();
+      chatloading = false;
+      if (mounted) {
+        setState(() {});
+      }
     }
-    await ChatService()
-        .sendChatMessage(roomId: roomid, message: textEditingController.text);
-    textEditingController.clear();
-    chatloading = false;
-    if (mounted) {
-      setState(() {});
+  }
+
+  sendImage() async {
+    await getImage();
+    if (_image != null) {
+      uploadImgLoading = true;
+      if (mounted) {
+        setState(() {});
+      }
+      await ChatService().sendImg(roomId: roomid, img: _image);
+      _image = null;
+      uploadImgLoading = false;
+      if (mounted) {
+        setState(() {});
+      }
+    }
+  }
+
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
     }
   }
 
@@ -130,8 +160,7 @@ class _ChatScreenState extends State<ChatScreen> {
       setState(() {
         is_connected = false;
       });
-    }
-    else{
+    } else {
       print(event.currentState);
     }
   }
@@ -140,6 +169,22 @@ class _ChatScreenState extends State<ChatScreen> {
     return Container(
       child: Row(
         children: <Widget>[
+          Material(
+            child: new Container(
+              child: uploadImgLoading
+                  ? CircularProgressIndicator(
+                      backgroundColor: accent,
+                    )
+                  : new IconButton(
+                      icon: new Icon(Icons.photo),
+                      onPressed: () {
+                        sendImage();
+                      },
+                      color: accent,
+                    ),
+            ),
+            color: Colors.white,
+          ),
           SizedBox(
             width: 15,
           ),
@@ -228,9 +273,15 @@ class _ChatScreenState extends State<ChatScreen> {
                           itemCount: messages.length,
                           itemBuilder: (context, int index) {
                             return ChatBubble(
+                              isImg: messages[index].attachments.length == 0
+                                  ? false
+                                  : true,
                               isMyMsg: messages[index].sender.id != widget.id
                                   ? true
                                   : false,
+                              imgLink: messages[index].attachments.length == 0
+                                  ? ""
+                                  : messages[index].attachments[0].path,
                               msg: messages[index].message,
                             );
                           }),

@@ -1,10 +1,15 @@
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
+import 'package:zouqadmin/utils/helpers.dart';
+
+import 'bigImageView.dart';
 
 class ChatBubble extends StatefulWidget {
   final bool isMyMsg;
   final String msg;
-  ChatBubble({this.isMyMsg = false, this.msg = ""});
+  final bool isImg;
+  final String imgLink;
+  ChatBubble({this.isMyMsg = false, this.msg = "", this.isImg = false, this.imgLink=""});
   @override
   _ChatBubbleState createState() => _ChatBubbleState();
 }
@@ -34,7 +39,21 @@ class _ChatBubbleState extends State<ChatBubble> {
     );
     return Bubble(
       style: widget.isMyMsg ? styleMe : styleSomebody,
-      child: Text('${widget.msg}'),
+      child: widget.isImg
+          ? InkWell(onTap: (){
+            pushPage(context, BigImgView(url: "${widget.imgLink}",));
+          },
+                      child: Container(
+                width: 100,
+                height: 100,
+                child: FadeInImage.assetNetwork(
+                  fit: BoxFit.contain,
+                  placeholder: "assets/icons/loading.gif",
+                  image: "${widget.imgLink}",
+                ),
+              ),
+          )
+          : Text('${widget.msg}'),
     );
   }
 }
