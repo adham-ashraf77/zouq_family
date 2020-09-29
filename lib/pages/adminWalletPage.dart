@@ -82,7 +82,7 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                       Center(
                         child: Text(
                           AppLocalizations.of(context).translate('withdraw'),
-                          style: moreTextStyle,
+                          style: moreTextStyle.copyWith(fontSize:15),
                         ),
                       ),
                       SizedBox(
@@ -98,13 +98,13 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                           child: Column(
                             children: <Widget>[
                               Text(
-                                  ' ريال' + "${widget.walletAmount}", style: TextStyle(color: Colors.white, fontSize: 25.0)),
+                                  ' ريال' + "${widget.walletAmount}", style: TextStyle(color: Colors.white, fontSize: 15)),
                               SizedBox(
                                 height: 5.0,
                               ),
                               Text(
                                 AppLocalizations.of(context).translate('currentBalance'),
-                                style: moreTextStyle1,
+                                style: moreTextStyle1.copyWith(fontSize:15),
                               )
                             ],
                           ),
@@ -116,7 +116,7 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                       Center(
                         child: Text(
                           AppLocalizations.of(context).translate('detailsRequired'),
-                          style: moreTextStyle1,
+                          style: moreTextStyle1.copyWith(fontSize:15),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -211,7 +211,7 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                             double.parse(widget.walletAmount) < 0 ?
                             "دفع المستحق" :
                             AppLocalizations.of(context).translate('withdraw'),
-                            style: TextStyle(color: Colors.white, fontSize: 25.0),
+                            style: TextStyle(color: Colors.white, fontSize: 15),
                           ),
                           onPressed: () => double.parse(widget.walletAmount) < 0 ? payCheck() : withdraw(context),
                         ),
