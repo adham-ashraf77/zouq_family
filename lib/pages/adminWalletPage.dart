@@ -124,9 +124,6 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      SizedBox(
-                        height: 5.0,
-                      ),
                       ListTile(
                         title: Row(
                           children: <Widget>[
@@ -138,7 +135,8 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                                     border: InputBorder.none,
                                     hintText: AppLocalizations.of(context)
                                         .translate('transactionAmount'),
-                                    hintStyle: hintTextStyle),
+                                    hintStyle:
+                                        hintTextStyle.copyWith(fontSize: 15)),
                               ),
                             ),
                           ],
@@ -156,7 +154,8 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                                     border: InputBorder.none,
                                     hintText: AppLocalizations.of(context)
                                         .translate('bank'),
-                                    hintStyle: hintTextStyle),
+                                    hintStyle:
+                                        hintTextStyle.copyWith(fontSize: 15)),
                               ),
                             ),
                           ],
@@ -174,14 +173,12 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                                     border: InputBorder.none,
                                     hintText: AppLocalizations.of(context)
                                         .translate('bankId'),
-                                    hintStyle: hintTextStyle),
+                                    hintStyle:
+                                        hintTextStyle.copyWith(fontSize: 15)),
                               ),
                             ),
                           ],
                         ),
-                      ),
-                      SizedBox(
-                        height: 10.0,
                       ),
                       ListTile(
                         title: Container(
@@ -195,7 +192,8 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                                 border: InputBorder.none,
                                 hintText: AppLocalizations.of(context)
                                     .translate('details'),
-                                hintStyle: hintTextStyle),
+                                hintStyle:
+                                    hintTextStyle.copyWith(fontSize: 15)),
                           ),
                         ),
                       ),
