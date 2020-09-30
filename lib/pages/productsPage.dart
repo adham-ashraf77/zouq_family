@@ -52,7 +52,6 @@ class _ProductsPageState extends State<ProductsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text("ذوق", style: headers1),
             Image.asset(
               'assets/images/logo.png',
               scale: 18,

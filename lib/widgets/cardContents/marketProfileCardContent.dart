@@ -43,14 +43,14 @@ class _MarketProfileCardContecntState extends State<MarketProfileCardContecnt> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            height: 100.0,
-            width: 100.0,
+            height: 70.0,
+            width: 70.0,
             color: Colors.transparent,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
@@ -68,7 +68,7 @@ class _MarketProfileCardContecntState extends State<MarketProfileCardContecnt> {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(5.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
@@ -83,17 +83,14 @@ class _MarketProfileCardContecntState extends State<MarketProfileCardContecnt> {
                         child: Text(
                           "${widget.title}",
                           overflow: TextOverflow.ellipsis,
-                          style: headers4,
+                          style: headers4.copyWith(fontSize:18),
                         ),
                       ),
                       Row(
                         children: <Widget>[
                           Text(
                             widget.rating == -1 ? "0.0" : "${widget.rating}",
-                            style: paragarph4,
-                          ),
-                          SizedBox(
-                            width: 3,
+                            style: paragarph4.copyWith(fontSize:13),
                           ),
                           Container(
                             width: 20,
@@ -115,7 +112,7 @@ class _MarketProfileCardContecntState extends State<MarketProfileCardContecnt> {
                         child: Text(
                           "${widget.description}",
                           overflow: TextOverflow.ellipsis,
-                          style: paragarph3,
+                          style: paragarph3.copyWith(fontSize:14),
                         ),
                       )
                     ],

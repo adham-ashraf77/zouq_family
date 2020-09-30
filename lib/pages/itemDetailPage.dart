@@ -255,7 +255,7 @@ class _ItemDetailState extends State<ItemDetail> {
 
   vedioStart() {
     child.insert(
-      0,
+      videoUrl == null ? child.last : 0,
       videoUrl == null
           ? Center(
               child: Text(
@@ -404,7 +404,7 @@ class _ItemDetailState extends State<ItemDetail> {
               backgroundColor: mainColor,
               title: Text(
                 AppLocalizations.of(context).translate('productDescription'),
-                style: headers3,
+                style: headers3.copyWith(fontSize: 17),
               ),
               elevation: 0,
               centerTitle: true,
@@ -505,17 +505,22 @@ class _ItemDetailState extends State<ItemDetail> {
                                 ),
                               ),
                             ),
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                  border: Border.all(
-                                      color: productStatus == 'ready'
-                                          ? Colors.cyan
-                                          : Colors.orange)),
-                              child: Text(
-                                  '${productStatus == 'ready' ? '${AppLocalizations.of(context).translate('available')}' : productStatus == 'unavailable' ? '${AppLocalizations.of(context).translate('notAvailable')}' : '${AppLocalizations.of(context).translate('onDemand')}'}'),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
+                                    border: Border.all(
+                                        color: productStatus == 'ready'
+                                            ? Colors.cyan
+                                            : Colors.orange)),
+                                child: Text(
+                                  '${productStatus == 'ready' ? '${AppLocalizations.of(context).translate('available')}' : productStatus == 'unavailable' ? '${AppLocalizations.of(context).translate('notAvailable')}' : '${AppLocalizations.of(context).translate('onDemand')}'}',
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                              ),
                             ),
                             Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                             productMeta.isEmpty
@@ -552,9 +557,13 @@ class _ItemDetailState extends State<ItemDetail> {
                                               : Colors.transparent,
                                         ),
                                         child: Text(
-                                            '${AppLocalizations.of(context).translate('available')}'),
+                                            '${AppLocalizations.of(context).translate('available')}',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                            )),
                                       ),
                                     ),
+                                    SizedBox(width: 5),
                                     InkWell(
                                       onTap: () {
                                         avalaible = false;
@@ -575,9 +584,13 @@ class _ItemDetailState extends State<ItemDetail> {
                                               : Colors.transparent,
                                         ),
                                         child: Text(
-                                            '${AppLocalizations.of(context).translate('notAvailable')}'),
+                                            '${AppLocalizations.of(context).translate('notAvailable')}',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                            )),
                                       ),
                                     ),
+                                    SizedBox(width: 5),
                                     InkWell(
                                       onTap: () {
                                         avalaible = false;
@@ -598,9 +611,14 @@ class _ItemDetailState extends State<ItemDetail> {
                                               : Colors.transparent,
                                         ),
                                         child: Text(
-                                            '${AppLocalizations.of(context).translate('onDemand')}'),
+                                          '${AppLocalizations.of(context).translate('onDemand')}',
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                          ),
+                                        ),
                                       ),
                                     ),
+                                    SizedBox(width: 5),
                                     GestureDetector(
                                       onTap: updateStatus,
                                       child: Container(
@@ -618,6 +636,7 @@ class _ItemDetailState extends State<ItemDetail> {
                                             AppLocalizations.of(context)
                                                 .translate('editStatus'),
                                             style: TextStyle(
+                                                fontSize: 13,
                                                 color: mainColor,
                                                 fontWeight: FontWeight.bold),
                                           ),
@@ -660,12 +679,15 @@ class _ItemDetailState extends State<ItemDetail> {
                                 : Container(),
                             Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                             RatingChip(rating: double.parse(this.rate)),
+                            SizedBox(
+                              height: 18,
+                            ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               child: Text(
                                 '${this.name}',
                                 style: TextStyle(
-                                  fontSize: 25,
+                                  fontSize: 20,
                                   color: textColor,
                                   fontWeight: FontWeight.bold,
                                 ),

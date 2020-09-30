@@ -405,7 +405,7 @@ class _AddItemPageState extends State<AddItemPage> {
       appBar: AppBar(
         // pinned: true,
         title: Text(AppLocalizations.of(context).translate('addProduct'),
-            style: headers1),
+            style: headers1.copyWith(fontSize:25)),
         centerTitle: true,
       ),
       body: !isConnected
@@ -475,13 +475,13 @@ class _AddItemPageState extends State<AddItemPage> {
                                 Text(
                                   AppLocalizations.of(context)
                                       .translate('optionalVideo'),
-                                  style: TextStyle(fontSize: 23),
+                                  style: TextStyle(fontSize: 20),
                                 ),
                                 Text(
                                   AppLocalizations.of(context)
                                       .translate('tenSecLimit'),
                                   style: TextStyle(
-                                      color: Colors.grey, fontSize: 13),
+                                      color: Colors.grey, fontSize: 11),
                                 ),
                               ],
                             )
@@ -496,12 +496,12 @@ class _AddItemPageState extends State<AddItemPage> {
                             Text(
                               AppLocalizations.of(context)
                                   .translate('productImages'),
-                              style: TextStyle(fontSize: 23),
+                              style: TextStyle(fontSize: 20),
                             ),
                             Text(
                               AppLocalizations.of(context)
                                   .translate('imagesLimit'),
-                              style: paragarph3,
+                              style: paragarph3.copyWith(fontSize:13),
                             ),
                             SizedBox(
                               width: 5,

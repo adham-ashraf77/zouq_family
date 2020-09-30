@@ -149,7 +149,6 @@ class _OrdersPageState extends State<OrdersPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text("ذوق", style: headers1),
             Image.asset(
               'assets/images/logo.png',
               scale: 18,

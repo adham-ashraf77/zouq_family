@@ -15,7 +15,7 @@ class FAQPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(
             AppLocalizations.of(context).translate('FAQ'),
-            style: moreTextStyle,
+            style: moreTextStyle.copyWith(fontSize:18),
           ),
           centerTitle: true,
         ),
@@ -30,7 +30,7 @@ class FAQPage extends StatelessWidget {
                     Localizations.localeOf(context).languageCode == "en"
                         ? data[index]['question_en']
                         : data[index]['question_ar'],
-                    style: moreTextStyle1,
+                    style: moreTextStyle1.copyWith(fontSize:13),
                   ),
                   children: <Widget>[
                     Text(
@@ -38,7 +38,7 @@ class FAQPage extends StatelessWidget {
                           ? data[index]['answer_en']
                           : data[index]['answer_ar'],
                       textAlign: TextAlign.start,
-                      style: moreTextStyle1.copyWith(fontWeight: FontWeight.w400),
+                      style: moreTextStyle1.copyWith(fontWeight: FontWeight.w400,fontSize: 13),
                     )
                   ],
                 ),

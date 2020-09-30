@@ -98,14 +98,7 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title:
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text("ذوق", style: TextStyle(color: Colors.blue),),
-            Image.asset('assets/images/logo.png', scale: 22,),
-          ],
-        ),
+       Image.asset('assets/images/logo.png',scale: 18,),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -125,7 +118,7 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                       child: CircleAvatar(
                         backgroundColor: Colors.grey[200],
                         backgroundImage: NetworkImage('${order.imageUrl.toString()}'),
-                        radius: 50,
+                        radius: 40,
                       ),
                     ),
                     SizedBox(
@@ -133,7 +126,7 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                     ),
                     Text(
                       order.name.toString(),
-                      style: paragarph1.copyWith(fontWeight: FontWeight.w500, color: Color(0xFF535353)),
+                      style: paragarph1.copyWith(fontWeight: FontWeight.w500, color: Color(0xFF535353),fontSize: 18),
                     ),
                     SizedBox(
                       height: 15,
@@ -159,7 +152,7 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                                 : type == 2 ? Color(0xFFF39D67) : type == 3 ? Color(0xFF48CF84) : Colors.blue,
                           ),
                           borderRadius: BorderRadius.circular(10)),
-                      width: 100,
+                      width: 80,
                       height: 30,
                       child: Center(
                           child: Text(
@@ -542,7 +535,7 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                     '${order.price}' + ' ' + 'ريال',
                     textDirection: TextDirection.rtl,
                     style: paragarph1.copyWith(
-                        fontWeight: FontWeight.w200, color: Colors.blue),
+                        fontWeight: FontWeight.w200, color: Colors.blue,fontSize: 17),
                   ),
                 ),
               ],

@@ -19,7 +19,7 @@ class _EULAPageState extends State<EULAPage> {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context).translate('EULA'),
-          style: headers2,
+          style: headers2.copyWith(fontSize:18),
         ),
         centerTitle: true,
       ),
@@ -27,11 +27,11 @@ class _EULAPageState extends State<EULAPage> {
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
         children: <Widget>[
           Container(
-            width: MediaQuery.of(context).size.width * 0.5,
-            height: MediaQuery.of(context).size.height * 0.3,
+            width: MediaQuery.of(context).size.width * 0.4,
+            height: MediaQuery.of(context).size.height * 0.2,
             decoration: BoxDecoration(image: DecorationImage(image: AssetImage(appLogo))),
           ),
-          Text(widget.data['content'], style: paragarph1),
+          Text(widget.data['content'], style: paragarph1.copyWith(fontSize:14)),
         ],
       ),
     );

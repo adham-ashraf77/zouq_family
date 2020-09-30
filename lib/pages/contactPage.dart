@@ -51,7 +51,7 @@ class _ContactPageState extends State<ContactPage> {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context).translate('contactUs'),
-          style: moreTextStyle,
+          style: moreTextStyle.copyWith(fontSize:18),
         ),
         centerTitle: true,
       ),
@@ -59,9 +59,7 @@ class _ContactPageState extends State<ContactPage> {
         child: ListView(
           padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
           children: <Widget>[
-            SizedBox(
-              height: 40.0,
-            ),
+
 //            Center(
 //              child: Text(
 //                AppLocalizations.of(context).translate('appInfo'),
@@ -72,7 +70,7 @@ class _ContactPageState extends State<ContactPage> {
             Center(
               child: Text(
                 AppLocalizations.of(context).translate('contactManagement'),
-                style: moreTextStyle1,
+                style: moreTextStyle1.copyWith(fontSize:15),
               ),
             ),
             SizedBox(
@@ -106,14 +104,11 @@ class _ContactPageState extends State<ContactPage> {
             ListTile(
               leading: Text(
                 AppLocalizations.of(context).translate('telephone'),
-                style: moreTextStyle1,
+                style: moreTextStyle1.copyWith(fontSize:15),
               ),
-              title: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  widget.data['phone'],
-                  style: paragarph1,
-                ),
+              title: Text(
+                widget.data['phone'],
+                style: paragarph1.copyWith(fontSize:15),
               ),
               trailing: CircleAvatar(
                 radius: 15.0,

@@ -150,6 +150,9 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(
+          horizontal: 15,
+        ),
         child: Column(
           // padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           children: <Widget>[
@@ -187,7 +190,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
             // ),
             CircleAvatar(
                 backgroundColor: Colors.transparent,
-                radius: 50,
+                radius: 45,
                 backgroundImage: avatarImageUrl == null
                     ? AssetImage(profileImg)
                     : NetworkImage('$avatarImageUrl')),
@@ -213,10 +216,10 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
               },
               child: ListTile(
                 leading: Text(AppLocalizations.of(context).translate('wallet'),
-                    style: moreTextStyle),
+                    style: moreTextStyle.copyWith(fontSize: 15)),
                 trailing: Text(
                   wallet.toString() == 'null' ? 'خطأ' : "$wallet ريال",
-                  style: moreSmallTextStyle,
+                  style: moreSmallTextStyle.copyWith(fontSize: 15),
                 ),
               ),
             ),
@@ -234,12 +237,12 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                 children: <Widget>[
                   Text(
                     AppLocalizations.of(context).translate('lang'),
-                    style: moreSmallTextStyle,
+                    style: moreSmallTextStyle.copyWith(fontSize: 15),
                   ),
                 ],
               ),
               leading: Text(AppLocalizations.of(context).translate('language'),
-                  style: moreTextStyle),
+                  style: moreTextStyle.copyWith(fontSize: 15)),
               onTap: () => showCupertinoModalPopup(
                   context: context, builder: (BuildContext context) => popUp()),
             ),
@@ -261,7 +264,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                 ),
                 leading: Text(
                   AppLocalizations.of(context).translate('conversations'),
-                  style: moreTextStyle,
+                  style: moreTextStyle.copyWith(fontSize: 15),
                   textAlign: TextAlign.end,
                 ),
               ),
@@ -277,7 +280,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
               ),
               leading: Text(
                   AppLocalizations.of(context).translate('storeLocation'),
-                  style: moreTextStyle),
+                  style: moreTextStyle.copyWith(fontSize: 15)),
               onTap: () => getLocation(),
             ),
             Divider(
@@ -306,7 +309,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                 ),
                 leading: Text(
                   AppLocalizations.of(context).translate('contactUs'),
-                  style: moreTextStyle,
+                  style: moreTextStyle.copyWith(fontSize: 15),
                   textAlign: TextAlign.end,
                 ),
               ),
@@ -331,7 +334,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
               ),
               leading: Text(
                 AppLocalizations.of(context).translate('EULA'),
-                style: moreTextStyle,
+                style: moreTextStyle.copyWith(fontSize: 15),
                 textAlign: TextAlign.end,
               ),
             ),
@@ -355,7 +358,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
               ),
               leading: Text(
                 AppLocalizations.of(context).translate('FAQ'),
-                style: moreTextStyle,
+                style: moreTextStyle.copyWith(fontSize: 15),
                 textAlign: TextAlign.end,
               ),
             ),
@@ -374,7 +377,8 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
                 },
                 child: Text(
                   AppLocalizations.of(context).translate('signOut'),
-                  style: moreTextStyle.copyWith(color: rejectedColor),
+                  style: moreTextStyle.copyWith(
+                      color: rejectedColor, fontSize: 15),
                   textAlign: TextAlign.end,
                 ),
               ),

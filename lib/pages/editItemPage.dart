@@ -491,7 +491,7 @@ class _EditItemPageState extends State<EditItemPage> {
         : Scaffold(
             appBar: AppBar(
               // pinned: true,
-              title: Text("اضافة منتج", style: headers1),
+              title: Text("اضافة منتج", style: headers1.copyWith(fontSize:25)),
               centerTitle: true,
             ),
             body: Padding(
@@ -560,13 +560,13 @@ class _EditItemPageState extends State<EditItemPage> {
                             Text(
                               AppLocalizations.of(context)
                                   .translate('optionalVideo'),
-                              style: TextStyle(fontSize: 23),
+                              style: TextStyle(fontSize: 20),
                             ),
                             Text(
                               AppLocalizations.of(context)
                                   .translate('tenSecLimit'),
                               style:
-                                  TextStyle(color: Colors.grey, fontSize: 13),
+                                  TextStyle(color: Colors.grey, fontSize: 11),
                             ),
                           ],
                         )
@@ -581,11 +581,11 @@ class _EditItemPageState extends State<EditItemPage> {
                         Text(
                           AppLocalizations.of(context)
                               .translate('productImages'),
-                          style: TextStyle(fontSize: 23),
+                          style: TextStyle(fontSize: 20),
                         ),
                         Text(
                           AppLocalizations.of(context).translate('imagesLimit'),
-                          style: paragarph3,
+                          style: paragarph3.copyWith(fontSize:14),
                         ),
                         SizedBox(
                           width: 5,
@@ -896,7 +896,6 @@ class _EditItemPageState extends State<EditItemPage> {
                       ),
                     ),
 
-                    Padding(padding: EdgeInsets.only(top: 20)),
                     GestureDetector(
                       onTap: updateProduct,
                       child: Padding(

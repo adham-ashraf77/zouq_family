@@ -17,9 +17,7 @@ class AdminWalletPage extends StatefulWidget {
   _AdminWalletPageState createState() => _AdminWalletPageState();
 }
 
-
 class _AdminWalletPageState extends State<AdminWalletPage> {
-
   TextEditingController bankNameController = TextEditingController();
   TextEditingController IbanController = TextEditingController();
   TextEditingController quantityController = TextEditingController();
@@ -40,7 +38,9 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
       iban: int.parse(IbanController.text),
       quantity: double.parse(quantityController.text),
     );
-    final snackBar = SnackBar(content: Text('${AppLocalizations.of(context).translate('withdrawSuccess')}'));
+    final snackBar = SnackBar(
+        content: Text(
+            '${AppLocalizations.of(context).translate('withdrawSuccess')}'));
 
 // Find the Scaffold in the widget tree and use it to show a SnackBar.
     Scaffold.of(context).showSnackBar(snackBar);
@@ -48,7 +48,8 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
   }
 
   payCheck() async {
-    _launchURL("${ConstantVarable.baseUrl}/api/family/wallet-debt/${widget.familyId}/checkout");
+    _launchURL(
+        "${ConstantVarable.baseUrl}/api/family/wallet-debt/${widget.familyId}/checkout");
   }
 
   _launchURL(String url) async {
@@ -82,11 +83,11 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                       Center(
                         child: Text(
                           AppLocalizations.of(context).translate('withdraw'),
-                          style: moreTextStyle.copyWith(fontSize:15),
+                          style: moreTextStyle.copyWith(fontSize: 15),
                         ),
                       ),
                       SizedBox(
-                        height: 25.0,
+                        height: 15,
                       ),
                       ListTile(
                         title: Container(
@@ -97,31 +98,34 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                           ),
                           child: Column(
                             children: <Widget>[
-                              Text(
-                                  ' ريال' + "${widget.walletAmount}", style: TextStyle(color: Colors.white, fontSize: 15)),
+                              Text(' ريال' + "${widget.walletAmount}",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 15)),
                               SizedBox(
-                                height: 5.0,
+                                height: 3.0,
                               ),
                               Text(
-                                AppLocalizations.of(context).translate('currentBalance'),
-                                style: moreTextStyle1.copyWith(fontSize:15),
+                                AppLocalizations.of(context)
+                                    .translate('currentBalance'),
+                                style: moreTextStyle1.copyWith(fontSize: 13),
                               )
                             ],
                           ),
                         ),
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 5,
                       ),
                       Center(
                         child: Text(
-                          AppLocalizations.of(context).translate('detailsRequired'),
-                          style: moreTextStyle1.copyWith(fontSize:15),
+                          AppLocalizations.of(context)
+                              .translate('detailsRequired'),
+                          style: moreTextStyle1.copyWith(fontSize: 13),
                           textAlign: TextAlign.center,
                         ),
                       ),
                       SizedBox(
-                        height: 25.0,
+                        height: 5.0,
                       ),
                       ListTile(
                         title: Row(
@@ -132,17 +136,15 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                                 focusNode: quantityNode,
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
-                                    hintText: AppLocalizations.of(context).translate('transactionAmount'),
+                                    hintText: AppLocalizations.of(context)
+                                        .translate('transactionAmount'),
                                     hintStyle: hintTextStyle),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      Divider(
-                        color: Color(0xff888888),
-                        indent: 25,
-                      ),
+                      Divider(),
                       ListTile(
                         title: Row(
                           children: <Widget>[
@@ -152,17 +154,15 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                                 focusNode: bankNameNode,
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
-                                    hintText: AppLocalizations.of(context).translate('bank'),
+                                    hintText: AppLocalizations.of(context)
+                                        .translate('bank'),
                                     hintStyle: hintTextStyle),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      Divider(
-                        color: Color(0xff888888),
-                        indent: 25,
-                      ),
+                      Divider(),
                       ListTile(
                         title: Row(
                           children: <Widget>[
@@ -172,48 +172,51 @@ class _AdminWalletPageState extends State<AdminWalletPage> {
                                 focusNode: IbanNode,
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
-                                    hintText: AppLocalizations.of(context).translate('bankId'),
+                                    hintText: AppLocalizations.of(context)
+                                        .translate('bankId'),
                                     hintStyle: hintTextStyle),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      Divider(
-                        color: Color(0xff888888),
-                        indent: 25,
-                      ),
                       SizedBox(
-                        height: 25.0,
+                        height: 10.0,
                       ),
                       ListTile(
                         title: Container(
-                          height: 150.0,
+                          height: 100.0,
                           padding: EdgeInsets.all(10.0),
                           decoration: BoxDecoration(
-                              border: Border.all(width: 0.5), borderRadius: BorderRadius.circular(15.0)),
+                              border: Border.all(width: 0.5),
+                              borderRadius: BorderRadius.circular(15.0)),
                           child: TextField(
                             decoration: InputDecoration(
                                 border: InputBorder.none,
-                                hintText: AppLocalizations.of(context).translate('details'),
+                                hintText: AppLocalizations.of(context)
+                                    .translate('details'),
                                 hintStyle: hintTextStyle),
                           ),
                         ),
                       ),
                       SizedBox(
-                        height: 50,
+                        height: 10,
                       ),
                       ListTile(
                         title: RaisedButton(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0)),
                           color: accent,
                           child: Text(
-                            double.parse(widget.walletAmount) < 0 ?
-                            "دفع المستحق" :
-                            AppLocalizations.of(context).translate('withdraw'),
+                            double.parse(widget.walletAmount) < 0
+                                ? "دفع المستحق"
+                                : AppLocalizations.of(context)
+                                    .translate('withdraw'),
                             style: TextStyle(color: Colors.white, fontSize: 15),
                           ),
-                          onPressed: () => double.parse(widget.walletAmount) < 0 ? payCheck() : withdraw(context),
+                          onPressed: () => double.parse(widget.walletAmount) < 0
+                              ? payCheck()
+                              : withdraw(context),
                         ),
                       ),
                     ],

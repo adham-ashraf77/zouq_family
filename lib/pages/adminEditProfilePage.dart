@@ -109,7 +109,7 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context).translate('editProfile'),
-          style: moreTextStyle,
+          style: moreTextStyle.copyWith(fontSize:18),
         ),
         centerTitle: true,
       ),
@@ -124,15 +124,15 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
               padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
               children: <Widget>[
                 Center(
-                  child: Text("تعديل الصوره", style: moreTextStyle),
+                  child: Text("تعديل الصوره", style: moreTextStyle.copyWith(fontSize:15)),
                 ),
                 _loodingImage ?
                 CircularProgressIndicator() :
                 InkWell(
                   onTap: () => getImage(context),
                   child: SizedBox(
-                    width: 100,
-                    height: 100,
+                    width: 70,
+                    height: 70,
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: CircleAvatar(
@@ -215,12 +215,12 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
 //              ),
 //            ),
                 SizedBox(
-                  height: 25.0,
+                  height: 15.0,
                 ),
                 Center(
                   child: Text(
                     AppLocalizations.of(context).translate('changePassword'),
-                    style: moreTextStyle,
+                    style: moreTextStyle.copyWith(fontSize:15),
                   ),
                 ),
                 SizedBox(
@@ -275,86 +275,83 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
                   height: 25,
                 ),
                 ListTile(
-                  title: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Row(
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectedDeliveryService = DeliveryService.doesDelivery;
-                                  isdeliveryAvailable = 1;
-                                });
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: selectedDeliveryService == DeliveryService.doesDelivery
-                                          ? accent
-                                          : Color(0xFF636363),
-                                    ),
-                                    borderRadius: BorderRadius.circular(50)),
-                                child: CircleAvatar(
-                                  child: Icon(
-                                    FontAwesomeIcons.check,
-                                    color: Colors.white,
-                                    size: 20.0,
+                  title: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Row(
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                selectedDeliveryService = DeliveryService.doesDelivery;
+                                isdeliveryAvailable = 1;
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: selectedDeliveryService == DeliveryService.doesDelivery
+                                        ? accent
+                                        : Color(0xFF636363),
                                   ),
-                                  radius: 15.0,
-                                  backgroundColor:
-                                  selectedDeliveryService == DeliveryService.doesDelivery ? accent : Colors.white,
+                                  borderRadius: BorderRadius.circular(50)),
+                              child: CircleAvatar(
+                                child: Icon(
+                                  FontAwesomeIcons.check,
+                                  color: Colors.white,
+                                  size: 20.0,
                                 ),
+                                radius: 15.0,
+                                backgroundColor:
+                                selectedDeliveryService == DeliveryService.doesDelivery ? accent : Colors.white,
                               ),
                             ),
-                            SizedBox(
-                              width: 10.0,
-                            ),
-                            Text(
-                              AppLocalizations.of(context).translate('delivery'),
-                              style: productName1,
-                            ),
-                            SizedBox(
-                              width: 20.0,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectedDeliveryService = DeliveryService.noDelivery;
-                                  isdeliveryAvailable = 0;
-                                });
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: selectedDeliveryService == DeliveryService.noDelivery
-                                          ? accent
-                                          : Color(0xFF636363),
-                                    ),
-                                    borderRadius: BorderRadius.circular(50)),
-                                child: CircleAvatar(
-                                  child: Icon(
-                                    FontAwesomeIcons.check,
-                                    color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 3.0,
+                          ),
+                          Text(
+                            AppLocalizations.of(context).translate('delivery'),
+                            style: productName1.copyWith(fontSize:15),
+                          ),
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                selectedDeliveryService = DeliveryService.noDelivery;
+                                isdeliveryAvailable = 0;
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: selectedDeliveryService == DeliveryService.noDelivery
+                                        ? accent
+                                        : Color(0xFF636363),
                                   ),
-                                  radius: 15.0,
-                                  backgroundColor:
-                                  selectedDeliveryService == DeliveryService.noDelivery ? accent : Colors.white,
+                                  borderRadius: BorderRadius.circular(50)),
+                              child: CircleAvatar(
+                                child: Icon(
+                                  FontAwesomeIcons.check,
+                                  color: Colors.white,
                                 ),
+                                radius: 15.0,
+                                backgroundColor:
+                                selectedDeliveryService == DeliveryService.noDelivery ? accent : Colors.white,
                               ),
                             ),
-                            SizedBox(
-                              width: 10.0,
-                            ),
-                            Text(
-                              AppLocalizations.of(context).translate('noDelivery'),
-                              style: productName1,
-                            ),
-                          ],
-                        ),
+                          ),
+                          SizedBox(
+                            width: 5.0,
+                          ),
+                          Text(
+                            AppLocalizations.of(context).translate('noDelivery'),
+                            style: productName1.copyWith(fontSize:15),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -385,9 +382,7 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
 //                );
 //              }).toList(),
 //            ),
-                SizedBox(
-                  height: 10,
-                ),
+         
                 TextFormField(
                   maxLines: 2,
                     controller: descTextFieldController,
@@ -449,7 +444,7 @@ class _AdminProfileEditorState extends State<AdminProfileEditor> {
                       color: accent,
                       child: Text(
                         AppLocalizations.of(context).translate('edit'),
-                        style: TextStyle(color: Colors.white, fontSize: 25.0),
+                        style: TextStyle(color: Colors.white, fontSize: 20.0),
                       ),
                       onPressed: () {
                         if (_formKey.currentState.validate()) {

@@ -11,7 +11,7 @@ class OrderViewPageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 15.0),
+      padding: const EdgeInsets.only(bottom: 10.0),
       child: Container(
         height: 90,
         width: MediaQuery.of(context).size.width,
@@ -61,8 +61,8 @@ class OrderViewPageCard extends StatelessWidget {
               width: 5,
             ),
             Container(
-                width: 90,
-                height: 90,
+                width: 70,
+                height: 70,
                 child: Image.network(
                   '${prouct.imageUrl}',
                   fit: BoxFit.fill,
