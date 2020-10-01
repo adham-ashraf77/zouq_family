@@ -41,7 +41,7 @@
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>api-testing.dhuqapp.com</key>
+			<key>api.dhuqapp.com</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>

@@ -57,10 +57,10 @@ class _ChatScreenState extends State<ChatScreen> {
     roomid = await ChatService().startRoom(id: widget.id);
     channel_name = 'rooms.$roomid';
     options = PusherOptions(
-        host: 'api-testing.dhuqapp.com',
+        host: 'api.dhuqapp.com',
         port: 6001,
         encrypted: false,
-        auth: PusherAuth('http://api-testing.dhuqapp.com/api/broadcasting/auth',
+        auth: PusherAuth('http://api.dhuqapp.com/api/broadcasting/auth',
             headers: {'Authorization': 'Bearer $token'}));
     pusherClient = FlutterPusher(
       "468a43433dad5808c2",
@@ -71,13 +71,13 @@ class _ChatScreenState extends State<ChatScreen> {
     echo = new Echo({
       'broadcaster': 'pusher',
       'client': pusherClient,
-      "wsHost": 'api-testing.dhuqapp.com',
-      "httpHost": 'api-testing.dhuqapp.com',
+      "wsHost": 'api.dhuqapp.com',
+      "httpHost": 'api.dhuqapp.com',
       "wsPort": 6001,
       'auth': {
         "headers": {'Authorization': 'Bearer $token'}
       },
-      'authEndpoint': 'http://api-testing.dhuqapp.com/api/broadcasting/auth',
+      'authEndpoint': 'http://api.dhuqapp.com/api/broadcasting/auth',
       "disableStats": true,
       "forceTLS": false,
       "enabledTransports": ['ws', 'wss']
