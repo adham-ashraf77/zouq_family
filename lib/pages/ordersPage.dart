@@ -105,7 +105,7 @@ class _OrdersPageState extends State<OrdersPage> {
               date: x[i]['created_at'].toString(),
               contents: x[i]['products_meta'].toString(),
               imageUrl: x[i]['client']['image'].toString(),
-              clientId:  x[i]['client']['id'],
+              clientId: x[i]['client']['id'],
               time: "",
               comments: [],
               product: [],
@@ -146,26 +146,38 @@ class _OrdersPageState extends State<OrdersPage> {
         automaticallyImplyLeading: false,
         // pinned: true,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Image.asset(
               'assets/images/logo.png',
               scale: 18,
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AddItemPage()));
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('addProduct'),
+                        style: TextStyle(color: Colors.grey, fontSize: 16),
+                      )),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Image.asset('assets/icons/add.png'),
+                ],
+              ),
+            ),
           ],
         ),
         centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: new Image.asset('assets/icons/add.png'),
-            onPressed: () {
-              //TODO go add product screen
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddItemPage()));
-            },
-          ),
-        ],
       ),
       body: RefreshIndicator(
         onRefresh: () => getOrders(),

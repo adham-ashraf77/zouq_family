@@ -48,25 +48,10 @@ class _AddItemPageState extends State<AddItemPage> {
   List<int> tagsIdList = List();
 
   Future<void> loadAssets(int index) async {
-    List<Asset> resultList = List<Asset>();
+  List<Asset> resultList = List<Asset>();
 
 //    if(file!=null && file.isNotEmpty)
 //      file.clear();
-
-    String error = 'No Error Dectected';
-
-    Future<File> getImageFileFromAssets(ByteData bytedata, String name) async {
-      print('hi');
-      final byteData = bytedata;
-
-      final file = File('${(await getTemporaryDirectory()).path}/$name');
-      await file.writeAsBytes(
-        byteData.buffer
-            .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes),
-      );
-      print('bye');
-      return file;
-    }
 
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
@@ -405,7 +390,7 @@ class _AddItemPageState extends State<AddItemPage> {
       appBar: AppBar(
         // pinned: true,
         title: Text(AppLocalizations.of(context).translate('addProduct'),
-            style: headers1.copyWith(fontSize:25)),
+            style: headers1.copyWith(fontSize: 25)),
         centerTitle: true,
       ),
       body: !isConnected
@@ -501,7 +486,7 @@ class _AddItemPageState extends State<AddItemPage> {
                             Text(
                               AppLocalizations.of(context)
                                   .translate('imagesLimit'),
-                              style: paragarph3.copyWith(fontSize:13),
+                              style: paragarph3.copyWith(fontSize: 13),
                             ),
                             SizedBox(
                               width: 5,
