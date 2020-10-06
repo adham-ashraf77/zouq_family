@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -48,12 +49,29 @@ class _AddItemPageState extends State<AddItemPage> {
   List<int> tagsIdList = List();
 
   Future<void> loadAssets(int index) async {
-  List<Asset> resultList = List<Asset>();
+    List<Asset> resultList = List<Asset>();
 
 //    if(file!=null && file.isNotEmpty)
 //      file.clear();
-
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    PickedFile img = await picker.getImage(source: ImageSource.gallery);
+    File selectedImg = File(img.path);
+    selectedImg = await ImageCropper.cropImage(
+        sourcePath: selectedImg.path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.ratio16x9,
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.ratio4x3,
+        ],
+        compressQuality: 70,
+        androidUiSettings: AndroidUiSettings(
+          toolbarTitle: 'Cropper',
+          toolbarColor: Colors.blue,
+          toolbarWidgetColor: Colors.white,
+          initAspectRatio: CropAspectRatioPreset.ratio16x9,
+        ),
+        iosUiSettings: IOSUiSettings());
 
 //    try {
 ////      resultList = await MultiImagePicker.pickImages(
@@ -81,7 +99,7 @@ class _AddItemPageState extends State<AddItemPage> {
     setState(() {
       photosIsEmpty = false;
       //images = resultList;
-      _image = File(pickedFile.path);
+      _image = File(selectedImg.path);
     });
     try {
       print('insert');
