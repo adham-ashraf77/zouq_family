@@ -153,26 +153,25 @@ class _OrdersPageState extends State<OrdersPage> {
               'assets/images/logo.png',
               scale: 18,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AddItemPage()));
-                      },
-                      child: Text(
-                        AppLocalizations.of(context).translate('addProduct'),
-                        style: TextStyle(color: Colors.grey, fontSize: 16),
-                      )),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Image.asset('assets/icons/add.png'),
-                ],
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AddItemPage()));
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Text(
+                      AppLocalizations.of(context).translate('addProduct'),
+                      style: TextStyle(color: Colors.grey, fontSize: 16),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Image.asset('assets/icons/add.png'),
+                  ],
+                ),
               ),
             ),
           ],
