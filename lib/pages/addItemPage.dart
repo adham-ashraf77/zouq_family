@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 import 'package:zouqadmin/models/CategoriesTag.dart';
@@ -34,7 +33,6 @@ class _AddItemPageState extends State<AddItemPage> {
   final picker = ImagePicker();
   File _video;
 
-  // List<File> images = [null, null, null, null, null];
   final nameTextFieldController = TextEditingController();
   final priceTextFieldController = TextEditingController();
   final descTextFieldController = TextEditingController();
@@ -51,8 +49,6 @@ class _AddItemPageState extends State<AddItemPage> {
   Future<void> loadAssets(int index) async {
     List<Asset> resultList = List<Asset>();
 
-//    if(file!=null && file.isNotEmpty)
-//      file.clear();
     PickedFile img = await picker.getImage(source: ImageSource.gallery);
     File selectedImg = File(img.path);
     selectedImg = await ImageCropper.cropImage(
@@ -72,82 +68,28 @@ class _AddItemPageState extends State<AddItemPage> {
           initAspectRatio: CropAspectRatioPreset.ratio16x9,
         ),
         iosUiSettings: IOSUiSettings());
-
-//    try {
-////      resultList = await MultiImagePicker.pickImages(
-////        maxImages: 5,
-////        enableCamera: true,
-////        selectedAssets: images,
-////        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
-////        materialOptions: MaterialOptions(
-////          actionBarColor: "#abcdef",
-////          actionBarTitle: "Example App",
-////          allViewTitle: "All Photos",
-////          useDetailsView: false,
-////          selectCircleStrokeColor: "#000000",
-////        ),
-////      );
-////    } on Exception catch (e) {
-////      error = e.toString();
-////    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
     if (!mounted) return;
 
     setState(() {
       photosIsEmpty = false;
-      //images = resultList;
       _image = File(selectedImg.path);
     });
     try {
-      print('insert');
-      print(index);
       if (_image.existsSync()) listOfImages[index] = _image;
     } catch (e) {
       print(e);
-      print('add');
-      print(index);
       listOfImages.add(_image);
     }
-
-    print(_image.path);
-    print('fileLength----->${listOfImages.length}');
-
-//    print('hi');
-//    print('Here ' + images.length.toString());
-//    if (images.length > 0) listOfImages.clear();
-//    images.forEach((image) async {
-////      images.first.requestOriginal(quality: 100).then((value){
-////
-////        print('yoooooooooooooo${value.buffer}');
-////      });
-//      File x = await getImageFileFromAssets(
-//          await image.requestOriginal(quality: 100), image.name);
-//
-//      setState(() {
-//        listOfImages.add(x);
-//      });
-//      print(image.name);
-//      print('fileLength----->${listOfImages.length}');
-//    });
-
-    //print('--------->${file.first.path}');
   }
 
   addItem(List<File> listOfPhotos) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString("token") ?? "";
-    print('token: $token');
     List<MultipartFile> something = List();
 
     listOfPhotos.forEach((photo) async {
       something.add(MultipartFile.fromFileSync("${photo.path}"));
-      print(listOfPhotos.length);
-      print(something.length);
       if (listOfPhotos.length == something.length) {
-        print('hi ^^');
         FormData _formData = FormData.fromMap({
           "name": "test1",
           "description": "descriptiondescriptiondescription1111",
@@ -156,10 +98,8 @@ class _AddItemPageState extends State<AddItemPage> {
           "category_id": 2,
         });
         try {
-          print('--------------------> addItemFile: ${_formData.files}');
           Response response;
           if (token.isNotEmpty) {
-            print('before response');
             response =
                 await Dio().post("http://api.dhuqapp.com/api/family/products",
                     data: _formData,
@@ -168,17 +108,13 @@ class _AddItemPageState extends State<AddItemPage> {
                         HttpHeaders.authorizationHeader: "Bearer $token"
                       },
                     ));
-            print('after response');
-            print(response.data);
           }
           if (response.statusCode == 200) {
             return "success";
           } else {
-            print(response.data);
             return "something is wrong";
           }
         } on DioError catch (e) {
-          print('errooooooooorrrrrrrrr');
           if (e.response == null) return "connection time out";
           print(e.response.data);
         }
@@ -196,14 +132,11 @@ class _AddItemPageState extends State<AddItemPage> {
           print('Duration : ' +
               vbc.value.duration.toString().split(':').toString());
           var duration = vbc.value.duration.toString().split(':');
-          print(duration[0] + ' - ' + duration[1] + ' = ' + duration[2]);
           if (duration[0].trim() == '0' &&
               duration[1].trim() == '00' &&
               double.parse(duration[2]) < 11.0) {
-            print('accepted');
             productVideo = videoFile;
           } else {
-            print('rejected');
             showDialog(
                 context: context,
                 builder: (BuildContext context) => DialogWorning(
@@ -213,14 +146,6 @@ class _AddItemPageState extends State<AddItemPage> {
             productVideo = null;
           }
         });
-
-      // _controller = VideoPlayerController.file(videoFile);
-
-      // // Initialize the controller and store the Future for later use.
-      // _initializeVideoPlayerFuture = _controller.initialize();
-
-      // // Use the controller to loop the video.
-      // _controller.setLooping(true);
     });
   }
 
@@ -231,11 +156,9 @@ class _AddItemPageState extends State<AddItemPage> {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         isConnected = true;
-        print('true');
       }
     } on SocketException catch (_) {
       isConnected = false;
-      print('false');
     }
     setState(() {});
   }
@@ -254,17 +177,6 @@ class _AddItemPageState extends State<AddItemPage> {
                             .translate('addPhotoLengthError'),
                       ));
             } else {
-              //TODO uploading
-              print('hi from else');
-              print('before API call: catID=> ${categoryID + 1}');
-              print('before API call: desc=> ${descTextFieldController.text}');
-              print('before API call: name=> ${nameTextFieldController.text}');
-              listOfImages.forEach((element) {
-                print('before API call: listOfPhotos=> ${element.path}');
-              });
-              print(
-                  'before API call: price=> ${priceTextFieldController.text}');
-              //print('before API call: video=> ${productVideo.path}');
               showDialog(
                   context: context,
                   builder: (BuildContext context) => LoadingDialog(
@@ -273,9 +185,7 @@ class _AddItemPageState extends State<AddItemPage> {
                       ));
               if (tagsSelected.length != 0) {
                 for (int i = 0; i < tagsSelected.length; i++) {
-                  print(tagsSelected[i].id);
                   tagsIdList.add(tagsSelected[i].id);
-                  print("tags id list is  $tagsIdList");
                 }
               }
 
@@ -318,38 +228,6 @@ class _AddItemPageState extends State<AddItemPage> {
                     .translate('أختر وسم واحد على الاقل'),
               ));
     }
-    // // if (_formKey.currentState.validate()) {
-    // //   if (_dropdownValue != null) {
-    // //     productImages.clear();
-    // //     for (int i = 0; i < images.length; i++) {
-    // //       // if (images[i] != null) {
-    // //       //   productImages.add(images[i]);
-    // //       // }
-    // //     }
-    // //     if (productImages.length == 0) {
-    // //       showDialog(
-    // //           context: context,
-    // //           builder: (BuildContext context) => DialogWorning(
-    // //                 mss: 'من فضلك اختر على الاقل صورة واحده',
-    // //               ));
-    // //     } else {
-    // //       //TODO uploading
-    // //       AddProduct().addProduct(
-    // //           catID: categoryID + 1,
-    // //           desc: descTextFieldController.text,
-    // //           name: nameTextFieldController.text,
-    // //           listOfPhotos : listOfImages,
-    // //           price: priceTextFieldController.text,
-    // //           video: productVideo);
-    // //     }
-    // //   } else {
-    // //     showDialog(
-    // //         context: context,
-    // //         builder: (BuildContext context) => DialogWorning(
-    // //               mss: 'من فضلك اختر تصنيف للمنتج',
-    // //             ));
-    // //   }
-    // }
   }
 
   List<CategoriesTag> categories = List<CategoriesTag>();
@@ -362,8 +240,6 @@ class _AddItemPageState extends State<AddItemPage> {
       categories.forEach((element) {
         catTags.add(element.text_ar);
       });
-      print("//////////////////////");
-      print(categories.length);
       isLoading = false;
     });
   }
@@ -374,12 +250,6 @@ class _AddItemPageState extends State<AddItemPage> {
     await AddProduct().getAllTags();
     setState(() {
       tagsList = AddProduct.tags;
-      // tagsList.forEach((element) {
-      //   catTags.add(element.);
-      // });
-      print("//////////////////////");
-      print(tagsList.length);
-      // isLoading = false;
     });
   }
 
@@ -406,7 +276,6 @@ class _AddItemPageState extends State<AddItemPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // pinned: true,
         title: Text(AppLocalizations.of(context).translate('addProduct'),
             style: headers1.copyWith(fontSize: 25)),
         centerTitle: true,
@@ -459,9 +328,8 @@ class _AddItemPageState extends State<AddItemPage> {
                                         ? vbc.value.initialized
                                             ? VideoPlayer(vbc)
                                             : VideoPlayer(vbc)
-                                        :
-                                        //TODO uncomment the previous files if u want a thumbnail for the video
-                                        Image.asset("assets/icons/video.png")),
+                                        : Image.asset(
+                                            "assets/icons/video.png")),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
                                   border: Border.all(
@@ -514,63 +382,6 @@ class _AddItemPageState extends State<AddItemPage> {
                         SizedBox(
                           height: 10,
                         ),
-                        // Padding(
-                        //     padding:
-                        //         EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-                        //     child: SizedBox(
-                        //       height: MediaQuery.of(context).size.height * 0.15,
-                        //       child: Directionality(
-                        //           textDirection: TextDirection.rtl,
-                        //           child: images.length == 0
-                        //               ? Container(
-                        //                   width: MediaQuery.of(context).size.width * 0.35,
-                        //                   margin: EdgeInsets.only(bottom: 10),
-                        //                   decoration: BoxDecoration(
-                        //                       border: Border.all(
-                        //                           color: Colors.green, width: 2),
-                        //                       borderRadius:
-                        //                           BorderRadius.all(Radius.circular(20))),
-                        //                   alignment: Alignment.center,
-                        //                   child: Icon(Icons.camera_alt),
-                        //                 )
-                        //               : ListView.builder(
-                        //                   scrollDirection: Axis.horizontal,
-                        //                   itemCount: images.length,
-                        //                   itemBuilder:
-                        //                       ((BuildContext context, int index) {
-                        //                     Asset asset = images[index];
-                        //                     return AssetThumb(
-                        //                       asset: asset,
-                        //                       width: 300,
-                        //                       height: 300,
-                        //                     );
-                        //                   }))),
-                        //     )),
-                        // InkWell(
-                        //   onTap: () {
-                        //     if (listOfImages != null && listOfImages.isNotEmpty) {
-                        //       listOfImages.clear();
-                        //     }
-                        //     loadAssets();
-                        //   },
-                        //   child: Container(
-                        //     width: MediaQuery.of(context).size.width * 0.35,
-                        //     height: MediaQuery.of(context).size.height * 0.07,
-                        //     margin: EdgeInsets.only(top: 10),
-                        //     decoration: BoxDecoration(
-                        //         border: Border.all(color: Colors.green, width: 2),
-                        //         borderRadius: BorderRadius.all(Radius.circular(20))),
-                        //     alignment: Alignment.center,
-                        //     child: Text(
-                        //       "choose a pic",
-                        //     ),
-                        //   ),
-                        // ),
-                        // RaisedButton(
-                        //   onPressed: () {
-                        //     addItem(listOfImages);
-                        //   },
-                        // ),
                         Container(
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height * 0.1,
@@ -582,7 +393,6 @@ class _AddItemPageState extends State<AddItemPage> {
                                 padding: EdgeInsets.only(left: 15),
                                 child: InkWell(
                                   onTap: () {
-                                    // pickImageFromGallery(index);
                                     loadAssets(index);
                                   },
                                   child: ClipRRect(
@@ -624,7 +434,6 @@ class _AddItemPageState extends State<AddItemPage> {
                               return null;
                             },
                             decoration: InputDecoration(
-                              // border: InputBorder.none,
                               hintText: AppLocalizations.of(context)
                                   .translate('name'),
                             ),
@@ -648,7 +457,6 @@ class _AddItemPageState extends State<AddItemPage> {
                             },
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                              // border: InputBorder.none,
                               hintText: AppLocalizations.of(context)
                                   .translate('price'),
                             ),
@@ -681,9 +489,6 @@ class _AddItemPageState extends State<AddItemPage> {
                                     categoryID = element.id;
                                   }
                                 });
-//                      categoryID = catTags
-//                          .indexOf(newValue);
-                                print('Cat ID' + categoryID.toString());
                               });
                             },
                             items: catTags
@@ -740,7 +545,6 @@ class _AddItemPageState extends State<AddItemPage> {
                           width: MediaQuery.of(context).size.width / 1.1,
                           decoration: BoxDecoration(
                               color: Colors.white,
-                              // border: Border.all(color: Colors.grey[500]
                               // ),
                               borderRadius: BorderRadius.circular(12)),
                           child: Row(

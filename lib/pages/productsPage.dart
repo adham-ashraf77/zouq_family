@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:zouqadmin/I10n/app_localizations.dart';
 import 'package:zouqadmin/models/product.dart';
 import 'package:zouqadmin/pages/addItemPage.dart';
 import 'package:zouqadmin/pages/itemDetailPage.dart';
 import 'package:zouqadmin/services/paginate.dart';
-import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/widgets/UiCard.dart';
 import 'package:zouqadmin/widgets/cardContents/marketProfileCardContent.dart';
 
@@ -15,8 +15,6 @@ class ProductsPage extends StatefulWidget {
 }
 
 class _ProductsPageState extends State<ProductsPage> {
-  List<String> tags = ["حلوى", "غداء", "حلوى", "غداء", "حلوى", "غداء"];
-  List<bool> selcted = [false, false, false, false, false, false];
   List<Product> products = [];
 
   @override
@@ -47,51 +45,42 @@ class _ProductsPageState extends State<ProductsPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        // pinned: true,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Image.asset(
               'assets/images/logo.png',
               scale: 18,
             ),
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AddItemPage()));
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Text(
+                      AppLocalizations.of(context).translate('addProduct'),
+                      style: TextStyle(color: Colors.grey, fontSize: 16),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Image.asset('assets/icons/add.png'),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
         centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: new Image.asset('assets/icons/add.png'),
-            onPressed: () {
-              //TODO go add product screen
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AddItemPage()));
-            },
-          ),
-        ],
       ),
       body: ListView(
         scrollDirection: Axis.vertical,
         children: <Widget>[
-//          Container(
-//            padding: EdgeInsets.only(right: 10),
-//            width: MediaQuery.of(context).size.width,
-//            height: MediaQuery.of(context).size.height * 0.1,
-//            child: ListView.builder(
-//              scrollDirection: Axis.horizontal,
-//              itemCount: 6,
-//              itemBuilder: (BuildContext context, int index) {
-//                return TagChip(
-//                  onSelect: (clicked) {
-//                    setState(() {
-//                      selcted[index] = clicked;
-//                    });
-//                  },
-//                  isSelected: selcted[index],
-//                  tagName: tags[index],
-//                );
-//              },
-//            ),
-//          ),
           Container(
             height: (allHeight -
                 AppBar().preferredSize.height -
@@ -101,26 +90,24 @@ class _ProductsPageState extends State<ProductsPage> {
             child: ListView.builder(
                 padding: EdgeInsets.all(0),
                 primary: true,
-                itemCount: products.length, //TODO replace with products.length
+                itemCount: products.length,
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
                     onTap: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ItemDetail(
-                                orderId: products[index]
-                                    .id), //TODO replace with products[index] ID
+                            builder: (context) =>
+                                ItemDetail(orderId: products[index].id),
                           ));
                     },
                     child: UICard(
-                        //TODO render products instead of static
                         cardContent: MarketProfileCardContecnt(
                       title: "${products[index].name}",
                       description: "${products[index].description}",
                       imgUrl: "${products[index].imageUrl}",
                       price: double.parse('${products[index].price}'),
-                      rating:  double.parse('${products[index].rate}'),
+                      rating: double.parse('${products[index].rate}'),
                     )),
                   );
                 }),
