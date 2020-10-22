@@ -6,12 +6,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zouqadmin/pages/adminOptionsPage.dart';
+import 'package:zouqadmin/pages/chat/conversationsLIst.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
 import 'package:zouqadmin/pages/ordersPage.dart';
 import 'package:zouqadmin/pages/productsPage.dart';
 import 'package:zouqadmin/services/getuser.dart';
 import 'package:zouqadmin/services/notifications.dart';
 import 'package:zouqadmin/theme/common.dart';
+import 'package:zouqadmin/utils/helpers.dart';
 
 import 'I10n/app_localizations.dart';
 
@@ -28,6 +30,7 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
 
   // Or do other work.
 }
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -37,7 +40,7 @@ class _HomeState extends State<Home> {
   int _currentIndex = 0;
   bool isLoading = false;
   var user;
-  
+
   final Firestore _db = Firestore.instance;
   final FirebaseMessaging _fcm = FirebaseMessaging();
   String fcmToken = "";
@@ -47,41 +50,45 @@ class _HomeState extends State<Home> {
   fireBaseNotifications() async {
     _fcm.requestNotificationPermissions(IosNotificationSettings());
     fcmToken = await _fcm.getToken();
-    print("device token $fcmToken");
     Notifications().sendFcmToken(fcmToken: fcmToken);
 
     _fcm.configure(
       onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            content: ListTile(
-              title: Text(
-                Platform.isIOS
-                    ? message['aps']['alert']['title']
-                    : message['notification']['title'],
+        if (message['is_chat'] == false) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              content: ListTile(
+                title: Text(
+                  Platform.isIOS
+                      ? message['aps']['alert']['title']
+                      : message['notification']['title'],
+                ),
+                subtitle: Text(
+                  Platform.isIOS
+                      ? message['aps']['alert']['body']
+                      : message['notification']['body'],
+                ),
               ),
-              subtitle: Text(
-                Platform.isIOS
-                    ? message['aps']['alert']['body']
-                    : message['notification']['body'],
-              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Ok'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
             ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Ok'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          ),
-        );
+          );
+        }
       },
       onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
+        if (message['is_chat'] == true) {
+          pushPage(context, ConversationsListScreen());
+        }
       },
       onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
+        if (message['is_chat'] == true) {
+          pushPage(context, ConversationsListScreen());
+        }
       },
     );
   }
@@ -180,7 +187,8 @@ class _HomeState extends State<Home> {
                   icon: Icon(Icons.home),
                 ),
                 BottomNavigationBarItem(
-                  title: Text(AppLocalizations.of(context).translate('myProducts')),
+                  title: Text(
+                      AppLocalizations.of(context).translate('myProducts')),
                   icon: Icon(Icons.shopping_cart),
                 ),
                 BottomNavigationBarItem(
