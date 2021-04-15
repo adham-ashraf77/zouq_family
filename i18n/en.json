@@ -133,6 +133,9 @@
   "locationSuccess": "location has been set successfully",
   "time": "Time per minute",
   "conversations": "Conversations",
-  "img": "Image"
-
+  "img": "Image",
+  "waitingForAgents": "waiting for agents",
+  "waiting_for_agent_pickup": "waiting for agent pickup",
+  "inDelivery": "inDelivery",
+  "delivered": "delivered"
 }

@@ -47,7 +47,9 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
   void whatsAppOpen({String phone, BuildContext context}) async {
     final snackBar = SnackBar(content: Text('please install whatsapp'));
     var whatsappUrl = "whatsapp://send?phone=$phone&text=hello";
-    await canLaunch(whatsappUrl) ? launch(whatsappUrl) : Scaffold.of(context).showSnackBar(snackBar);
+    await canLaunch(whatsappUrl)
+        ? launch(whatsappUrl)
+        : Scaffold.of(context).showSnackBar(snackBar);
   }
 
   Future<void> _makePhoneCall(String url) async {
@@ -65,12 +67,16 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
     final int type = index[1];
 
     acceptOrRejectOrder({String orderStatus}) async {
-      await AcceptOrRejectOrder().postOrderStatus(orderId: order.id, orderStatus: orderStatus);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home()));
+      await AcceptOrRejectOrder()
+          .postOrderStatus(orderId: order.id, orderStatus: orderStatus);
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => Home()));
     }
 
     firstTime
-        ? GetOrderWithProducts().getOrderWithProducts(id: order.id).then((onValue) {
+        ? GetOrderWithProducts()
+            .getOrderWithProducts(id: order.id)
+            .then((onValue) {
             //TODO here and using onValue u can get any info about the product
             latitude = jsonDecode(onValue.toString())['order']['latitude'];
             longitude = jsonDecode(onValue.toString())['order']['longitude'];
@@ -79,7 +85,8 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
             order.product.clear();
             for (int i = 0; i < x.length; i++) {
               setState(() {
-                rate = jsonDecode(onValue.toString())['order']['rate'].toString();
+                rate =
+                    jsonDecode(onValue.toString())['order']['rate'].toString();
                 order.product.add(Product(
                   name: x[i]['name'],
                   price: x[i]['price'],
@@ -97,8 +104,10 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title:
-       Image.asset('assets/images/logo.png',scale: 18,),
+        title: Image.asset(
+          'assets/images/logo.png',
+          scale: 18,
+        ),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -117,7 +126,8 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                       ),
                       child: CircleAvatar(
                         backgroundColor: Colors.grey[200],
-                        backgroundImage: NetworkImage('${order.imageUrl.toString()}'),
+                        backgroundImage:
+                            NetworkImage('${order.imageUrl.toString()}'),
                         radius: 40,
                       ),
                     ),
@@ -126,7 +136,10 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                     ),
                     Text(
                       order.name.toString(),
-                      style: paragarph1.copyWith(fontWeight: FontWeight.w500, color: Color(0xFF535353),fontSize: 18),
+                      style: paragarph1.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF535353),
+                          fontSize: 18),
                     ),
                     SizedBox(
                       height: 15,
@@ -149,27 +162,63 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                           border: Border.all(
                             color: type == 1
                                 ? Color(0xFFF39D67)
-                                : type == 2 ? Color(0xFFF39D67) : type == 3 ? Color(0xFF48CF84) : Colors.blue,
+                                : type == 2
+                                    ? Color(0xFFF39D67)
+                                    : type == 3
+                                        ? Color(0xFF48CF84)
+                                        : Colors.blue,
                           ),
                           borderRadius: BorderRadius.circular(10)),
-                      width: 80,
+                      width: 200,
                       height: 30,
                       child: Center(
                           child: Text(
                         type == 1
                             ? AppLocalizations.of(context).translate('newOrder')
                             : type == 2
-                                ? AppLocalizations.of(context).translate('confirmedOrder')
+                                ? AppLocalizations.of(context)
+                                    .translate('confirmedOrder')
                                 : type == 3 && order.status == 'done'
-                                    ? AppLocalizations.of(context).translate('completedOrder')
-                                    : type == 3 && order.status == 'canceled' || order.status == "rejected"
-                                        ? AppLocalizations.of(context).translate('cancelOrder')
-                                        : '',
+                                    ? AppLocalizations.of(context)
+                                        .translate('completedOrder')
+                                    : type == 3 && order.status == 'canceled' ||
+                                            order.status == "rejected"
+                                        ? AppLocalizations.of(context)
+                                            .translate('cancelOrder')
+                                        : type == 3 &&
+                                                order.status ==
+                                                    "waiting_for_agents"
+                                            ? AppLocalizations.of(context)
+                                                .translate('waitingForAgents')
+                                            : type == 3 &&
+                                                    order.status ==
+                                                        "waiting_for_agent_pickup"
+                                                ? AppLocalizations.of(context)
+                                                    .translate(
+                                                        'waiting_for_agent_pickup')
+                                                : type == 3 &&
+                                                        order.status ==
+                                                            "indelivery"
+                                                    ? AppLocalizations.of(
+                                                            context)
+                                                        .translate('inDelivery')
+                                                    : type == 3 &&
+                                                            order.status ==
+                                                                "delivered"
+                                                        ? AppLocalizations.of(
+                                                                context)
+                                                            .translate(
+                                                                'delivered')
+                                                        : '',
                         textDirection: TextDirection.rtl,
                         style: TextStyle(
                             color: type == 1
                                 ? Color(0xFFE08248)
-                                : type == 2 ? Colors.white : type == 3 ? Colors.white : Colors.blue,
+                                : type == 2
+                                    ? Colors.white
+                                    : type == 3
+                                        ? Colors.white
+                                        : Colors.blue,
                             fontSize: 16),
                       )),
                     ),
@@ -189,7 +238,8 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                                 style: TextStyle(color: Colors.grey),
                               ),
                               Text(
-                                AppLocalizations.of(context).translate('orderNum'),
+                                AppLocalizations.of(context)
+                                    .translate('orderNum'),
                                 style: paragarph2.copyWith(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w400,
@@ -208,7 +258,9 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                '${order.time.toString()}' + '  ' + '${order.date.toString()}',
+                                '${order.time.toString()}' +
+                                    '  ' +
+                                    '${order.date.toString()}',
                                 style: TextStyle(color: Colors.grey),
                               ),
                               Text(
@@ -261,7 +313,8 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                                           context: context);
                                   },
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Row(
                                         children: <Widget>[
@@ -276,10 +329,12 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                                             width: 10,
                                           ),
                                           Text(
-              order.phoneNumber.toString() == 'hidden'
+                                            order.phoneNumber.toString() ==
+                                                    'hidden'
                                                 ? 'XXXXXXXXXXX'
                                                 : '${order.phoneNumber.toString()}',
-                                            style: TextStyle(color: Colors.grey),
+                                            style:
+                                                TextStyle(color: Colors.grey),
                                           ),
                                         ],
                                       ),
@@ -307,9 +362,11 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                           /////
                           type == 2 || type == 3
                               ? InkWell(
-                                  onTap: () => _makePhoneCall('tel:${order.phoneNumber}'),
+                                  onTap: () => _makePhoneCall(
+                                      'tel:${order.phoneNumber}'),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Row(
                                         children: <Widget>[
@@ -323,14 +380,18 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                                             width: 10,
                                           ),
                                           Text(
-                                            order.phoneNumber.toString() == "hidden" ? "XXXXXXXXX" : '${order.phoneNumber
-                                                .toString()}',
-                                            style: TextStyle(color: Colors.grey),
+                                            order.phoneNumber.toString() ==
+                                                    "hidden"
+                                                ? "XXXXXXXXX"
+                                                : '${order.phoneNumber.toString()}',
+                                            style:
+                                                TextStyle(color: Colors.grey),
                                           ),
                                         ],
                                       ),
                                       Text(
-                                        AppLocalizations.of(context).translate('telephone'),
+                                        AppLocalizations.of(context)
+                                            .translate('telephone'),
                                         textDirection: TextDirection.rtl,
                                         style: paragarph2.copyWith(
                                           color: Colors.black,
@@ -354,9 +415,9 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                           ),
                           type == 2 || type == 3
                               ? Divider(
-                            height: 2,
-                            color: Colors.grey[300],
-                          )
+                                  height: 2,
+                                  color: Colors.grey[300],
+                                )
                               : SizedBox(),
                           SizedBox(
                             height: type == 2 || type == 3 ? 20 : 0,
@@ -378,12 +439,13 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                     ),
                     type == 2 || type == 1
                         ? ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(20),
                             child: Container(
                                 color: Colors.grey[200],
                                 height: 100,
                                 width: MediaQuery.of(context).size.width,
-                                child: Image.network('https://www.mediafire.com/convkey/b31a/c318q2te6lqziqzzg.jpg')),
+                                child: Image.network(
+                                    'https://www.mediafire.com/convkey/b31a/c318q2te6lqziqzzg.jpg')),
 
                             ///TODO this url must be replaced with `link` variable
                           )
@@ -393,7 +455,8 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                               shrinkWrap: true,
                               itemCount: order.comments.length,
                               itemBuilder: (context, i) {
-                                return CommentDesign(comment: order.comments[i]);
+                                return CommentDesign(
+                                    comment: order.comments[i]);
                               },
                             ),
                           ),
@@ -431,13 +494,14 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
             topRight: Radius.circular(20), topLeft: Radius.circular(20)),
         child: BottomAppBar(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal:10,vertical:5),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: new Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(left: 20.0, top: 10, bottom: 10),
+                  padding:
+                      const EdgeInsets.only(left: 20.0, top: 10, bottom: 10),
                   child: type == 1
                       ? Row(
                           children: <Widget>[
@@ -453,17 +517,19 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(50)),
+                                        BorderRadius.all(Radius.circular(50)),
                                     border: Border.all(
                                         color: Color(0xFFDADADA), width: 2)),
                               ),
-                              onTap: () => acceptOrRejectOrder(orderStatus: "reject"),
+                              onTap: () =>
+                                  acceptOrRejectOrder(orderStatus: "reject"),
                             ),
                             SizedBox(
                               width: 12,
                             ),
                             InkWell(
-                              onTap: () => acceptOrRejectOrder(orderStatus: "approve"),
+                              onTap: () =>
+                                  acceptOrRejectOrder(orderStatus: "approve"),
                               child: Container(
                                 height: 40,
                                 width: 70,
@@ -475,7 +541,7 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
+                                      BorderRadius.all(Radius.circular(50)),
                                   border: Border.all(
                                       color: Color(0xFFDADADA), width: 2),
                                 ),
@@ -484,23 +550,24 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                           ],
                         )
                       : type == 2
-                      ? InkWell(
-                    onTap: () => endOrder(order.id),
-                    child: Container(
-                      height: 40,
-                      width: 110,
-                      child: Icon(
-                        Icons.check,
-                        color: Colors.white,
-                        size: 23,
-                      ),
-                      decoration: BoxDecoration(
-                          color: Colors.green[300],
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(50)),
-                          border: Border.all(color: Colors.grey[300])),
-                    ),
-                  )
+                          ? InkWell(
+                              onTap: () => endOrder(order.id),
+                              child: Container(
+                                height: 40,
+                                width: 110,
+                                child: Icon(
+                                  Icons.check,
+                                  color: Colors.white,
+                                  size: 23,
+                                ),
+                                decoration: BoxDecoration(
+                                    color: Colors.green[300],
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(50)),
+                                    border:
+                                        Border.all(color: Colors.grey[300])),
+                              ),
+                            )
                           : Row(
                               children: <Widget>[
                                 Container(
@@ -535,7 +602,9 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                     '${order.price}' + ' ' + 'ريال',
                     textDirection: TextDirection.rtl,
                     style: paragarph1.copyWith(
-                        fontWeight: FontWeight.w200, color: Colors.blue,fontSize: 17),
+                        fontWeight: FontWeight.w200,
+                        color: Colors.blue,
+                        fontSize: 17),
                   ),
                 ),
               ],

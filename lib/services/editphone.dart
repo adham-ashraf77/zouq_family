@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zouqadmin/ConstantVarables.dart';
 
 class UpdatePhone {
-  final String apiUrl = "https://api.dhuqapp.com";
+  final String apiUrl = "http://api-testing.dhuqapp.com";
   final String updatephone = "/api/family/send-update-phone-confirm-code";
   FormData _formData;
 

@@ -20,6 +20,7 @@ import '../I10n/app_localizations.dart';
 import '../theme/common.dart';
 import '../widgets/AppButton.dart';
 import 'auth/verificationcode_screen.dart';
+import 'package:searchable_dropdown/searchable_dropdown.dart';
 
 enum DeliveryService { doesDelivery, noDelivery }
 
@@ -117,7 +118,6 @@ class _AdminRegistrationState extends State<AdminRegistration> {
     int idCity;
     Cities city = _allCity.firstWhere((c) => c.text == _city);
     idCity = city.id;
-
     //if (_image != null) {
     if (name.text != null && name.text != '' && name.text.isNotEmpty) {
       if (_phone != null || int.parse(_phone) == 9) {
@@ -654,56 +654,85 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                               _categories.forEach((element) {
                                 print(element);
                               });
-                              print('----------------------');
-                            }
-                            setState(() {
-                              selected[index] = clicked;
-                            });
-                          },
-                        ),
-                      );
-                    }),
-              ),
-              //TODO fill dropdown button with data from api
-              DropdownButton<String>(
-                value: _city,
-                icon: Icon(
-                  Icons.arrow_drop_down,
-                  color: Color.fromRGBO(29, 174, 209, 1),
-                  size: 35,
-                ),
-                elevation: 10,
-                hint: Text(
-                  AppLocalizations.of(context).translate('chooseCity'),
-                ),
-                underline: Container(
-                  height: 1,
-                  color: Colors.grey,
-                ),
-                isExpanded: true,
-                onChanged: (String newValue) {
-                  setState(() {
-                    _city = newValue;
-                  });
-                },
-                items: _showCity.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
+                                    print('----------------------');
+                                  }
+                                  setState(() {
+                                    selected[index] = clicked;
+                                  });
+                                },
+                              ),
+                            );
+                          }),
+                    ),
+                    SearchableDropdown.single(
+                      items: _showCity
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      value: _city,
+                      hint:
+                          AppLocalizations.of(context).translate('chooseCity'),
+                      searchHint:
+                          AppLocalizations.of(context).translate('chooseCity'),
+                      icon: Icon(
+                        Icons.arrow_drop_down,
+                        color: Color.fromRGBO(29, 174, 209, 1),
+                        size: 35,
+                      ),
+                      underline: Container(
+                        height: 1,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          _city = value;
+                        });
+                      },
+                      isExpanded: true,
+                    ),
+                    // //TODO fill dropdown button with data from api
+                    // DropdownButton<String>(
+                    //   value: _city,
+                    //   icon: Icon(
+                    //     Icons.arrow_drop_down,
+                    //     color: Color.fromRGBO(29, 174, 209, 1),
+                    //     size: 35,
+                    //   ),
+                    //   elevation: 10,
+                    //   hint: Text(
+                    //     AppLocalizations.of(context).translate('chooseCity'),
+                    //   ),
+                    //   underline: Container(
+                    //     height: 1,
+                    //     color: Colors.grey,
+                    //   ),
+                    //   isExpanded: true,
+                    //   onChanged: (String newValue) {
+                    //     setState(() {
+                    //       _city = newValue;
+                    //     });
+                    //   },
+                    //   items: _showCity.map<DropdownMenuItem<String>>((String value) {
+                    //     return DropdownMenuItem<String>(
+                    //       value: value,
+                    //       child: Text(value),
+                    //     );
+                    //   }).toList(),
+                    // ),
 
-              Padding(
-                padding: EdgeInsets.only(left: 25.0, top: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 10),
-                      child: GestureDetector(
-                        onTap: () {
+                      padding: EdgeInsets.only(left: 25.0, top: 10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 10),
+                            child: GestureDetector(
+                              onTap: () {
                           setState(() {
                             _agree = !_agree;
                             if (_agree == true)

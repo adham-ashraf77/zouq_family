@@ -6,6 +6,7 @@ import 'package:zouqadmin/pages/chat/ChatScreen.dart';
 import 'package:zouqadmin/pages/ordersViewPage.dart';
 import 'package:zouqadmin/services/accept_or_reject_order.dart';
 import 'package:zouqadmin/services/end_order.dart';
+import 'package:zouqadmin/services/sendToAgent.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
 import 'package:zouqadmin/widgets/CounDownTimer.dart';
@@ -41,6 +42,13 @@ class OrdersCard extends StatelessWidget {
 
     endOrder(String orderId) async {
       await EndOrder().endOrder(orderId);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => Home(),
+      ));
+    }
+
+    sendOrderToAgent(String orderId) async {
+      await IntroduceToAgents().introduceToAgents(orderId);
       Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => Home(),
       ));
@@ -292,7 +300,38 @@ class OrdersCard extends StatelessWidget {
                                             color: Colors.grey[300])),
                                   ),
                                 )
-                              : Container()
+                              : type == 3 && order.status == "done"
+                                  ? InkWell(
+                                      onTap: () => sendOrderToAgent(order.id),
+                                      child: Container(
+                                        height: 35,
+                                        alignment: Alignment.center,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: Row(
+                                          children: <Widget>[
+                                            Icon(
+                                              Icons.check,
+                                              color: Colors.white,
+                                              size: 18,
+                                            ),
+                                            Text(
+                                              'عرض للمندوب',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12),
+                                            ),
+                                          ],
+                                        ),
+                                        decoration: BoxDecoration(
+                                            color: Colors.green[300],
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(50)),
+                                            border: Border.all(
+                                                color: Colors.grey[300])),
+                                      ),
+                                    )
+                                  : Container()
                         ],
                       ),
                     )

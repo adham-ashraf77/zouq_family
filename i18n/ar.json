@@ -134,5 +134,9 @@
   "locationSuccess": "تم اختيار الموقع الحالى بنجاح",
   "time": "الوقت بالدقيقة",
   "conversations": "المحادثات",
-  "img": "صورة"
+  "img": "صورة",
+  "waitingForAgents": "الطلبات المعروضة للتوصيل",
+  "waiting_for_agent_pickup": "جارى اخذ الطلبات من الاسر",
+  "inDelivery": "الطلبات الجارى توصيلها",
+  "delivered": "الطلبات التى تم توصيلها"
 }

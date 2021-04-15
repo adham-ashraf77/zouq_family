@@ -43,7 +43,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('token');
-      await Dio().post('https://api.dhuqapp.com/api/family/set-location',
+      await Dio().post('http://api-testing.dhuqapp.com/api/family/set-location',
           data: {
             "latitude": "${position.latitude}",
             "longitude": "${position.longitude}",
