@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zouqadmin/home.dart';
 import 'package:zouqadmin/pages/auth/ResetPasswordPage.dart';
 import 'package:zouqadmin/services/checkpasswordresettingcode.dart';
+import 'package:zouqadmin/services/login.dart';
 import 'package:zouqadmin/services/registeration.dart';
 import 'package:zouqadmin/theme/common.dart';
 import 'package:zouqadmin/utils/helpers.dart';
@@ -54,7 +56,7 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
     );
   }
 
-  validation() {
+  validation() async {
     if (_currentText.length < 4) {
       setState(() {
         _codeAlert = "Confirmation code is short";
@@ -63,11 +65,40 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
       setState(() {
         _codeAlert = "";
       });
-      flag == 1 ? activate(_currentText) : checkToResetPassword(_currentText);
+      flag == 3
+          ? await loginRequest()
+          : flag == 1
+              ? activate(_currentText)
+              : checkToResetPassword(_currentText);
     }
   }
 
   bool isLoadingServer = false;
+
+  loginRequest() async {
+    setState(() {
+      isLoadingServer = true;
+    });
+    String response =
+        await Login().login(phone: widget.phone, otp: _currentText);
+
+    if (response != "success") {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) => DialogWorning(
+                mss: AppLocalizations.of(context).translate('otpError'),
+              ));
+    } else {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Home(),
+          ));
+    }
+    setState(() {
+      isLoadingServer = false;
+    });
+  }
 
   activate(String code) async {
     setState(() {
@@ -78,8 +109,8 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
       showDialog(
           context: context,
           builder: (BuildContext context) => DialogWorning(
-            mss: AppLocalizations.of(context).translate('otpError'),
-          ));
+                mss: AppLocalizations.of(context).translate('otpError'),
+              ));
     } else {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.clear();
@@ -95,7 +126,7 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
         .resetPassword(phone: _phone, code: code)
         .then((onValue) {
       if (onValue.data['message'] ==
-          'now you can reset the password in 3600 sec' ||
+              'now you can reset the password in 3600 sec' ||
           onValue.statusCode == 200) {
         pushPage(
             context,
@@ -106,16 +137,17 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
         showDialog(
             context: context,
             builder: (BuildContext context) => DialogWorning(
-              mss: AppLocalizations.of(context).translate('failed'),
-            ));
+                  mss: AppLocalizations.of(context).translate('failed'),
+                ));
       }
     }).catchError((onError) {
       print('Error : ' + onError.toString());
       showDialog(
           context: context,
           builder: (BuildContext context) => DialogWorning(
-            mss: AppLocalizations.of(context).translate('unknownError'), //onError.toString(),
-          ));
+                mss: AppLocalizations.of(context)
+                    .translate('unknownError'), //onError.toString(),
+              ));
     });
   }
 
@@ -144,7 +176,8 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).translate('verifyCode'), style: headers4),
+        title: Text(AppLocalizations.of(context).translate('verifyCode'),
+            style: headers4),
         centerTitle: true,
         leading: IconButton(
             icon: Icon(
@@ -214,21 +247,19 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
             ),
             AppButton(
               text: AppLocalizations.of(context).translate('check'),
-              onClick: () {
+              onClick: () async {
                 if (_start == 0) {
                   _start = 60;
                   startTimer();
-                  validation();
+                  await validation();
                 }
               },
             ),
             SizedBox(
               height: 20,
             ),
-
             Text("برجاء الانتظار لأعاده المحاوله"),
             Text('$_start' + ' ثانيه '),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -239,20 +270,21 @@ class _VerificationcodePageState extends State<VerificationcodePage> {
                 SizedBox(
                   width: 5,
                 ),
-
-                isLoadingServer == false ?
-                InkWell(
-                  onTap: () {
+                isLoadingServer == false
+                    ? InkWell(
+                        onTap: () {
                           if (_start == 0) {
                             resendCode();
                             startTimer();
                           }
                         },
-                  child: Text(
-                    AppLocalizations.of(context).translate('resendCode'),
-                    style: paragarph4.copyWith(color: _start != 0 ? Colors.grey : accent),
-                  ),
-                ) : CircularProgressIndicator(),
+                        child: Text(
+                          AppLocalizations.of(context).translate('resendCode'),
+                          style: paragarph4.copyWith(
+                              color: _start != 0 ? Colors.grey : accent),
+                        ),
+                      )
+                    : CircularProgressIndicator(),
               ],
             )
           ],

@@ -12,13 +12,14 @@ class Registeration {
   final String _activateRegisteredUser = "/api/family/activate-registered-user";
   final String _currentUser = "/api/family/user";
   FormData _formData;
+  static int versionNumber = 2;
+  var header = {'Version': '$versionNumber'};
 
   Future<String> registration({
     String shopName,
     String shopOwnerName,
     String pIN,
     String phone,
-    String password,
     //String email,
     bool is_delivery_available,
     File image,
@@ -33,7 +34,6 @@ class Registeration {
         image.existsSync() == false) {
       _formData = FormData.fromMap({
         "name": "$shopName",
-        "password": "$password",
         //"email": "$email",
         "phone": "$phone",
         "is_delivery_available": is_delivery_available ? 1 : 0,
@@ -48,7 +48,6 @@ class Registeration {
       _formData = FormData.fromMap({
         "name": "$shopName",
         "identity_number": int.parse(pIN),
-        "password": "$password",
         //"email": "$email",
         "phone": "$phone",
         "is_delivery_available": is_delivery_available ? 1 : 0,
@@ -63,7 +62,6 @@ class Registeration {
       _formData = FormData.fromMap({
         "name": "$shopName",
         "manager_name": "$shopOwnerName",
-        "password": "$password",
         //"email": "$email",
         "phone": "$phone",
         "is_delivery_available": is_delivery_available ? 1 : 0,
@@ -78,7 +76,6 @@ class Registeration {
         image.existsSync() == true) {
       _formData = FormData.fromMap({
         "name": "$shopName",
-        "password": "$password",
         //"email": "$email",
         "phone": "$phone",
         "is_delivery_available": is_delivery_available ? 1 : 0,
@@ -93,7 +90,6 @@ class Registeration {
       _formData = FormData.fromMap({
         "name": "$shopName",
         "identity_number": int.parse(pIN),
-        "password": "$password",
         //"email": "$email",
         "phone": "$phone",
         "is_delivery_available": is_delivery_available ? 1 : 0,
@@ -108,7 +104,6 @@ class Registeration {
       _formData = FormData.fromMap({
         "name": "$shopName",
         "manager_name": "$shopOwnerName",
-        "password": "$password",
         //"email": "$email",
         "phone": "$phone",
         "is_delivery_available": is_delivery_available ? 1 : 0,
@@ -128,7 +123,6 @@ class Registeration {
         "name": "$shopName",
         "manager_name": "$shopOwnerName",
         "identity_number": int.parse(pIN),
-        "password": "$password",
         // "email": "$email",
         "phone": "$phone",
         "is_delivery_available": is_delivery_available ? 1 : 0,
@@ -141,7 +135,8 @@ class Registeration {
     try {
       Response response = await Dio().post(
           "${ConstantVarable.baseUrl}$_registeraAndSendConfirm",
-          data: _formData);
+          data: _formData,
+          options: Options(headers: header));
       print(response.data);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         return "success";
@@ -191,9 +186,8 @@ class Registeration {
       Response response = await Dio().post(
           "${ConstantVarable.baseUrl}$_activateRegisteredUser",
           data: _formData);
-          print(response.data);
+      print(response.data);
       if (response.statusCode >= 200 && response.statusCode <= 299) {
-        
 //        Map data = response.data;
 //        print(data['token']);
 //        Response response2 = await Dio().get("$_url$_currentUser",
@@ -202,7 +196,7 @@ class Registeration {
 //        print(data2);
 //        //TODO save data in SharedPreferences
 //        prefs.setString("token", "${data['token']}");
-          prefs.setInt("id", response.data['user']['id']);
+        prefs.setInt("id", response.data['user']['id']);
 //        prefs.setString("name", "${data2['user']['name']}");
 //        prefs.setString("email", "${data2['user']['email']}");
 //        prefs.setString("phone", "${data2['user']['phone']}");

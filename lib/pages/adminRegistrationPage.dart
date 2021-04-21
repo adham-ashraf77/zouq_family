@@ -37,7 +37,7 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   bool _loodingImage = false;
   String _shopOwnerName;
   String _pIN;
-  String _password;
+  //String _password;
   //String _email;
   String _phone;
   File _image;
@@ -122,7 +122,6 @@ class _AdminRegistrationState extends State<AdminRegistration> {
     if (name.text != null && name.text != '' && name.text.isNotEmpty) {
       if (_phone != null || int.parse(_phone) == 9) {
 //          if (_email != null) {
-        if (_password != null) {
           if (selectedDeliveryService != null) {
             if (_categories.isNotEmpty) {
               if (_city != null) {
@@ -131,7 +130,6 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                     shopOwnerName: _shopOwnerName,
                     pIN: _pIN,
                     //email: _email,
-                    password: _password,
                     phone:
                     "${(_countryCode.replaceAll("+", "")).trim()}$_phone",
                     image: _image == null ? File('') : _image,
@@ -207,14 +205,6 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                             .translate('deliveryServiceError'),
                       ));
             }
-          } else {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) => DialogWorning(
-                      mss: AppLocalizations.of(context)
-                          .translate('passwordError'),
-                ));
-        }
         //         }
 //          else {
 //            showDialog(
@@ -503,49 +493,46 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 //                  ],
 //                ),
 //              ),
-              ListTile(
-                title: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: TextFormField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context)
-                                .translate('password'),
-                            hintStyle: hintTextStyle),
-                        onSaved: (value) {
-                          _password = value;
-                        },
-                        validator: (value) {
-                          if (value
-                              .trim()
-                              .length == 0) {
-                            return AppLocalizations.of(context)
-                                .translate('passwordError');
-                          }
-                          if (value
-                              .trim()
-                              .length < 6) {
-                            return AppLocalizations.of(context)
-                                .translate('shortPassword');
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              ListTile(
-                title: SizedBox(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Row(
-                      children: <Widget>[
-                        GestureDetector(
+//               ListTile(
+//                 title: Row(
+//                   children: <Widget>[
+//                     Expanded(
+//                       child: TextFormField(
+//                         obscureText: true,
+//                         decoration: InputDecoration(
+//                             hintText: AppLocalizations.of(context)
+//                                 .translate('password'),
+//                             hintStyle: hintTextStyle),
+//                         onSaved: (value) {
+//                           _password = value;
+//                         },
+//                         validator: (value) {
+//                           if (value
+//                               .trim()
+//                               .length == 0) {
+//                             return AppLocalizations.of(context)
+//                                 .translate('passwordError');
+//                           }
+//                           if (value
+//                               .trim()
+//                               .length < 6) {
+//                             return AppLocalizations.of(context)
+//                                 .translate('shortPassword');
+//                           }
+//                         },
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+                    ListTile(
+                      title: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Row(
+                            children: <Widget>[
+                              GestureDetector(
                           onTap: () {
                             setState(() {
                               selectedDeliveryService =

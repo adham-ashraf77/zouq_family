@@ -79,7 +79,6 @@ class _DialogWorningState extends State<DialogWorning> {
                           color: Color(0xFF1DAED1),
                           onPressed: () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
