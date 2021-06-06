@@ -1,11 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_pusher_client/flutter_pusher.dart';
+
+// import 'package:flutter_pusher_client/flutter_pusher.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:laravel_echo/laravel_echo.dart';
+
+// import 'package:laravel_echo/laravel_echo.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pusher_client/pusher_client.dart';
 
 import '../../I10n/app_localizations.dart';
 import '../../models/chat/chat.dart';
@@ -16,7 +20,9 @@ import '../../widgets/chat/chatBubble.dart';
 class ChatScreen extends StatefulWidget {
   String name;
   int id;
+
   ChatScreen({this.name = "", this.id});
+
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
@@ -33,8 +39,9 @@ class _ChatScreenState extends State<ChatScreen> {
   String channel_name = 'private-channel';
   String event = '.message.sent';
 
-  Echo echo;
-  FlutterPusher pusherClient;
+  // Echo echo;
+  // FlutterPusher pusherClient;
+  PusherClient pusherClient;
   PusherOptions options;
 
   bool isLoading = true;
@@ -54,41 +61,59 @@ class _ChatScreenState extends State<ChatScreen> {
   createRoom() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
+    getHeaderWithInTokenChat() {
+      return {
+        HttpHeaders.authorizationHeader: "Bearer " + token,
+        // "Accept": "application/json",
+        // 'Content-Type': 'application/json',
+        // "charset": "UTF-8"
+      };
+    }
+
     roomid = await ChatService().startRoom(id: widget.id);
-    channel_name = 'rooms.$roomid';
-    options = PusherOptions(
+    channel_name = 'private-rooms.$roomid';
+    PusherOptions options = PusherOptions(
         host: 'api.dhuqapp.com',
-        port: 6001,
+        wsPort: 6001,
         encrypted: false,
         auth: PusherAuth('http://api.dhuqapp.com/api/broadcasting/auth',
-            headers: {'Authorization': 'Bearer $token'}));
-    pusherClient = FlutterPusher(
+            headers: getHeaderWithInTokenChat()));
+    pusherClient = PusherClient(
       "468a43433dad5808c2",
       options,
       enableLogging: true,
     );
+    // echo = new Echo({
+    //   'broadcaster': 'pusher',
+    //   'client': pusherClient,
+    //   "wsHost": 'api.dhuqapp.com',
+    //   "httpHost": 'api.dhuqapp.com',
+    //   "wsPort": 6001,
+    //   'auth': {
+    //     "headers": {'Authorization': 'Bearer $token'}
+    //   },
+    //   'authEndpoint': 'http://api.dhuqapp.com/api/broadcasting/auth',
+    //   "disableStats": true,
+    //   "forceTLS": false,
+    //   "enabledTransports": ['ws', 'wss']
+    // });
 
-    echo = new Echo({
-      'broadcaster': 'pusher',
-      'client': pusherClient,
-      "wsHost": 'api.dhuqapp.com',
-      "httpHost": 'api.dhuqapp.com',
-      "wsPort": 6001,
-      'auth': {
-        "headers": {'Authorization': 'Bearer $token'}
-      },
-      'authEndpoint': 'http://api.dhuqapp.com/api/broadcasting/auth',
-      "disableStats": true,
-      "forceTLS": false,
-      "enabledTransports": ['ws', 'wss']
-    });
-    echo.private(channel_name).listen('.message.sent', (e) {
-      print(e);
-      messages.insert(0, Message.fromJson(e));
+    Channel channel = pusherClient.subscribe(channel_name);
+    print(channel_name);
+    channel.bind('message.sent', (e) {
+      messages.insert(0, Message.fromJson(jsonDecode(e.data)));
       if (mounted) {
         setState(() {});
       }
     });
+
+    // echo.private(channel_name).listen('.message.sent', (e) {
+    //   print(e);
+    //   messages.insert(0, Message.fromJson(e));
+    //   if (mounted) {
+    //     setState(() {});
+    //   }
+    // });
     await getMessages();
   }
 
@@ -151,19 +176,19 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  void onConnectionStateChange(ConnectionStateChange event) {
-    if (event.currentState == 'CONNECTED') {
-      setState(() {
-        is_connected = true;
-      });
-    } else if (event.currentState == 'DISCONNECTED') {
-      setState(() {
-        is_connected = false;
-      });
-    } else {
-      print(event.currentState);
-    }
-  }
+  // void onConnectionStateChange(ConnectionStateChange event) {
+  //   if (event.currentState == 'CONNECTED') {
+  //     setState(() {
+  //       is_connected = true;
+  //     });
+  //   } else if (event.currentState == 'DISCONNECTED') {
+  //     setState(() {
+  //       is_connected = false;
+  //     });
+  //   } else {
+  //     print(event.currentState);
+  //   }
+  // }
 
   Widget inputFiled() {
     return Container(
@@ -176,12 +201,12 @@ class _ChatScreenState extends State<ChatScreen> {
                       backgroundColor: accent,
                     )
                   : new IconButton(
-                      icon: new Icon(Icons.photo),
-                      onPressed: () {
-                        sendImage();
-                      },
-                      color: accent,
-                    ),
+                icon: new Icon(Icons.photo),
+                onPressed: () {
+                  sendImage();
+                },
+                color: accent,
+              ),
             ),
             color: Colors.white,
           ),
@@ -212,15 +237,15 @@ class _ChatScreenState extends State<ChatScreen> {
             child: new Container(
               child: chatloading
                   ? CircularProgressIndicator(
-                      backgroundColor: accent,
-                    )
+                backgroundColor: accent,
+              )
                   : new IconButton(
-                      icon: new Icon(Icons.send),
-                      onPressed: () {
-                        sendMessage();
-                      },
-                      color: accent,
-                    ),
+                icon: new Icon(Icons.send),
+                onPressed: () {
+                  sendMessage();
+                },
+                color: accent,
+              ),
             ),
             color: Colors.white,
           ),
@@ -230,7 +255,7 @@ class _ChatScreenState extends State<ChatScreen> {
       height: 50.0,
       decoration: new BoxDecoration(
           border:
-              new Border(top: new BorderSide(color: Colors.grey, width: 0.5)),
+          new Border(top: new BorderSide(color: Colors.grey, width: 0.5)),
           color: Colors.white),
     );
   }
@@ -253,46 +278,46 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         body: isLoading
             ? Center(
-                child: CircularProgressIndicator(
-                  backgroundColor: accent,
-                ),
-              )
+          child: CircularProgressIndicator(
+            backgroundColor: accent,
+          ),
+        )
             : ListView(
-                children: [
-                  LazyLoadScrollView(
-                    scrollOffset: 400,
-                    onEndOfPage: () {
-                      getMoreMessage(
-                          lastMsgId: messages[messages.length - 1].id);
-                    },
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.75,
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          reverse: true,
-                          itemCount: messages.length,
-                          itemBuilder: (context, int index) {
-                            return ChatBubble(
-                              isImg: messages[index].attachments.length == 0
-                                  ? false
-                                  : true,
-                              isMyMsg: messages[index].sender.id != widget.id
-                                  ? true
-                                  : false,
-                              imgLink: messages[index].attachments.length == 0
-                                  ? ""
-                                  : messages[index].attachments[0].path,
-                              msg: messages[index].message,
-                            );
-                          }),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: inputFiled(),
-                  ),
-                ],
+          children: [
+            LazyLoadScrollView(
+              scrollOffset: 400,
+              onEndOfPage: () {
+                getMoreMessage(
+                    lastMsgId: messages[messages.length - 1].id);
+              },
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.75,
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    reverse: true,
+                    itemCount: messages.length,
+                    itemBuilder: (context, int index) {
+                      return ChatBubble(
+                        isImg: messages[index].attachments.length == 0
+                            ? false
+                            : true,
+                        isMyMsg: messages[index].sender.id != widget.id
+                            ? true
+                            : false,
+                        imgLink: messages[index].attachments.length == 0
+                            ? ""
+                            : messages[index].attachments[0].path,
+                        msg: messages[index].message,
+                      );
+                    }),
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: inputFiled(),
+            ),
+          ],
+        ),
       ),
     );
   }

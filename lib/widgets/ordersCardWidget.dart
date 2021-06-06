@@ -251,7 +251,9 @@ class OrdersCard extends StatelessWidget {
                                             ? 70
                                             : type == 2
                                                 ? 50
-                                                : type == 3 ? 70 : null),
+                                                : type == 3
+                                                    ? 70
+                                                    : null),
                                     alignment: Alignment.center,
                                     child: type == 1 || type == 3
                                         ? Text(
@@ -284,12 +286,19 @@ class OrdersCard extends StatelessWidget {
                                           color: Colors.white,
                                           size: 18,
                                         ),
-                                        Text(
-                                          'جاهز',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12),
-                                        ),
+                                        order.wantDelivery
+                                            ? Text(
+                                                'انهاء و ارسال للمندوب',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 10),
+                                              )
+                                            : Text(
+                                                'جاهز',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12),
+                                              ),
                                       ],
                                     ),
                                     decoration: BoxDecoration(

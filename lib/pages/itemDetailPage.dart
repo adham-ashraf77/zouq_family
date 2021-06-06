@@ -161,7 +161,7 @@ class _ItemDetailState extends State<ItemDetail> {
     try {
       print(productId);
       await Dio().post(
-          'http://api-testing.dhuqapp.com/api/family/products/$productId/availability',
+          'http://api.dhuqapp.com/api/family/products/$productId/availability',
           data: formdata,
           options: Options(
             headers: {HttpHeaders.authorizationHeader: "Bearer $token"},
@@ -298,7 +298,7 @@ class _ItemDetailState extends State<ItemDetail> {
 
   getComments() async {
     Response response = await Dio().get(
-        "http://api-testing.dhuqapp.com/api/client/products/${widget.orderId}/reviews");
+        "http://api.dhuqapp.com/api/client/products/${widget.orderId}/reviews");
     List data = response.data['reviews'];
     data.forEach((element) {
       productsCommentsAndRating

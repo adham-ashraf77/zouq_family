@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zouqadmin/ConstantVarables.dart';
 
 class UpdateProfile {
-  final String apiUrl = "http://api-testing.dhuqapp.com";
+  final String apiUrl = "http://api.dhuqapp.com";
   final String updateprof = "/api/family/update-profile";
   FormData _formData;
 

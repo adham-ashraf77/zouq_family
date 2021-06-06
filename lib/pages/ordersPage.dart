@@ -96,6 +96,7 @@ class _OrdersPageState extends State<OrdersPage> {
     PaginateOrders().paginateOrders(status: 'approved').then((onValue) {
       completeOrders.clear();
       List x = jsonDecode(onValue.toString())['orders'];
+      print(jsonDecode(onValue.toString())['orders']);
       //  print('Old Orders  : ' + x.toString());
       for (int i = 0; i < x.length; i++) {
         setState(() {
@@ -106,6 +107,7 @@ class _OrdersPageState extends State<OrdersPage> {
               contents: x[i]['products_meta'].toString(),
               imageUrl: x[i]['client']['image'].toString(),
               clientId: x[i]['client']['id'],
+              wantDelivery: x[i]['want_delivery'],
               time: "",
               comments: [],
               product: [],

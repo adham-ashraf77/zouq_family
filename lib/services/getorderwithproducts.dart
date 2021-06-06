@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zouqadmin/ConstantVarables.dart';
 
 class GetOrderWithProducts {
-  final String _url = "http://api-testing.dhuqapp.com";
+  final String _url = "http://api.dhuqapp.com";
   final String _order = "/api/family/orders/";
 
   Future<dynamic> getOrderWithProducts({@required id}) async {

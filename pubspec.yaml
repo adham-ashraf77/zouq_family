@@ -59,8 +59,10 @@ dependencies:
   google_maps_flutter: ^0.5.28+1
   lazy_load_scrollview: ^1.1.0
   bubble: ^1.1.9+1
-  flutter_pusher_client: ^0.3.1
-  laravel_echo:
+  #  flutter_pusher_client:
+  #  laravel_echo: ^0.2.9
+  pusher_client:
+    git: https://github.com/alexkok/pusher_client.git
   searchable_dropdown: ^1.1.3
 
 

@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zouqadmin/ConstantVarables.dart';
 
 class AcceptOrRejectOrder {
-  String url = "http://api-testing.dhuqapp.com";
+  String url = "http://api.dhuqapp.com";
   String order = "/api/family/orders/";
   FormData formData;
 

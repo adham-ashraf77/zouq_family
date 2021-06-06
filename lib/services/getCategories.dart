@@ -3,7 +3,7 @@ import 'package:zouqadmin/ConstantVarables.dart';
 import 'package:zouqadmin/models/CategoriesTag.dart';
 
 class GetCategories {
-  String _url = "http://api-testing.dhuqapp.com";
+  String _url = "http://api.dhuqapp.com";
   String _categories = "/api/content/categories";
   static List<CategoriesTag> categories = [];
 

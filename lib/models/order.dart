@@ -17,6 +17,7 @@ class Order {
   final String status;
   final String paymentUsing;
   final int remainingTime;
+  final bool wantDelivery;
 
   Order(
       {this.id,
@@ -33,5 +34,6 @@ class Order {
       this.imageUrl,
       this.price,
       this.product,
-      this.remainingTime});
+      this.remainingTime,
+      this.wantDelivery});
 }
