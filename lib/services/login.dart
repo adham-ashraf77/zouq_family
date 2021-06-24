@@ -39,6 +39,7 @@ class Login {
       if (response.statusCode >= 200 && response.statusCode <= 299) {
         prefs.setString("phone", "$phone");
         prefs.setInt("id", response.data['user']['id']);
+        prefs.setString("name", response.data['user']['name']);
         prefs.setString("token", response.data['token']);
         prefs.setString("image", response.data['image']);
         prefs.setString("email", response.data['email']);

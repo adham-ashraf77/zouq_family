@@ -67,7 +67,6 @@ class _OrdersPageState extends State<OrdersPage> {
       // print('Old Orders  : ' + x.length.toString());
     });
     PaginateOrders().paginateOrders(status: 'old').then((onValue) {
-      print('a7ba tete');
       print(onValue);
       oldOrders.clear();
       List x = jsonDecode(onValue.toString())['orders'];

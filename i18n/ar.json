@@ -138,5 +138,6 @@
   "waitingForAgents": "الطلبات المعروضة للتوصيل",
   "waiting_for_agent_pickup": "جارى اخذ الطلبات من الاسر",
   "inDelivery": "الطلبات الجارى توصيلها",
-  "delivered": "الطلبات التى تم توصيلها"
+  "delivered": "الطلبات التى تم توصيلها",
+  "subscription": "الاشتراكات"
 }

@@ -12,6 +12,7 @@ import 'package:zouqadmin/I10n/AppLanguage.dart';
 import 'package:zouqadmin/pages/adminEditProfilePage.dart';
 import 'package:zouqadmin/pages/adminWalletPage.dart';
 import 'package:zouqadmin/pages/auth/login_screen.dart';
+import 'package:zouqadmin/pages/subscriptionScreen.dart';
 import 'package:zouqadmin/services/getuser.dart';
 import 'package:zouqadmin/services/userLanguage.dart';
 import 'package:zouqadmin/theme/common.dart';
@@ -35,6 +36,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
   String wallet;
   String token;
   int familyId;
+  bool hide = false;
   var links;
 
   getLocation() async {
@@ -74,6 +76,7 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
           print('[${wallet.toString()}]');
           name = x['user']['name'];
           familyId = x['user']['id'];
+          hide = x['user']['is_haha'];
           avatarImageUrl = x['user']['image'];
           wallet = x['user']['wallet'].toString();
           print('[$wallet]');
@@ -273,6 +276,33 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
               color: iconsFaded,
               indent: 25,
             ),
+            hide == false
+                ? Container()
+                : GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SubscriptionScreen()));
+                    },
+                    child: ListTile(
+                      trailing: Icon(
+                        trailingIcon,
+                        size: 15.0,
+                      ),
+                      leading: Text(
+                        AppLocalizations.of(context).translate('subscription'),
+                        style: moreTextStyle.copyWith(fontSize: 15),
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                  ),
+            hide == false
+                ? SizedBox()
+                : Divider(
+                    color: iconsFaded,
+                    indent: 25,
+                  ),
             ListTile(
               trailing: Icon(
                 trailingIcon,

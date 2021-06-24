@@ -137,5 +137,6 @@
   "waitingForAgents": "waiting for agents",
   "waiting_for_agent_pickup": "waiting for agent pickup",
   "inDelivery": "inDelivery",
-  "delivered": "delivered"
+  "delivered": "delivered",
+  "subscription": "subscription"
 }
