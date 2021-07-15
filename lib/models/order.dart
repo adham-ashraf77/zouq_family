@@ -12,6 +12,12 @@ class Order {
   final String phoneNumber;
   final double rate;
   final int clientId;
+  final String appMoney;
+  final String familyMoney;
+  final String subtotal;
+  final String usingCashFees;
+  final String discountMoney;
+  final String deliveryMoney;
   final List<Comment> comments;
   final List<Product> product;
   final String status;
@@ -23,17 +29,23 @@ class Order {
       {this.id,
       this.clientId,
       this.paymentUsing,
-      this.status,
-      this.comments,
-      this.rate,
-      this.phoneNumber,
-      this.name,
-      this.date,
-      this.time,
-      this.contents,
-      this.imageUrl,
-      this.price,
-      this.product,
-      this.remainingTime,
-      this.wantDelivery});
+    this.status,
+    this.comments,
+    this.rate,
+    this.phoneNumber,
+    this.name,
+    this.date,
+    this.time,
+    this.contents,
+    this.imageUrl,
+    this.familyMoney,
+    this.usingCashFees,
+    this.deliveryMoney,
+    this.subtotal,
+    this.appMoney,
+    this.discountMoney,
+    this.price,
+    this.product,
+    this.remainingTime,
+    this.wantDelivery});
 }

@@ -400,7 +400,7 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                                       ),
                                     ],
                                   ),
-                          )
+                                )
                               : SizedBox(),
 
                           SizedBox(
@@ -410,6 +410,32 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                             height: 2,
                             color: Colors.grey[300],
                           ),
+                          order.deliveryMoney == null ||
+                                  order.deliveryMoney == ""
+                              ? SizedBox()
+                              : Text("مصاريف التوصيل: ${order.deliveryMoney}"),
+                          order.deliveryMoney == null ||
+                                  order.deliveryMoney == ""
+                              ? SizedBox()
+                              : Divider(
+                                  thickness: 1.5,
+                                ),
+                          Text("مجموع الطلب: ${order.subtotal}"),
+                          Divider(
+                            thickness: 1.5,
+                          ),
+                          order.usingCashFees == null ||
+                                  order.usingCashFees == ""
+                              ? SizedBox()
+                              : Text(
+                                  "رسوم الدفع عند الاستلام: ${order.usingCashFees}"),
+                          order.usingCashFees == null ||
+                                  order.usingCashFees == ""
+                              ? SizedBox()
+                              : Divider(
+                                  thickness: 1.5,
+                                ),
+                          Text("الاجمالى: ${order.price}"),
                           SizedBox(
                             height: 20,
                           ),
@@ -505,48 +531,48 @@ class _OrdersViewPageState extends State<OrdersViewPage> {
                   child: type == 1
                       ? Row(
                           children: <Widget>[
-                            InkWell(
-                              child: Container(
-                                height: 40,
-                                width: 40,
-                                child: Icon(
-                                  Icons.close,
-                                  color: rejectedColor,
-                                  size: 23,
-                                ),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(50)),
-                                    border: Border.all(
-                                        color: Color(0xFFDADADA), width: 2)),
-                              ),
-                              onTap: () =>
-                                  acceptOrRejectOrder(orderStatus: "reject"),
-                            ),
-                            SizedBox(
-                              width: 12,
-                            ),
-                            InkWell(
-                              onTap: () =>
-                                  acceptOrRejectOrder(orderStatus: "approve"),
-                              child: Container(
-                                height: 40,
-                                width: 70,
-                                child: Icon(
-                                  Icons.check,
-                                  color: accent,
-                                  size: 23,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(50)),
-                                  border: Border.all(
-                                      color: Color(0xFFDADADA), width: 2),
-                                ),
-                              ),
-                            ),
+                            // InkWell(
+                            //   child: Container(
+                            //     height: 40,
+                            //     width: 40,
+                            //     child: Icon(
+                            //       Icons.close,
+                            //       color: rejectedColor,
+                            //       size: 23,
+                            //     ),
+                            //     decoration: BoxDecoration(
+                            //         color: Colors.white,
+                            //         borderRadius:
+                            //             BorderRadius.all(Radius.circular(50)),
+                            //         border: Border.all(
+                            //             color: Color(0xFFDADADA), width: 2)),
+                            //   ),
+                            //   onTap: () =>
+                            //       acceptOrRejectOrder(orderStatus: "reject"),
+                            // ),
+                            // SizedBox(
+                            //   width: 12,
+                            // ),
+                            // InkWell(
+                            //   onTap: () =>
+                            //       acceptOrRejectOrder(orderStatus: "approve"),
+                            //   child: Container(
+                            //     height: 40,
+                            //     width: 70,
+                            //     child: Icon(
+                            //       Icons.check,
+                            //       color: accent,
+                            //       size: 23,
+                            //     ),
+                            //     decoration: BoxDecoration(
+                            //       color: Colors.white,
+                            //       borderRadius:
+                            //           BorderRadius.all(Radius.circular(50)),
+                            //       border: Border.all(
+                            //           color: Color(0xFFDADADA), width: 2),
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         )
                       : type == 2

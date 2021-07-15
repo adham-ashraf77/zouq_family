@@ -169,6 +169,13 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  @override
+  void dispose() {
+    pusherClient.unsubscribe(channel_name);
+    pusherClient.disconnect();
+    super.dispose();
+  }
+
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -201,12 +208,12 @@ class _ChatScreenState extends State<ChatScreen> {
                       backgroundColor: accent,
                     )
                   : new IconButton(
-                icon: new Icon(Icons.photo),
-                onPressed: () {
-                  sendImage();
-                },
-                color: accent,
-              ),
+                      icon: new Icon(Icons.photo),
+                      onPressed: () {
+                        sendImage();
+                      },
+                      color: accent,
+                    ),
             ),
             color: Colors.white,
           ),
@@ -237,15 +244,15 @@ class _ChatScreenState extends State<ChatScreen> {
             child: new Container(
               child: chatloading
                   ? CircularProgressIndicator(
-                backgroundColor: accent,
-              )
+                      backgroundColor: accent,
+                    )
                   : new IconButton(
-                icon: new Icon(Icons.send),
-                onPressed: () {
-                  sendMessage();
-                },
-                color: accent,
-              ),
+                      icon: new Icon(Icons.send),
+                      onPressed: () {
+                        sendMessage();
+                      },
+                      color: accent,
+                    ),
             ),
             color: Colors.white,
           ),
@@ -255,7 +262,7 @@ class _ChatScreenState extends State<ChatScreen> {
       height: 50.0,
       decoration: new BoxDecoration(
           border:
-          new Border(top: new BorderSide(color: Colors.grey, width: 0.5)),
+              new Border(top: new BorderSide(color: Colors.grey, width: 0.5)),
           color: Colors.white),
     );
   }
@@ -278,46 +285,46 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         body: isLoading
             ? Center(
-          child: CircularProgressIndicator(
-            backgroundColor: accent,
-          ),
-        )
+                child: CircularProgressIndicator(
+                  backgroundColor: accent,
+                ),
+              )
             : ListView(
-          children: [
-            LazyLoadScrollView(
-              scrollOffset: 400,
-              onEndOfPage: () {
-                getMoreMessage(
-                    lastMsgId: messages[messages.length - 1].id);
-              },
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.75,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    reverse: true,
-                    itemCount: messages.length,
-                    itemBuilder: (context, int index) {
-                      return ChatBubble(
-                        isImg: messages[index].attachments.length == 0
-                            ? false
-                            : true,
-                        isMyMsg: messages[index].sender.id != widget.id
-                            ? true
-                            : false,
-                        imgLink: messages[index].attachments.length == 0
-                            ? ""
-                            : messages[index].attachments[0].path,
-                        msg: messages[index].message,
-                      );
-                    }),
+                children: [
+                  LazyLoadScrollView(
+                    scrollOffset: 400,
+                    onEndOfPage: () {
+                      getMoreMessage(
+                          lastMsgId: messages[messages.length - 1].id);
+                    },
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.75,
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          reverse: true,
+                          itemCount: messages.length,
+                          itemBuilder: (context, int index) {
+                            return ChatBubble(
+                              isImg: messages[index].attachments.length == 0
+                                  ? false
+                                  : true,
+                              isMyMsg: messages[index].sender.id != widget.id
+                                  ? true
+                                  : false,
+                              imgLink: messages[index].attachments.length == 0
+                                  ? ""
+                                  : messages[index].attachments[0].path,
+                              msg: messages[index].message,
+                            );
+                          }),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: inputFiled(),
+                  ),
+                ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: inputFiled(),
-            ),
-          ],
-        ),
       ),
     );
   }

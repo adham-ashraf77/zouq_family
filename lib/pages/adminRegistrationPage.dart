@@ -52,8 +52,9 @@ class _AdminRegistrationState extends State<AdminRegistration> {
 
   bool _agree = false;
   bool _agreeClicked = true;
-  bool percant = false;
-  bool percantClicked = true;
+
+  // bool percant = false;
+  // bool percantClicked = true;
 
   TextEditingController name = TextEditingController();
 
@@ -99,15 +100,10 @@ class _AdminRegistrationState extends State<AdminRegistration> {
   validation() async {
     await checkConnection();
     if (isConnected) if (_agree == true) {
-      if (percant == true) {
         if (_formKey.currentState.validate()) {
           _formKey.currentState.save();
           registration();
         }
-      } else {
-        percantClicked = false;
-        setState(() {});
-      }
     } else {
       _agreeClicked = false;
       setState(() {});
@@ -763,78 +759,71 @@ class _AdminRegistrationState extends State<AdminRegistration> {
                       },
                       child: Text(
                         AppLocalizations.of(context).translate('termsAgree'),
-                        style: paragarph4,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              _agreeClicked == false ?
-              Text("الرجاء الموافقه على الشروط و الاحكام", style: TextStyle(color: Colors.red),) : Container(),
-
-              Padding(
-                padding: EdgeInsets.only(left: 25.0, top: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 10),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            percant = !percant;
-                            if (percant == true)
-                              percantClicked = true;
-                            else
-                              percantClicked = false;
-                          });
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                color: percant ? accent : Color(0xFF636363),
-                              ),
-                              borderRadius: BorderRadius.circular(50)),
-                          child: CircleAvatar(
-                            child: Icon(
-                              FontAwesomeIcons.check,
-                              color: Colors.white,
-                              size: 9.0,
+                              style: paragarph4,
                             ),
-                            radius: 10.0,
-                            backgroundColor: percant ? accent : Colors.white,
                           ),
-                        ),
+                        ],
                       ),
                     ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    InkWell(
-                      child: Text(
-                        AppLocalizations.of(context).translate('percantAgree'),
-                        style: paragarph4,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
 
-              percantClicked == false ?
-              Text("الرجاء الموافقه على نسبه التطبيق", style: TextStyle(color: Colors.red),) : Container(),
+                    _agreeClicked == false
+                        ? Text(
+                            "الرجاء الموافقه على الشروط و الاحكام",
+                            style: TextStyle(color: Colors.red),
+                          )
+                        : Container(),
 
-              ListTile(
-                title: _isLooding
-                    ? Center(
-                  child: CircularProgressIndicator(),
-                )
-                    : AppButton(
-                    text: AppLocalizations.of(context).translate('signUp'),
-                    onClick: () {
-                      //TODO admin profile editing code
-                      validation();
+                    // Padding(
+                    //   padding: EdgeInsets.only(left: 25.0, top: 10.0),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.start,
+                    //     children: <Widget>[
+                    //       Padding(
+                    //         padding: const EdgeInsets.symmetric(
+                    //             vertical: 10.0, horizontal: 10),
+                    //         child: Container(
+                    //           decoration: BoxDecoration(
+                    //               border: Border.all(
+                    //                 color: accent ,
+                    //               ),
+                    //               borderRadius: BorderRadius.circular(50)),
+                    //           child: CircleAvatar(
+                    //             child: Icon(
+                    //               FontAwesomeIcons.check,
+                    //               color: Colors.white,
+                    //               size: 9.0,
+                    //             ),
+                    //             radius: 10.0,
+                    //             backgroundColor: accent ,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //       SizedBox(
+                    //         width: 5,
+                    //       ),
+                    //       // InkWell(
+                    //       //   child: Text(
+                    //       //     AppLocalizations.of(context).translate('percantAgree'),
+                    //       //     style: paragarph4,
+                    //       //   ),
+                    //       // ),
+                    //     ],
+                    //   ),
+                    // ),
+
+                    // Text("الرجاء الاشتراك فى باقات ال", style: TextStyle(color: Colors.red),),
+
+                    ListTile(
+                      title: _isLooding
+                          ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : AppButton(
+                              text: AppLocalizations.of(context)
+                                  .translate('signUp'),
+                              onClick: () {
+                                //TODO admin profile editing code
+                                validation();
                     }),
               ),
               //TODO remove row testing alert dialogs
