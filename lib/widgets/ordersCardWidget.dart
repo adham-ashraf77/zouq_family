@@ -309,38 +309,7 @@ class OrdersCard extends StatelessWidget {
                                             color: Colors.grey[300])),
                                   ),
                                 )
-                              : type == 3 && order.status == "done"
-                                  ? InkWell(
-                                      onTap: () => sendOrderToAgent(order.id),
-                                      child: Container(
-                                        height: 35,
-                                        alignment: Alignment.center,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        child: Row(
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.check,
-                                              color: Colors.white,
-                                              size: 18,
-                                            ),
-                                            Text(
-                                              'عرض للمندوب',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 12),
-                                            ),
-                                          ],
-                                        ),
-                                        decoration: BoxDecoration(
-                                            color: Colors.green[300],
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(50)),
-                                            border: Border.all(
-                                                color: Colors.grey[300])),
-                                      ),
-                                    )
-                                  : Container()
+                              : Container()
                         ],
                       ),
                     )
