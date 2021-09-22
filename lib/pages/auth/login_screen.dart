@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:zouqadmin/I10n/app_localizations.dart';
 import 'package:zouqadmin/pages/auth/forgetpass_screen.dart';
 import 'package:zouqadmin/pages/dialogWorning.dart';
@@ -265,7 +268,7 @@ class _LoginPageState extends State<LoginPage> {
                           : AppButton(
                               text: AppLocalizations.of(context)
                                   .translate('sign in'),
-                        onClick: () async {
+                              onClick: () async {
                                 setState(() {
                                   signinLoading = true;
                                 });
@@ -429,7 +432,38 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SizedBox(
                       height: 20,
-                    )
+                    ),
+
+                    GestureDetector(
+                        onTap: () async {
+                          if (Platform.isAndroid) {
+                            await launch(
+                                "https://play.google.com/store/apps/details?id=com.alexApps.zouq");
+                          } else {
+                            await launch(
+                                "https://apps.apple.com/us/app/%D8%B0%D9%88%D9%82/id1503978501");
+                          }
+                        },
+                        child: Text(
+                            AppLocalizations.of(context).translate('zouqApp'),
+                            style: paragarph3.copyWith(color: accent))),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        if (Platform.isAndroid) {
+                          await launch(
+                              "https://play.google.com/store/apps/details?id=com.alexapps.zouq_agent");
+                        } else {
+                          await launch(
+                              "https://apps.apple.com/us/app/%D8%B0%D9%88%D9%82-%D8%AA%D8%B7%D8%A8%D9%8A%D9%82-%D8%A7%D9%84%D9%85%D9%86%D8%AF%D9%88%D8%A8/id1571285699");
+                        }
+                      },
+                      child: Text(
+                          AppLocalizations.of(context).translate('agentApp'),
+                          style: paragarph3.copyWith(color: accent)),
+                    ),
                   ],
                 ),
               ),

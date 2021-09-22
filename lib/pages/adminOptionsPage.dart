@@ -396,6 +396,55 @@ class _AdminOptionsPageState extends State<AdminOptionsPage> {
               color: iconsFaded,
               indent: 25,
             ),
+
+            ListTile(
+              onTap: () async {
+                if (Platform.isAndroid) {
+                  await launch(
+                      "https://play.google.com/store/apps/details?id=com.alexApps.zouq");
+                } else {
+                  await launch(
+                      "https://apps.apple.com/us/app/%D8%B0%D9%88%D9%82/id1503978501");
+                }
+              },
+              trailing: Icon(
+                trailingIcon,
+                size: 15.0,
+              ),
+              leading: Text(
+                AppLocalizations.of(context).translate('zouqApp'),
+                style: moreTextStyle.copyWith(fontSize: 15),
+                textAlign: TextAlign.end,
+              ),
+            ),
+            Divider(
+              color: iconsFaded,
+              indent: 25,
+            ),
+            ListTile(
+              onTap: () async {
+                if (Platform.isAndroid) {
+                  await launch(
+                      "https://play.google.com/store/apps/details?id=com.alexapps.zouq_agent");
+                } else {
+                  await launch(
+                      "https://apps.apple.com/us/app/%D8%B0%D9%88%D9%82-%D8%AA%D8%B7%D8%A8%D9%8A%D9%82-%D8%A7%D9%84%D9%85%D9%86%D8%AF%D9%88%D8%A8/id1571285699");
+                }
+              },
+              trailing: Icon(
+                trailingIcon,
+                size: 15.0,
+              ),
+              leading: Text(
+                AppLocalizations.of(context).translate('agentApp'),
+                style: moreTextStyle.copyWith(fontSize: 15),
+                textAlign: TextAlign.end,
+              ),
+            ),
+            Divider(
+              color: iconsFaded,
+              indent: 25,
+            ),
             ListTile(
               leading: GestureDetector(
                 onTap: () async {
